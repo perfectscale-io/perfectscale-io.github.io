@@ -1,0 +1,88 @@
+{{- $fullName := include "helm.fullname" . -}}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "helm.fullname" . }}
+  labels:
+    {{- include "helm.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "helm.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "helm.selectorLabels" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ include "helm.serviceAccountName" . }}
+      initContainers:
+        - name: depends-on
+          image: "public.ecr.aws/perfectscale/alpine:3.16"
+          command: [ 'sh' ]
+          args: [ '-c', 'apk add curl; curl --retry-all-errors --retry 30 --retry-delay 5 -s {{ include "helm.exporter.ksmAddress" . }}; sleep {{ include "helm.exporter.initSleep" . }}' ]
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+          - name: SERVICE_ID
+            value: "{{ .Values.settings.serviceId }}"
+          - name: ENV
+            value: "{{ .Values.settings.env }}"
+          - name: LOG_LEVEL
+            value: "{{ .Values.settings.logLevel }}"
+          - name: HTTP_PORT
+            value: "{{ .Values.settings.httpPort }}"
+          - name: SCRAPE_FREQUENCY_TIME
+            value: {{ .Values.settings.scrapingInterval }}
+          - name: DATA_RETENTION_TIME
+            value: "{{ include "helm.exporter.dataRetentionTime" . }}"
+          - name: KSM_ADDRESS
+            value: "{{ include "helm.exporter.ksmAddress" . }}"
+          - name: CADVISOR_NUM_WORKERS
+            value: "{{ .Values.settings.cAdvisorNumWorkers }}"
+          - name: PS_URL
+            value: "{{ .Values.settings.psUrl }}"
+          - name: UPLOAD_POLICY_URL
+            value: "{{ .Values.settings.uploadPolicyUrl }}"
+          - name: SETTINGS_SERVICE_URL
+            value: "{{ .Values.settings.settingsServiceUrl }}"
+          - name: RAW_TIME_WINDOW_SIZE_MINUTES
+            value: "{{ include "helm.exporter.rawTimeWindowSizeMinutes" . }}"
+          - name: UPLOAD_POLICY_REFRESH_PCT
+            value: "{{ include "helm.exporter.policyRefreshPct" . }}"
+          - name: CLUSTER_UID
+            value: "{{ include "helm.exporter.clusterUID" . }}"
+          - name: DEMO_ENV_ADDRESS
+            value: "{{ .Values.settings.demoEnvAddress }}"
+          - name: CLIENT_ID
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.secret.name | default $fullName }}
+                key: "clientId"
+                optional: false
+          - name: CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.secret.name | default $fullName }}
+                key: "clientSecret"
+                optional: false
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+      - name: {{ .Values.imagePullSecrets.secretName }}
+      {{- end }}
