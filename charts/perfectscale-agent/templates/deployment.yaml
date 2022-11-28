@@ -68,6 +68,8 @@ spec:
                 name: {{ .Values.secret.name | default $fullName }}
                 key: "clientSecret"
                 optional: false
+          - name: ENABLE_PPROF
+            value: "{{ include "helm.exporter.enablePProf" . }}"
           ports:
             - name: http
               containerPort: 8080
