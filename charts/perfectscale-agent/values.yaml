@@ -1,18 +1,16 @@
 replicaCount: 1
-
 image:
-  repository: public.ecr.aws/perfectscale/psc-exporter
+  repository: public.ecr.aws/perfectscale-io/psc-exporter
   pullPolicy: Always
-  tag: "latest"
-
+  tag: "vv0.0.4"
 settings:
   serviceId: "psc-exporter"
-  env: "dev"
+  env: "prod"
   logLevel: "INFO"
   httpPort: ":8080"
-  psUrl: "https://api.dev.perfectscale.click/psc-tenant-manager"
-  uploadPolicyUrl: "https://api.dev.perfectscale.click/psc-presigned-policy"
-  settingsServiceUrl: "https://api.dev.perfectscale.click/psc-settings"
+  psUrl: "https://api.app.perfectscale.io/psc-tenant-manager"
+  uploadPolicyUrl: "https://api.app.perfectscale.io/psc-presigned-policy"
+  settingsServiceUrl: "https://api.app.perfectscale.io/psc-settings"
   scrapingInterval: "30s"
 #  ksmAddress: "http://kube-state-metrics:8080"
 
@@ -21,18 +19,16 @@ secret:
   name: ""
   clientSecret: ""
   clientId: ""
-
 service:
   type: ClusterIP
   port: 80
-
-resources: { }
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
+resources: {}
+# We usually recommend not to specify default resources and to leave this as a conscious
+# choice for the user. This also increases chances charts run on environments with little
+# resources, such as Minikube. If you do want to specify resources, uncomment the following
+# lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+# limits:
+#   cpu: 100m
 #   memory: 128Mi
 # requests:
 #   cpu: 100m
@@ -62,12 +58,11 @@ kube-state-metrics:
     - statefulsets
     - storageclasses
     - volumeattachments
-
 serviceAccount:
   # Specifies whether a service account should be created
   create: true
   # Annotations to add to the service account
-  annotations: { }
+  annotations: {}
   # The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template
   name: ""
