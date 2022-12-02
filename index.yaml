@@ -3,7 +3,21 @@ entries:
   exporter:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2022-11-28T21:18:09.996491346Z"
+    created: "2022-12-02T09:31:15.873624089Z"
+    dependencies:
+    - name: kube-state-metrics
+      repository: https://prometheus-community.github.io/helm-charts
+      version: 4.16.0
+    description: PerfectScale data exporter
+    digest: 00a0d09d81c5f5efa22a7e9112091df10f683b4e04becf03226d62155676d473
+    name: exporter
+    type: application
+    urls:
+    - exporter-v0.0.4.tgz
+    version: v0.0.4
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2022-12-02T09:31:15.872258429Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -17,7 +31,7 @@ entries:
     version: v0.0.3
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2022-11-28T21:18:09.995128528Z"
+    created: "2022-12-02T09:31:15.870892669Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -31,7 +45,7 @@ entries:
     version: v0.0.2
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2022-11-28T21:18:09.993728309Z"
+    created: "2022-12-02T09:31:15.869466311Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -43,4 +57,4 @@ entries:
     urls:
     - exporter-v0.0.1.tgz
     version: v0.0.1
-generated: "2022-11-28T21:18:09.992018987Z"
+generated: "2022-12-02T09:31:15.866559197Z"
