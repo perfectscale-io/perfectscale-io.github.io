@@ -3,7 +3,21 @@ entries:
   exporter:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2022-12-02T09:38:14.329236555Z"
+    created: "2022-12-06T14:37:39.903151024Z"
+    dependencies:
+    - name: kube-state-metrics
+      repository: https://prometheus-community.github.io/helm-charts
+      version: 4.16.0
+    description: PerfectScale data exporter
+    digest: f94beed616da04902761c2ee4f0034f4392d7503027268baf80194d55772f906
+    name: exporter
+    type: application
+    urls:
+    - exporter-v0.0.7-rc1.tgz
+    version: v0.0.7-rc1
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2022-12-06T14:37:39.901819659Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -17,7 +31,7 @@ entries:
     version: v0.0.6
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2022-12-02T09:38:14.327984931Z"
+    created: "2022-12-06T14:37:39.900496994Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -31,7 +45,7 @@ entries:
     version: v0.0.4
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2022-12-02T09:38:14.326664505Z"
+    created: "2022-12-06T14:37:39.89918813Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -45,7 +59,7 @@ entries:
     version: v0.0.3
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2022-12-02T09:38:14.325365881Z"
+    created: "2022-12-06T14:37:39.897837964Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -59,7 +73,7 @@ entries:
     version: v0.0.2
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2022-12-02T09:38:14.323999654Z"
+    created: "2022-12-06T14:37:39.896484398Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -71,4 +85,4 @@ entries:
     urls:
     - exporter-v0.0.1.tgz
     version: v0.0.1
-generated: "2022-12-02T09:38:14.322470125Z"
+generated: "2022-12-06T14:37:39.88976187Z"
