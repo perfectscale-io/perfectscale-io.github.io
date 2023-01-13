@@ -2,7 +2,7 @@ replicaCount: 1
 image:
   repository: public.ecr.aws/perfectscale-io/psc-exporter
   pullPolicy: Always
-  tag: "v0.0.8"
+  tag: "v0.0.9"
 settings:
   serviceId: "psc-exporter"
   env: "prod"
@@ -12,6 +12,8 @@ settings:
   uploadPolicyUrl: "https://api.app.perfectscale.io/psc-presigned-policy"
   settingsServiceUrl: "https://api.app.perfectscale.io/psc-settings"
   scrapingInterval: "30s"
+  kubeAPITimeoutSec: "3"
+  cAdvisorNumWorkers: "30"
 #  ksmAddress: "http://kube-state-metrics:8080"
 
 secret:
@@ -22,18 +24,10 @@ secret:
 service:
   type: ClusterIP
   port: 80
-resources: {}
-# We usually recommend not to specify default resources and to leave this as a conscious
-# choice for the user. This also increases chances charts run on environments with little
-# resources, such as Minikube. If you do want to specify resources, uncomment the following
-# lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-# limits:
-#   cpu: 100m
-#   memory: 128Mi
-# requests:
-#   cpu: 100m
-#   memory: 128Mi
-
+resources:
+  requests:
+    cpu: 200m
+    memory: 300M
 kube-state-metrics:
   prometheusScrape: false
   metricLabelsAllowlist:
@@ -58,6 +52,10 @@ kube-state-metrics:
     - statefulsets
     - storageclasses
     - volumeattachments
+  resources:
+    requests:
+      cpu: 200m
+      memory: 200M
 serviceAccount:
   # Specifies whether a service account should be created
   create: true

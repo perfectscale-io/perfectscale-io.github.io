@@ -35,7 +35,9 @@ spec:
           - name: HTTP_PORT
             value: "{{ .Values.settings.httpPort }}"
           - name: SCRAPE_FREQUENCY_TIME
-            value: {{ .Values.settings.scrapingInterval }}
+            value: "{{ .Values.settings.scrapingInterval }}"
+          - name: KUBE_API_TIMEOUT
+            value: "{{ .Values.settings.kubeAPITimeoutSec }}"
           - name: DATA_RETENTION_TIME
             value: "{{ include "helm.exporter.dataRetentionTime" . }}"
           - name: KSM_ADDRESS
