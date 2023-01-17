@@ -2,7 +2,7 @@ replicaCount: 1
 image:
   repository: public.ecr.aws/perfectscale-io/psc-exporter
   pullPolicy: Always
-  tag: "v0.0.10"
+  tag: "v0.0.12"
 settings:
   serviceId: "psc-exporter"
   env: "prod"
@@ -64,3 +64,5 @@ serviceAccount:
   # The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template
   name: ""
+serviceMonitor:
+  create: false
