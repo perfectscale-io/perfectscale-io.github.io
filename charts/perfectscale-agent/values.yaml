@@ -2,7 +2,7 @@ replicaCount: 1
 image:
   repository: public.ecr.aws/perfectscale-io/psc-exporter
   pullPolicy: Always
-  tag: "v0.0.14"
+  tag: "v0.0.15"
 settings:
   serviceId: "psc-exporter"
   env: "prod"
@@ -10,7 +10,6 @@ settings:
   httpPort: ":8080"
   psUrl: "https://api.app.perfectscale.io/psc-tenant-manager"
   uploadPolicyUrl: "https://api.app.perfectscale.io/psc-presigned-policy"
-  settingsServiceUrl: "https://api.app.perfectscale.io/psc-settings"
   scrapingInterval: "30s"
   kubeAPITimeoutSec: "3"
   cAdvisorNumWorkers: "30"

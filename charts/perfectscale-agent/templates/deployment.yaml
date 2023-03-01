@@ -48,8 +48,6 @@ spec:
             value: "{{ .Values.settings.psUrl }}"
           - name: UPLOAD_POLICY_URL
             value: "{{ .Values.settings.uploadPolicyUrl }}"
-          - name: SETTINGS_SERVICE_URL
-            value: "{{ .Values.settings.settingsServiceUrl }}"
           - name: RAW_TIME_WINDOW_SIZE_MINUTES
             value: "{{ include "helm.exporter.rawTimeWindowSizeMinutes" . }}"
           - name: UPLOAD_POLICY_REFRESH_PCT
