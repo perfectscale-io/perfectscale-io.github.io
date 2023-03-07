@@ -2,7 +2,7 @@ replicaCount: 1
 image:
   repository: public.ecr.aws/perfectscale-io/psc-exporter
   pullPolicy: Always
-  tag: "v0.0.16"
+  tag: "v0.0.17"
 settings:
   serviceId: "psc-exporter"
   env: "prod"
@@ -67,7 +67,7 @@ nodeSelector: {}
 affinity: {}
 serviceMonitor:
   # When set true then use a ServiceMonitor to configure scraping
-  enable: true
+  enable: false
   # Set how frequently Prometheus should scrape
   interval: 30s
   # Set path to the metrics
