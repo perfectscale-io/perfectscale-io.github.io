@@ -4,9 +4,15 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "helm.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels:
     {{- include "helm.labels" . | nindent 4 }}
+  {{- with .Values.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 spec:
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
       {{- include "helm.selectorLabels" . | nindent 6 }}
@@ -15,12 +21,20 @@ spec:
       labels:
         {{- include "helm.selectorLabels" . | nindent 8 }}
     spec:
+      {{- if .Values.priorityClass.enabled }}
+      priorityClassName: {{ .Values.priorityClass.name }}
+      {{- end }}
       serviceAccountName: {{ include "helm.serviceAccountName" . }}
+      automountServiceAccountToken: true
+      {{- with .Values.securityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       initContainers:
         - name: depends-on
-          image: "public.ecr.aws/perfectscale/alpine:3.16"
+          image: "public.ecr.aws/perfectscale-io/alpine:3.17"
           command: [ 'sh' ]
-          args: [ '-c', 'apk add curl; curl --retry-all-errors --retry 30 --retry-delay 5 -s {{ include "helm.exporter.ksmAddress" . }}; sleep {{ include "helm.exporter.initSleep" . }}' ]
+          args: [ '-c', 'curl --retry-all-errors --retry 30 --retry-delay 5 -s {{ include "helm.exporter.ksmAddress" . }}; sleep {{ .Values.settings.initSleep | default "1s" }}' ]
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
@@ -39,7 +53,7 @@ spec:
           - name: KUBE_API_TIMEOUT
             value: "{{ .Values.settings.kubeAPITimeoutSec }}"
           - name: DATA_RETENTION_TIME
-            value: "{{ include "helm.exporter.dataRetentionTime" . }}"
+            value: "{{ .Values.settings.dataRetentionTime | default "15m" }}"
           - name: KSM_ADDRESS
             value: "{{ include "helm.exporter.ksmAddress" . }}"
           - name: CADVISOR_NUM_WORKERS
@@ -49,13 +63,15 @@ spec:
           - name: UPLOAD_POLICY_URL
             value: "{{ .Values.settings.uploadPolicyUrl }}"
           - name: RAW_TIME_WINDOW_SIZE_MINUTES
-            value: "{{ include "helm.exporter.rawTimeWindowSizeMinutes" . }}"
+            value: "{{ .Values.settings.rawTimeWindowSizeMinutes | default "10m" }}"
           - name: UPLOAD_POLICY_REFRESH_PCT
-            value: "{{ include "helm.exporter.policyRefreshPct" . }}"
+            value: "{{ .Values.settings.policyRefreshPct | default "0.5" }}"
           - name: CLUSTER_UID
             value: "{{ include "helm.exporter.clusterUID" . }}"
           - name: DEMO_ENV_ADDRESS
             value: "{{ .Values.settings.demoEnvAddress }}"
+          - name: ENABLE_PPROF
+            value: "{{ .Values.settings.enablePProf | default "false" }}"
           - name: CLIENT_ID
             valueFrom:
               secretKeyRef:
@@ -68,8 +84,6 @@ spec:
                 name: {{ .Values.secret.name | default $fullName }}
                 key: "clientSecret"
                 optional: false
-          - name: ENABLE_PPROF
-            value: "{{ include "helm.exporter.enablePProf" . }}"
           ports:
             - name: http
               containerPort: 8080
@@ -87,4 +101,16 @@ spec:
       {{- if .Values.imagePullSecrets }}
       imagePullSecrets:
       - name: {{ .Values.imagePullSecrets.secretName }}
+      {{- end }}
+      {{- with .Values.tolerations }}      
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
       {{- end }}

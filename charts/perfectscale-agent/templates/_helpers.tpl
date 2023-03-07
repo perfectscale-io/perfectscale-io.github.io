@@ -103,25 +103,3 @@ For testing purposes, in prod we want to get the actual cluster's UID
 {{- "" }}
 {{- end }}
 {{- end }}
-
-{{/*
-How much sleep should init container gets before completing
-*/}}
-{{- define "helm.exporter.initSleep" -}}
-{{- if .Values.settings.initSleep }}
-{{- .Values.settings.initSleep }}
-{{- else }}
-{{- "1s" }}
-{{- end }}
-{{- end }}
-
-{{/*
-Set if we want to enable go PPROF
-*/}}
-{{- define "helm.exporter.enablePProf" -}}
-{{- if .Values.settings.enablePProf }}
-{{- .Values.settings.enablePProf }}
-{{- else }}
-{{- "false" }}
-{{- end }}
-{{- end }}

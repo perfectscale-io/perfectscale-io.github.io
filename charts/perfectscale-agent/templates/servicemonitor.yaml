@@ -1,0 +1,31 @@
+{{- if .Values.serviceMonitor -}}
+{{- if .Values.serviceMonitor.enable -}}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "helm.fullname" . }}
+  labels:
+    {{- include "helm.labels" . | nindent 4 }}
+    {{- range $key, $value := .Values.serviceMonitor.labels }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+spec:
+  endpoints:
+  - port: http
+{{- if .Values.serviceMonitor.interval }}
+    interval: {{ .Values.serviceMonitor.interval }}
+{{- end }}
+{{- if .Values.serviceMonitor.path }}
+    path: {{ .Values.serviceMonitor.path }}
+{{- end }}
+{{- if .Values.serviceMonitor.timeout }}
+    scrapeTimeout: {{ .Values.serviceMonitor.timeout }}
+{{- end }}
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace | quote }}
+  selector:
+    matchLabels:
+      {{- include "helm.selectorLabels" . | nindent 6 }}
+{{- end }}
+{{- end }}

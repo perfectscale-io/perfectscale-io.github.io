@@ -2,7 +2,7 @@ replicaCount: 1
 image:
   repository: public.ecr.aws/perfectscale-io/psc-exporter
   pullPolicy: Always
-  tag: "v0.0.15"
+  tag: "v0.0.16"
 settings:
   serviceId: "psc-exporter"
   env: "prod"
@@ -27,6 +27,56 @@ resources:
   requests:
     cpu: 200m
     memory: 300M
+## Annotations to add to the deployment
+annotations: {}
+## Pods Service Account
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+## Role Based Access
+## Ref: https://kubernetes.io/docs/admin/authorization/rbac/
+##
+rbac:
+  create: true
+# Pod security context.
+# Ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+securityContext:
+  runAsNonRoot: true
+  fsGroup: 1002
+  runAsGroup: 1002
+  runAsUser: 1002
+  seccompProfile:
+    type: RuntimeDefault
+priorityClass:
+  enabled: true
+  name: system-cluster-critical
+# Pod toleration rules.
+# Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+tolerations: {}
+# Pod node selector rules.
+# Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
+nodeSelector: {}
+# Pod affinity rules.
+# Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+affinity: {}
+serviceMonitor:
+  # When set true then use a ServiceMonitor to configure scraping
+  enable: true
+  # Set how frequently Prometheus should scrape
+  interval: 30s
+  # Set path to the metrics
+  path: /metrics
+  # Set timeout for scrape
+  timeout: 10s
+  # Additional Label to the serviceMonitor
+  # labels:
+  #   prometheus: kube-prometheus
 kube-state-metrics:
   prometheusScrape: false
   metricLabelsAllowlist:
@@ -55,13 +105,3 @@ kube-state-metrics:
     requests:
       cpu: 200m
       memory: 200M
-serviceAccount:
-  # Specifies whether a service account should be created
-  create: true
-  # Annotations to add to the service account
-  annotations: {}
-  # The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
-  name: ""
-serviceMonitor:
-  create: false
