@@ -2,7 +2,7 @@ replicaCount: 1
 image:
   repository: public.ecr.aws/perfectscale-io/psc-exporter
   pullPolicy: Always
-  tag: "v0.0.17"
+  tag: "v0.0.18"
 settings:
   serviceId: "psc-exporter"
   env: "prod"
@@ -51,6 +51,11 @@ securityContext:
   fsGroup: 1002
   runAsGroup: 1002
   runAsUser: 1002
+## Specify security settings for a Container
+## Allows overrides and additional options compared to (Pod) securityContext
+## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+containerSecurityContext:
+  allowPrivilegeEscalation: false
   seccompProfile:
     type: RuntimeDefault
 priorityClass:
@@ -78,6 +83,10 @@ serviceMonitor:
   # labels:
   #   prometheus: kube-prometheus
 kube-state-metrics:
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    seccompProfile:
+      type: RuntimeDefault
   prometheusScrape: false
   metricLabelsAllowlist:
     - nodes=[*]
