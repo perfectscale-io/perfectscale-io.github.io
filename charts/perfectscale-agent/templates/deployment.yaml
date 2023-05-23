@@ -76,6 +76,10 @@ spec:
             value: "{{ .Values.settings.demoEnvAddress }}"
           - name: ENABLE_PPROF
             value: "{{ .Values.settings.enablePProf | default "false" }}"
+          - name: "KUBERNETES_CLIENT_BURST"
+            value: "{{ .Values.settings.k8sClientBurst }}"
+          - name: "KUBERNETES_CLIENT_QPS"
+            value: "{{ .Values.settings.k8sClientQPS }}"
           - name: CLIENT_ID
             valueFrom:
               secretKeyRef:
@@ -110,7 +114,7 @@ spec:
       imagePullSecrets:
       - name: {{ .Values.imagePullSecrets.secretName }}
       {{- end }}
-      {{- with .Values.tolerations }}      
+      {{- with .Values.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
