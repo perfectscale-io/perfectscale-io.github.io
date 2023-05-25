@@ -2,7 +2,7 @@ replicaCount: 1
 image:
   repository: public.ecr.aws/perfectscale-io/psc-exporter
   pullPolicy: Always
-  tag: "v0.0.22"
+  tag: "v0.0.23"
 settings:
   serviceId: "psc-exporter"
   env: "prod"
@@ -19,7 +19,7 @@ settings:
 
 secret:
   create: false
-  name: ""
+  name: "perfectscale-secret"
   clientSecret: ""
   clientId: ""
 service:
