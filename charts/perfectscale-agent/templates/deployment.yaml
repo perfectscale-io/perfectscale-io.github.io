@@ -60,6 +60,8 @@ spec:
             value: "{{ .Values.settings.dataRetentionTime | default "15m" }}"
           - name: KSM_ADDRESS
             value: "{{ include "helm.exporter.ksmAddress" . }}"
+          - name: KSM_TIMEOUT
+            value: "{{ include "helm.exporter.ksmTimeout" . }}"
           - name: CADVISOR_NUM_WORKERS
             value: "{{ .Values.settings.cAdvisorNumWorkers }}"
           - name: PS_URL

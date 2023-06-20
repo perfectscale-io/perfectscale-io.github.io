@@ -77,6 +77,14 @@ Create the name of the service account to use
 {{- end }}
 {{- end }}
 
+{{- define "helm.exporter.ksmTimeout" -}}
+{{- if .Values.settings.ksmTimeout }}
+{{- .Values.settings.ksmTimeout }}
+{{- else }}
+{{- "30s" }}
+{{- end }}
+{{- end }}
+
 {{- define "helm.exporter.rawTimeWindowSizeMinutes" -}}
 {{- if .Values.settings.rawTimeWindowSizeMinutes }}
 {{- .Values.settings.rawTimeWindowSizeMinutes }}
