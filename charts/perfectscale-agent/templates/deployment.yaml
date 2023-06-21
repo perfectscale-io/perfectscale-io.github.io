@@ -94,6 +94,20 @@ spec:
                 name: {{ .Values.secret.name | default $fullName }}
                 key: "clientSecret"
                 optional: false
+          - name: "NUM_SCRAPERS"
+            value: "{{ .Values.settings.scraper.numberOfScrapers }}"
+          - name: "KSM_METRICS_PORT"
+            value: "{{ .Values.settings.scraper.ksmMetricsPort }}"
+          - name: "LABEL_SELECTOR"
+            value: "{{ .Values.settings.scraper.labelSelector }}}"
+          - name: "FIELD_SELECTOR"
+            value: "{{ .Values.settings.scraper.fieldSelector }}"
+          - name: "SCRAPE_EXTERNAL_KSM"
+            value: "{{ .Values.settings.scraper.scrapeExternalKSM }}"
+          - name: "SCRAPE_NAMESPACE"
+            value: "{{ .Values.settings.scraper.scrapeNamespace }}"
+          - name: "KSM_IMAGE_NAME"
+            value: "{{ .Values.settings.scraper.ksmImageName }}"
           ports:
             - name: http
               containerPort: 8080
