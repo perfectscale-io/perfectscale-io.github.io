@@ -99,7 +99,7 @@ spec:
           - name: "KSM_METRICS_PORT"
             value: "{{ .Values.settings.scraper.ksmMetricsPort }}"
           - name: "LABEL_SELECTOR"
-            value: "{{ .Values.settings.scraper.labelSelector }}}"
+            value: "{{ .Values.settings.scraper.labelSelector }}"
           - name: "FIELD_SELECTOR"
             value: "{{ .Values.settings.scraper.fieldSelector }}"
           - name: "SCRAPE_EXTERNAL_KSM"
