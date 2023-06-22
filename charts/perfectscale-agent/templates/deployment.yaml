@@ -36,11 +36,11 @@ spec:
           image: "public.ecr.aws/perfectscale-io/alpine:3.17"
           command: [ 'sh' ]
           args: [ '-c', 'curl --retry-all-errors --retry 30 --retry-delay 5 -s {{ include "helm.exporter.ksmAddress" . }}; sleep {{ .Values.settings.initSleep | default "1s" }}' ]
-      {{- end }}
-{{- if .Values.containerSecurityContext }}
+          {{- if .Values.containerSecurityContext }}
           securityContext:
-{{ toYaml .Values.containerSecurityContext | indent 12 }}
-{{- end }}
+            {{- toYaml .Values.containerSecurityContext | nindent 12 }}
+          {{- end }}
+      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
