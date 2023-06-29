@@ -2,7 +2,7 @@ replicaCount: 1
 image:
   repository: public.ecr.aws/perfectscale-io/psc-exporter
   pullPolicy: Always
-  tag: "v0.0.32"
+  tag: "v0.0.33"
 settings:
   deployKubeStateMetrics: true
   serviceId: "psc-exporter"
@@ -17,13 +17,14 @@ settings:
   cAdvisorNumWorkers: "30"
   k8sClientBurst: "150"
   k8sClientQPS: "100"
+  enablePProf: false
   #  ksmAddress: "http://kube-state-metrics:8080"
   scraper:
     numberOfScrapers: "8"
     ksmMetricsPort: "8080"
     labelSelector: ""
     fieldSelector: ""
-    scrapeExternalKSM: "false"
+    scrapeExternalKSM: false
     scrapeNamespace: ""
     ksmImageName: "kube-state-metrics"
 secret:
@@ -102,6 +103,7 @@ kube-state-metrics:
   metricLabelsAllowlist:
     - nodes=[*]
     - pods=[*]
+    - namespaces=[label_perfectscale_io_autoscaler]
   collectors:
     - cronjobs
     - daemonsets
