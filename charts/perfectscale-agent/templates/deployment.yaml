@@ -108,6 +108,8 @@ spec:
             value: "{{ .Values.settings.scraper.scrapeExternalKSM }}"
           - name: "SCRAPE_NAMESPACE"
             value: "{{ .Values.settings.scraper.scrapeNamespace }}"
+          - name: "COLLECTOR_NUM_WORKERS"
+            value: "{{ .Values.settings.collectorNumWorkers }}"
           - name: "KSM_IMAGE_NAME"
             value: "{{ .Values.settings.scraper.ksmImageName }}"
           ports:
