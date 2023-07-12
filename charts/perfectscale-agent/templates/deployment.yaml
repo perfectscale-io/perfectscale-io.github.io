@@ -76,6 +76,8 @@ spec:
             value: "{{ .Values.settings.policyRefreshPct | default "0.5" }}"
           - name: CLUSTER_UID
             value: "{{ include "helm.exporter.clusterUID" . }}"
+          - name: CLUSTER_RESILIENCE_LEVEL
+            value: "{{ .Values.settings.clusterResilienceLevel }}"
           - name: DEMO_ENV_ADDRESS
             value: "{{ .Values.settings.demoEnvAddress }}"
           - name: ENABLE_PPROF

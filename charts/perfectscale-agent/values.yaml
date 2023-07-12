@@ -2,7 +2,7 @@ replicaCount: 1
 image:
   repository: public.ecr.aws/perfectscale-io/psc-exporter
   pullPolicy: Always
-  tag: "v0.0.35"
+  tag: "v0.0.36"
 settings:
   deployKubeStateMetrics: true
   serviceId: "psc-exporter"
@@ -18,6 +18,8 @@ settings:
   k8sClientBurst: "150"
   k8sClientQPS: "100"
   enablePProf: false
+  # supported resilience levels: low, medium, high, highest
+  clusterResilienceLevel: "medium"
   collectorNumWorkers: "4"
   #  ksmAddress: "http://kube-state-metrics:8080"
   scraper:
