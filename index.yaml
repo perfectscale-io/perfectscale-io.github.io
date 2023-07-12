@@ -3,7 +3,22 @@ entries:
   exporter:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-07-10T13:15:37.660690484Z"
+    created: "2023-07-12T15:07:03.141275324Z"
+    dependencies:
+    - condition: settings.deployKubeStateMetrics
+      name: kube-state-metrics
+      repository: https://prometheus-community.github.io/helm-charts
+      version: 4.16.0
+    description: PerfectScale data exporter
+    digest: 69d11d37a184628ecc24e11c0b2d874f75adbdd4ac15f665744c1e111c1d4726
+    name: exporter
+    type: application
+    urls:
+    - exporter-v0.0.36.tgz
+    version: v0.0.36
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2023-07-12T15:07:03.13969069Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -18,7 +33,7 @@ entries:
     version: v0.0.35
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-07-10T13:15:37.659158776Z"
+    created: "2023-07-12T15:07:03.138138759Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -33,7 +48,7 @@ entries:
     version: v0.0.34
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-07-10T13:15:37.657600167Z"
+    created: "2023-07-12T15:07:03.136507421Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -48,7 +63,7 @@ entries:
     version: v0.0.33
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-07-10T13:15:37.656059858Z"
+    created: "2023-07-12T15:07:03.134875083Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -63,7 +78,7 @@ entries:
     version: v0.0.32
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-07-10T13:15:37.654447849Z"
+    created: "2023-07-12T15:07:03.133256146Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -78,7 +93,7 @@ entries:
     version: v0.0.30
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-07-10T13:15:37.650559727Z"
+    created: "2023-07-12T15:07:03.12430689Z"
     dependencies:
     - condition: kube-state-metrics.enabled
       name: kube-state-metrics
@@ -93,7 +108,7 @@ entries:
     version: v0.0.29
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-07-10T13:15:37.649012318Z"
+    created: "2023-07-12T15:07:03.122612147Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -107,7 +122,7 @@ entries:
     version: v0.0.28
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-07-10T13:15:37.647493909Z"
+    created: "2023-07-12T15:07:03.121091818Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -121,7 +136,7 @@ entries:
     version: v0.0.27
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-07-10T13:15:37.6459755Z"
+    created: "2023-07-12T15:07:03.119580191Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -135,7 +150,7 @@ entries:
     version: v0.0.26
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-07-10T13:15:37.644456492Z"
+    created: "2023-07-12T15:07:03.118081864Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -149,7 +164,7 @@ entries:
     version: v0.0.25
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-07-10T13:15:37.642906183Z"
+    created: "2023-07-12T15:07:03.116526433Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -163,7 +178,7 @@ entries:
     version: v0.0.24
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-07-10T13:15:37.641288774Z"
+    created: "2023-07-12T15:07:03.114475259Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -177,7 +192,7 @@ entries:
     version: v0.0.23
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-07-10T13:15:37.638476358Z"
+    created: "2023-07-12T15:07:03.111470705Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -191,7 +206,7 @@ entries:
     version: v0.0.22
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-07-10T13:15:37.636887949Z"
+    created: "2023-07-12T15:07:03.109995781Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -205,7 +220,7 @@ entries:
     version: v0.0.21
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-07-10T13:15:37.63530614Z"
+    created: "2023-07-12T15:07:03.108512556Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -219,7 +234,7 @@ entries:
     version: v0.0.20
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-07-10T13:15:37.632035221Z"
+    created: "2023-07-12T15:07:03.105401393Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -233,7 +248,7 @@ entries:
     version: v0.0.19
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-07-10T13:15:37.630332011Z"
+    created: "2023-07-12T15:07:03.103811958Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -247,7 +262,7 @@ entries:
     version: v0.0.18
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-07-10T13:15:37.628573101Z"
+    created: "2023-07-12T15:07:03.096072204Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -261,7 +276,7 @@ entries:
     version: v0.0.17
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-07-10T13:15:37.621046058Z"
+    created: "2023-07-12T15:07:03.09436656Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -275,7 +290,7 @@ entries:
     version: v0.0.16
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-07-10T13:15:37.61962445Z"
+    created: "2023-07-12T15:07:03.092878435Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -289,7 +304,7 @@ entries:
     version: v0.0.15
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-07-10T13:15:37.617731539Z"
+    created: "2023-07-12T15:07:03.091413411Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -303,7 +318,7 @@ entries:
     version: v0.0.14
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-07-10T13:15:37.616320531Z"
+    created: "2023-07-12T15:07:03.089711267Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -317,7 +332,7 @@ entries:
     version: v0.0.13
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-07-10T13:15:37.614924923Z"
+    created: "2023-07-12T15:07:03.088003223Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -331,7 +346,7 @@ entries:
     version: v0.0.12
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-07-10T13:15:37.613463815Z"
+    created: "2023-07-12T15:07:03.084969666Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -345,7 +360,7 @@ entries:
     version: v0.0.10
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-07-10T13:15:37.671340145Z"
+    created: "2023-07-12T15:07:03.15200483Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -359,7 +374,7 @@ entries:
     version: v0.0.9
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-07-10T13:15:37.669971337Z"
+    created: "2023-07-12T15:07:03.150652816Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -373,7 +388,7 @@ entries:
     version: v0.0.8
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-07-10T13:15:37.66865743Z"
+    created: "2023-07-12T15:07:03.149321604Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -387,7 +402,7 @@ entries:
     version: v0.0.7
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-07-10T13:15:37.667334922Z"
+    created: "2023-07-12T15:07:03.147948288Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -401,7 +416,7 @@ entries:
     version: v0.0.7-rc2
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-07-10T13:15:37.665951014Z"
+    created: "2023-07-12T15:07:03.146549969Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -415,7 +430,7 @@ entries:
     version: v0.0.7-rc1
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-07-10T13:15:37.663723302Z"
+    created: "2023-07-12T15:07:03.145188054Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -429,7 +444,7 @@ entries:
     version: v0.0.6
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-07-10T13:15:37.662013492Z"
+    created: "2023-07-12T15:07:03.142601836Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -443,7 +458,7 @@ entries:
     version: v0.0.4
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-07-10T13:15:37.652483638Z"
+    created: "2023-07-12T15:07:03.125831619Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -457,7 +472,7 @@ entries:
     version: v0.0.3
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-07-10T13:15:37.63357313Z"
+    created: "2023-07-12T15:07:03.106816212Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -471,7 +486,7 @@ entries:
     version: v0.0.2
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-07-10T13:15:37.612029107Z"
+    created: "2023-07-12T15:07:03.083320527Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -483,4 +498,4 @@ entries:
     urls:
     - exporter-v0.0.1.tgz
     version: v0.0.1
-generated: "2023-07-10T13:15:37.610292697Z"
+generated: "2023-07-12T15:07:03.081609482Z"
