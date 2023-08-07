@@ -2,7 +2,7 @@ replicaCount: 1
 image:
   repository: public.ecr.aws/perfectscale-io/psc-exporter
   pullPolicy: Always
-  tag: "v0.0.39"
+  tag: "v0.0.40"
 settings:
   deployKubeStateMetrics: true
   serviceId: "psc-exporter"
@@ -105,7 +105,6 @@ kube-state-metrics:
   metricLabelsAllowlist:
     - nodes=[*]
     - pods=[*]
-    - namespaces=[perfectscale.io/autoscaler]
   collectors:
     - cronjobs
     - daemonsets
