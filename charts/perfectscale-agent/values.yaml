@@ -2,7 +2,7 @@ replicaCount: 1
 image:
   repository: public.ecr.aws/perfectscale-io/psc-exporter
   pullPolicy: Always
-  tag: "v0.0.41"
+  tag: "v0.0.42"
 settings:
   deployKubeStateMetrics: true
   serviceId: "psc-exporter"
@@ -11,6 +11,8 @@ settings:
   httpPort: ":8080"
   psUrl: "https://api.app.perfectscale.io/psc-tenant-manager"
   uploadPolicyUrl: "https://api.app.perfectscale.io/psc-presigned-policy"
+  telemetryUrl: "https://api.app.perfectscale.io/psc-telemetry"
+  pushTelemetryFrequency: "1m"
   scrapingInterval: "30s"
   ksmTimeout: "30s"
   kubeAPITimeoutSec: "3"
@@ -105,6 +107,8 @@ kube-state-metrics:
   metricLabelsAllowlist:
     - nodes=[*]
     - pods=[*]
+  metricAnnotationsAllowList:
+    - pods=[gitops.perfectscale.io/user-spec]
   collectors:
     - cronjobs
     - daemonsets

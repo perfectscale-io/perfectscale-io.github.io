@@ -56,6 +56,8 @@ spec:
             value: "{{ .Values.settings.httpPort }}"
           - name: SCRAPE_FREQUENCY_TIME
             value: "{{ .Values.settings.scrapingInterval }}"
+          - name: PUSH_TELEMETRY_FREQUENCY
+            value: "{{ .Values.settings.pushTelemetryFrequency }}"
           - name: KUBE_API_TIMEOUT
             value: "{{ .Values.settings.kubeAPITimeoutSec }}"
           - name: DATA_RETENTION_TIME
@@ -70,6 +72,8 @@ spec:
             value: "{{ .Values.settings.psUrl }}"
           - name: UPLOAD_POLICY_URL
             value: "{{ .Values.settings.uploadPolicyUrl }}"
+          - name: TELEMETRY_URL
+            value: "{{ .Values.settings.telemetryUrl }}"
           - name: RAW_TIME_WINDOW_SIZE_MINUTES
             value: "{{ .Values.settings.rawTimeWindowSizeMinutes | default "10m" }}"
           - name: UPLOAD_POLICY_REFRESH_PCT
