@@ -152,13 +152,13 @@ spec:
             - name: CLIENT_ID
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "psc-autoscaler.fullname" . }}
+                  name: {{ .Values.secret.name | default $fullName }}
                   key: "clientId"
                   optional: false
             - name: CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "psc-autoscaler.fullname" . }}
+                  name: {{ .Values.secret.name | default $fullName }}
                   key: "clientSecret"
                   optional: false
             - name: CLUSTER_UID
@@ -234,13 +234,13 @@ spec:
             - name: CLIENT_ID
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "psc-autoscaler.fullname" . }}
+                  name: {{ .Values.secret.name | default $fullName }}
                   key: "clientId"
                   optional: false
             - name: CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "psc-autoscaler.fullname" . }}
+                  name: {{ .Values.secret.name | default $fullName }}
                   key: "clientSecret"
                   optional: false
             - name: CLUSTER_UID
