@@ -2,7 +2,7 @@ replicaCount: 1
 image:
   repository: public.ecr.aws/perfectscale-io/psc-exporter
   pullPolicy: Always
-  tag: "v0.0.45"
+  tag: "v1.0.0"
 settings:
   deployKubeStateMetrics: true
   serviceId: "psc-exporter"
@@ -77,7 +77,10 @@ containerSecurityContext:
     type: RuntimeDefault
 priorityClass:
   enabled: true
-  name: system-cluster-critical
+  create: true
+  name: perfectscale-exporter
+  preemptionpolicy: PreemptLowerPriority
+  value: ''
 # Pod toleration rules.
 # Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 tolerations: {}
