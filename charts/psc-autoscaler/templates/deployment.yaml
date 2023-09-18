@@ -1,0 +1,268 @@
+{{- $fullName := include "helm.fullname" . -}}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "psc-autoscaler.fullname" . }}-serve
+  labels:
+    {{- include "psc-autoscaler.labels" . | nindent 4 }}
+  {{- with .Values.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      perfectscale.io/psc-autoscaler-cmd: serve
+      {{- include "psc-autoscaler.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        perfectscale.io/psc-autoscaler-cmd: serve
+        {{- include "psc-autoscaler.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- if .Values.priorityClass.enabled }}
+      priorityClassName: {{ .Values.priorityClass.name }}
+      {{- end }}
+      serviceAccountName: {{ include "psc-autoscaler.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}-serve
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: https
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          env:
+            - name: ENV
+              value: "{{ .Values.settings.env }}"
+            - name: LOG_LEVEL
+              value: "{{ .Values.settings.logLevel }}"
+            - name: PS_URL
+              value: "{{ .Values.settings.psUrl }}"
+            - name: TLS_CERT_FILE
+              value: "/opt/tls/tls.crt"
+            - name: TLS_KEY_FILE
+              value: "/opt/tls/tls.key"
+            - name: CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secret.name | default $fullName }}
+                  key: "clientId"
+                  optional: false
+            - name: CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secret.name | default $fullName }}
+                  key: "clientSecret"
+                  optional: false
+            - name: CLUSTER_UID
+              value: "{{ include "psc-autoscaler.clusterUID" . }}"
+          command:
+            - "./app"
+            - "serve"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: https
+              scheme: HTTPS
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: https
+              scheme: HTTPS
+          resources:
+            {{- toYaml .Values.cmd.serve.resources | nindent 12 }}
+          volumeMounts:
+            - name: tls
+              mountPath: /opt/tls
+              readOnly: true
+      {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+      - name: {{ .Values.imagePullSecrets.secretName }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+        - name: tls
+          secret:
+            secretName: {{ include "psc-autoscaler.fullname" . }}-tls
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "psc-autoscaler.fullname" . }}-sync
+  labels:
+    {{- include "psc-autoscaler.labels" . | nindent 4 }}
+  {{- with .Values.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      perfectscale.io/psc-autoscaler-cmd: sync
+      {{- include "psc-autoscaler.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        perfectscale.io/psc-autoscaler-cmd: sync
+        {{- include "psc-autoscaler.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- if .Values.priorityClass.enabled }}
+      priorityClassName: {{ .Values.priorityClass.name }}
+      {{- end }}
+      serviceAccountName: {{ include "psc-autoscaler.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}-sync
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: https
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          env:
+            - name: ENV
+              value: "{{ .Values.settings.env }}"
+            - name: LOG_LEVEL
+              value: "{{ .Values.settings.logLevel }}"
+            - name: PS_URL
+              value: "{{ .Values.settings.psUrl }}"
+            - name: CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "psc-autoscaler.fullname" . }}
+                  key: "clientId"
+                  optional: false
+            - name: CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "psc-autoscaler.fullname" . }}
+                  key: "clientSecret"
+                  optional: false
+            - name: CLUSTER_UID
+              value: "{{ include "psc-autoscaler.clusterUID" . }}"
+          command:
+            - "./app"
+            - "sync"
+          resources:
+            {{- toYaml .Values.cmd.sync.resources | nindent 12 }}
+      {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+      - name: {{ .Values.imagePullSecrets.secretName }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "psc-autoscaler.fullname" . }}-evict
+  labels:
+    {{- include "psc-autoscaler.labels" . | nindent 4 }}
+  {{- with .Values.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      perfectscale.io/psc-autoscaler-cmd: evict
+      {{- include "psc-autoscaler.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        perfectscale.io/psc-autoscaler-cmd: evict
+        {{- include "psc-autoscaler.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- if .Values.priorityClass.enabled }}
+      priorityClassName: {{ .Values.priorityClass.name }}
+      {{- end }}
+      serviceAccountName: {{ include "psc-autoscaler.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}-evict
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: https
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          env:
+            - name: ENV
+              value: "{{ .Values.settings.env }}"
+            - name: LOG_LEVEL
+              value: "{{ .Values.settings.logLevel }}"
+            - name: PS_URL
+              value: "{{ .Values.settings.psUrl }}"
+            - name: CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "psc-autoscaler.fullname" . }}
+                  key: "clientId"
+                  optional: false
+            - name: CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "psc-autoscaler.fullname" . }}
+                  key: "clientSecret"
+                  optional: false
+            - name: CLUSTER_UID
+              value: "{{ include "psc-autoscaler.clusterUID" . }}"
+          command:
+            - "./app"
+            - "evict"
+          resources:
+            {{- toYaml .Values.cmd.sync.resources | nindent 12 }}
+      {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+      - name: {{ .Values.imagePullSecrets.secretName }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

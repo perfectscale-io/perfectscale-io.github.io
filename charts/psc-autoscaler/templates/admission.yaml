@@ -1,0 +1,76 @@
+{{- $altNames := list ( printf "%s.%s" (include "psc-autoscaler.name" .) .Release.Namespace ) ( printf "%s.%s.svc" (include "psc-autoscaler.name" .) .Release.Namespace ) -}}
+{{- $ca := genCA "psc-autoscaler-ca" 1825 -}}
+{{- $cert := genSignedCert ( include "psc-autoscaler.name" . ) nil $altNames 1825 $ca -}}
+{{- $label := "automation.perfectscale.io/enabled" -}}
+---
+apiVersion: v1
+kind: Secret
+type: kubernetes.io/tls
+metadata:
+  name: {{ include "psc-autoscaler.fullname" . }}-tls
+  labels:
+    {{- include "psc-autoscaler.labels" . | nindent 4 }}
+data:
+  tls.crt: {{ $cert.Cert | b64enc }}
+  tls.key: {{ $cert.Key | b64enc }}
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: {{ include "psc-autoscaler.fullname" . }}
+webhooks:
+  - name: label.perfectscale.io
+    objectSelector:
+      matchExpressions:
+        - key: {{ $label }}
+          operator: In
+          values: [ "true" ]
+    namespaceSelector:
+      matchExpressions:
+        - key: {{ $label }}
+          operator: DoesNotExist
+    rules:
+      - apiGroups: [ "" ]
+        apiVersions: [ "v1" ]
+        operations: [ "CREATE" ]
+        resources: [ "pods" ]
+        scope: "Namespaced"
+    clientConfig:
+      caBundle: {{ $ca.Cert | b64enc }}
+      service:
+        namespace: {{ .Release.Namespace }}
+        name: {{ include "psc-autoscaler.fullname" . }}
+        path: /v1
+        port: 443
+    admissionReviewVersions: [ "v1" ]
+    sideEffects: None
+    timeoutSeconds: 5
+    failurePolicy: Ignore
+  - name: namespace.perfectscale.io
+    objectSelector:
+      matchExpressions:
+        - key: {{ $label }}
+          operator: NotIn
+          values: [ "false" ]
+    namespaceSelector:
+      matchExpressions:
+        - key: {{ $label }}
+          operator: In
+          values: [ "true" ]
+    rules:
+      - apiGroups: [ "" ]
+        apiVersions: [ "v1" ]
+        operations: [ "CREATE" ]
+        resources: [ "pods" ]
+        scope: "Namespaced"
+    clientConfig:
+      caBundle: {{ $ca.Cert | b64enc }}
+      service:
+        namespace: {{ .Release.Namespace }}
+        name: {{ include "psc-autoscaler.fullname" . }}
+        path: /v1
+        port: 443
+    admissionReviewVersions: [ "v1" ]
+    sideEffects: None
+    timeoutSeconds: 5
+    failurePolicy: Ignore

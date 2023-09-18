@@ -1,0 +1,15 @@
+{{- if .Values.rbac.enabled -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ template "psc-autoscaler.fullname" . }}
+  labels: {{- include "psc-autoscaler.labels" . | nindent 4 }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "psc-autoscaler.serviceAccountName" . }}
+    namespace: {{ .Release.Namespace }}
+roleRef:
+  kind: ClusterRole
+  name: {{ template "psc-autoscaler.fullname" . }}
+  apiGroup: rbac.authorization.k8s.io
+{{- end }}
