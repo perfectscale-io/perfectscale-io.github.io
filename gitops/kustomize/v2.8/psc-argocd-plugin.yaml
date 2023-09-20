@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: argocd-lovely-plugin
+spec:
+  template:
+    spec:
+      automountServiceAccountToken: true
+      containers:
+        - name: lovely-plugin
+          image: public.ecr.aws/perfectscale-io/psc-argocd-plugin:v0.0.11
+          env:
+            - name: ARGOCD_ENV_PSC_CLUSTER_UID
+              value: your-cluster-uid
+            - name: ARGOCD_ENV_REPO_URL
+              value: https://github.com/your-org/.perfectscale.git
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 999
+          volumeMounts:
+            - mountPath: /var/run/argocd
+              name: var-files
+            - mountPath: /home/argocd/cmp-server/plugins
+              name: plugins
+            - mountPath: /tmp
+              name: psc-tmp
+      volumes:
+        - emptyDir: {}
+          name: psc-tmp

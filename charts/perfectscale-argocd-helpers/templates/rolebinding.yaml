@@ -1,0 +1,16 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  labels:
+    app.kubernetes.io/component: repo-server
+    app.kubernetes.io/name: argocd-repo-server
+    app.kubernetes.io/part-of: argocd
+  name: argocd-repo-server
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ if .Values.argocdReleaseName }}{{ .Values.argocdReleaseName }}-argocd-server{{ else }}{{ .Values.rolebinding.serviceaccount.role }}{{ end }}
+subjects:
+- kind: ServiceAccount
+  name: {{ if .Values.argocdReleaseName }}{{ .Values.argocdReleaseName }}-argocd-repo-server{{ else }}{{ .Values.rolebinding.serviceaccount.name }}{{ end }}
+  namespace: {{ .Release.Namespace }}

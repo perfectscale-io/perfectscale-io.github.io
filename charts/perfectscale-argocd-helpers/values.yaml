@@ -1,0 +1,13 @@
+# you can specify argocdReleaseName to autogenerate rolebinding name and role names
+#argocdReleaseName: argocd
+
+cronjob:
+  serviceaccount:
+    # for helm installation it usualy looks like {{release-name}}-argocd-applicationset-controller
+    name: argocd-applicationset-controller
+rolebinding:
+  serviceaccount:
+    # for helm installation it usualy looks like {{release-name}}-argocd-repo-server
+    name: argocd-repo-server
+    # for helm installation it usualy looks like {{release-name}}-argocd-server
+    role: argocd-server

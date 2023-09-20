@@ -1,0 +1,17 @@
+# kustomize build . > argocd-deploy.yml
+
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: argocd
+
+resources:
+- github.com/argoproj/argo-cd/manifests/ha/cluster-install?ref=v2.7.11
+- namespace.yaml
+- hard-refresh-cron.yaml
+- role-binding.yaml
+
+patches:
+- path: psc-argocd-plugin.yaml
+  target:
+    kind: Deployment
+    name: argocd-repo-server

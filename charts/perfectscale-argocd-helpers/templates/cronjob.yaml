@@ -1,0 +1,51 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: hard-refresh-annotate
+spec:
+  schedule: "*/10 * * * *"
+  concurrencyPolicy: Replace
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: 60
+      backoffLimit: 1
+      template:
+        spec:
+          serviceAccountName: {{ .Values.cronjob.serviceaccount.name }}
+          automountServiceAccountToken: true
+          restartPolicy: Never
+          containers:
+            - name: annotator
+              image: kubesphere/kubectl:v1.0.0
+              command: ["/bin/bash", "-c"]
+              args:
+                - |
+                  # Check if SA has cluster-wide permissions
+                  kubectl get applications -A --no-headers=true > /dev/null 2>&1
+                  if [ $? -eq 0 ]; then
+                    # SA has cluster-wide permissions (argo 2.6+)
+                    kubectl get applications -A --no-headers=true -o custom-columns=":metadata.name,:metadata.namespace" | while read -r app_name namespace; do
+                      name="application.argoproj.io/$app_name"
+                      plugin_section=$(kubectl get "$name" -n "$namespace" -o jsonpath="{.spec.source.plugin}")
+                      if [ -n "$plugin_section" ]; then
+                        printf "%s/%s\n" "$namespace" "$name"
+                        kubectl annotate "$name" -n "$namespace" argocd.argoproj.io/refresh=hard
+                      fi
+                    done
+                  else
+                    # SA does not have cluster-wide permissions, read namespace from file
+                    if [ -f "/var/run/secrets/kubernetes.io/serviceaccount/namespace" ]; then
+                      namespace=$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace)
+                    else
+                      namespace={{ .Release.Namespace }}
+                      echo "Namespace file does not exist, using value from helm."
+                    fi
+                    kubectl get applications -n $namespace --no-headers=true -o custom-columns=":metadata.name,:metadata.namespace" | while read -r app_name namespace; do
+                      name="application.argoproj.io/$app_name"
+                      plugin_section=$(kubectl get "$name" -n $namespace -o jsonpath="{.spec.source.plugin}")
+                      if [ -n "$plugin_section" ]; then
+                        printf "%s/%s\n" "$namespace" "$name"
+                        kubectl annotate "$name" -n "$namespace" argocd.argoproj.io/refresh=hard
+                      fi
+                    done
+                  fi

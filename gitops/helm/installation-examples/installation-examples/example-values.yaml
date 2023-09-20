@@ -1,0 +1,38 @@
+repoServer:
+  automountServiceAccountToken: true
+  serviceAccount:
+    name: argocd-repo-server
+    automountServiceAccountToken: true
+  volumes:
+    - emptyDir: {}
+      name: psc-tmp
+  extraContainers:
+    - name: psc-argocd-plugin
+      # This command is actually already set in the image.
+      # IMPORTANT!: Please remove command it if you are using argocd 2.8+
+      command: [/var/run/argocd/argocd-cmp-server] # Entrypoint should be Argo CD lightweight CMP server i.e. argocd-cmp-server
+      image: public.ecr.aws/perfectscale-io/psc-argocd-plugin:v0.0.11
+      # If you are using argocd 2.4-2.5, please use legacy image
+      #image: public.ecr.aws/perfectscale-io/psc-argocd-plugin:0.1.0-legacy
+      # Here we are configuring default evironment for every app
+      env:
+        - name: PSC_CLUSTER_UID
+          value: your-cluster-uid
+        - name: ENV_REPO_URL
+          value: https://github.com/your-org/.perfectscale.git
+          # if something not working, try to use this envs:
+      #- name: ARGOCD_ENV_PSC_CLUSTER_UID
+      #value: your-cluster-uid
+      #- name: ARGOCD_ENV_REPO_URL
+      #value: https://github.com/your-org/.perfectscale.git
+
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 999
+      volumeMounts:
+        - mountPath: /var/run/argocd
+          name: var-files
+        - mountPath: /home/argocd/cmp-server/plugins
+          name: plugins
+        - mountPath: /tmp
+          name: psc-tmp
