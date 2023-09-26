@@ -1,0 +1,91 @@
+{{- if .Values.serviceMonitor -}}
+{{- if .Values.serviceMonitor.enable -}}
+{{- if .Values.prometheusRule -}}
+{{- if .Values.prometheusRule.enable -}}
+{{- $fullName := include "helm.fullname" . -}}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ $fullName }}
+  labels:
+  {{ toYaml .Values.prometheusRule.labels | indent 4 }}
+  annotations:
+  {{ toYaml .Values.prometheusRule.annotations | indent 4 }}
+spec:
+  groups:
+    - name: {{ $fullName }}
+      rules:
+        - alert: PerfectScale exporter High KSM Scraping Error Rate
+          annotations:
+            description: "More than 30% of kube-state-metrics scraping attempts resulted in an error in the last 5 minutes."
+            runbook: "Please, contact PerfectScale support"
+            summary: "{{ $fullName }} high kube-state-metrics scraping error rate"
+          expr: |
+            (increase(psc_exporter_ksm_scraping_errors_total[5m]) / increase(psc_exporter_ksm_instances_scraped[5m])) > 0.3
+          labels:
+            {{- if .Values.prometheusRule.team }}
+            team: {{ .Values.prometheusRule.team }}
+            {{- end}}
+            {{- if .Values.prometheusRule.severity }}
+            severity: {{ .Values.prometheusRule.severity }}
+            {{- end}}
+        - alert: PerfectScale exporter High cAdvisor Scraping Error Rate
+          annotations:
+            description: "More than 30% of cAdvisor scraping attempts resulted in an error in the last 5 minutes."
+            runbook: "Please, contact PerfectScale support"
+            summary: "{{ $fullName }} high cAdvisor scraping error rate"
+          expr: |
+            (increase(psc_exporter_cadvisor_scraping_errors_total[5m]) / increase(psc_exporter_cadvisor_instances_scraped[5m])) > 0.3
+          labels:
+            {{- if .Values.prometheusRule.team }}
+            team: {{ .Values.prometheusRule.team }}
+            {{- end}}
+            {{- if .Values.prometheusRule.severity }}
+            severity: {{ .Values.prometheusRule.severity }}
+            {{- end}}
+        - alert: PerfectScale exporter Time Windows Upload Error Rate
+          annotations:
+            description: "3 or more time windows upload errors to PerfectScale occurred in the last 1 hour."
+            runbook: "Please, contact PerfectScale support"
+            summary: "{{ $fullName }} time windows upload error rate"
+          expr: |
+            increase(psc_exporter_time_windows_upload_errors_total[1h]) >= 3
+          labels:
+            {{- if .Values.prometheusRule.team }}
+            team: {{ .Values.prometheusRule.team }}
+            {{- end}}
+            {{- if .Values.prometheusRule.severity }}
+            severity: {{ .Values.prometheusRule.severity }}
+            {{- end}}
+        - alert: PerfectScale exporter Authorization Errors
+          annotations:
+            description: "2 or more PerfectScale's exporter authorization errors occurred in the last 1 hour."
+            runbook: "Please, contact PerfectScale support"
+            summary: "{{ $fullName }} authorization errors"
+          expr: |
+            increase(psc_exporter_auth_errors_total[1h]) >= 2
+          labels:
+            {{- if .Values.prometheusRule.team }}
+            team: {{ .Values.prometheusRule.team }}
+            {{- end}}
+            {{- if .Values.prometheusRule.severity }}
+            severity: {{ .Values.prometheusRule.severity }}
+            {{- end}}
+        - alert: PerfectScale exporter Upload Policy Refresh Errors
+          annotations:
+            description: "2 or more errors occurred while refreshing upload policy in the last 1 hour."
+            runbook: "Please, contact PerfectScale support"
+            summary: "{{ $fullName }} upload policy refresh errors"
+          expr: |
+            increase(psc_exporter_upload_policy_errors_total[1h]) >= 2
+          labels:
+            {{- if .Values.prometheusRule.team }}
+            team: {{ .Values.prometheusRule.team }}
+            {{- end}}
+            {{- if .Values.prometheusRule.severity }}
+            severity: {{ .Values.prometheusRule.severity }}
+            {{- end}}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
