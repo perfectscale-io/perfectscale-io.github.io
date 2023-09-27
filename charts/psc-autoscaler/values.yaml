@@ -2,7 +2,7 @@ replicaCount: 3
 image:
   repository: public.ecr.aws/perfectscale-io/psc-autoscaler
   pullPolicy: Always
-  tag: "v0.1.3"
+  tag: "v0.1.4"
 settings:
   env: "prod"
   logLevel: "ERROR"
@@ -40,8 +40,8 @@ fullnameOverride: ""
 annotations: {}
 priorityClass:
   enabled: true
-  create: false
-  name: perfectscale-exporter
+  create: true
+  name: perfectscale-autoscaler
   preemptionpolicy: PreemptLowerPriority
   value: ''
 ## Role Based Access

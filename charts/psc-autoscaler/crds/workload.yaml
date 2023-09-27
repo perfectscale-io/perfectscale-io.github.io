@@ -43,55 +43,71 @@ spec:
                 waste:
                   type: number
                   format: double
+                updatedAt:
+                  type: string
+                appliedAt:
+                  type: string
                 indicators:
                   type: object
                   additionalProperties:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        name:
-                          type: string
-                        type:
-                          type: string
-                        severity:
-                          type: integer
-                current:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      type:
+                        type: string
+                      severity:
+                        type: integer
+                containers:
                   type: object
                   additionalProperties:
                     type: object
                     properties:
-                      requests:
+                      name:
+                        type: string
+                      indicators:
+                        type: object
+                        additionalProperties:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                            type:
+                              type: string
+                            severity:
+                              type: integer
+                      current:
                         type: object
                         properties:
-                          cpu:
-                            type: string
-                          memory:
-                            type: string
-                      limits:
+                          requests:
+                            type: object
+                            properties:
+                              cpu:
+                                type: string
+                              memory:
+                                type: string
+                          limits:
+                            type: object
+                            properties:
+                              cpu:
+                                type: string
+                              memory:
+                                type: string
+                      target:
                         type: object
                         properties:
-                          cpu:
-                            type: string
-                          memory:
-                            type: string
-                target:
-                  type: object
-                  additionalProperties:
-                    type: object
-                    properties:
-                      requests:
-                        type: object
-                        properties:
-                          cpu:
-                            type: string
-                          memory:
-                            type: string
-                      limits:
-                        type: object
-                        properties:
-                          cpu:
-                            type: string
-                          memory:
-                            type: string
+                          requests:
+                            type: object
+                            properties:
+                              cpu:
+                                type: string
+                              memory:
+                                type: string
+                          limits:
+                            type: object
+                            properties:
+                              cpu:
+                                type: string
+                              memory:
+                                type: string
 
