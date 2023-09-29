@@ -72,5 +72,5 @@ webhooks:
         port: 443
     admissionReviewVersions: [ "v1" ]
     sideEffects: None
-    timeoutSeconds: 5
+    timeoutSeconds: 10
     failurePolicy: Ignore
