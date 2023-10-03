@@ -35,7 +35,7 @@ spec:
             runbook: "Please, contact PerfectScale support"
             summary: "{{ $fullName }} high cAdvisor scraping error rate"
           expr: |
-            (increase(psc_exporter_cadvisor_scraping_errors_total[5m]) / increase(psc_exporter_cadvisor_instances_scraped[5m])) > 0.3
+            (increase(psc_exporter_cadvisor_scraping_errors_total[{{ .Values.prometheusRule.cAdvisorScraping.timeRange }}]) / increase(psc_exporter_cadvisor_instances_scraped[{{ .Values.prometheusRule.cAdvisorScraping.timeRange }}])) > {{ .Values.prometheusRule.cAdvisorScraping.threshold }}
           labels:
             {{- if .Values.prometheusRule.team }}
             team: {{ .Values.prometheusRule.team }}

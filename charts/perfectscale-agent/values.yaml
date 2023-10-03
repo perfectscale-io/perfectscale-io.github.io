@@ -2,7 +2,7 @@ replicaCount: 1
 image:
   repository: public.ecr.aws/perfectscale-io/psc-exporter
   pullPolicy: Always
-  tag: "v1.0.2"
+  tag: "v1.0.3"
 settings:
   deployKubeStateMetrics: true
   serviceId: "psc-exporter"
@@ -110,6 +110,9 @@ prometheusRule:
   severity: warning
   labels:
     release: prometheus
+  cAdvisorScraping:
+    timeRange: "30m"
+    threshold: 0.3
 kube-state-metrics:
   containerSecurityContext:
     allowPrivilegeEscalation: false
