@@ -120,6 +120,10 @@ spec:
             value: "{{ .Values.settings.scraper.ksmImageName }}"
           - name: "CLUSTER_NAME"
             value: "{{ .Values.settings.clusterName }}"
+          - name: REMOTE_LOG_BATCH_SIZE
+            value: "{{ include "helm.exporter.remoteLogBatchSize" . }}"
+          - name: REMOTE_LOG_BATCH_INTERVAL
+            value: "{{ include "helm.exporter.remoteLogBatchInterval" . }}"
           ports:
             - name: http
               containerPort: 8080

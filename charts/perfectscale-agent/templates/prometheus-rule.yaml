@@ -31,7 +31,7 @@ spec:
             {{- end}}
         - alert: PerfectScale exporter High cAdvisor Scraping Error Rate
           annotations:
-            description: "More than 30% of cAdvisor scraping attempts resulted in an error in the last 5 minutes."
+            description: "More than {{ mulf .Values.prometheusRule.cAdvisorScraping.threshold 100 }}% of cAdvisor scraping attempts resulted in an error in the last {{ .Values.prometheusRule.cAdvisorScraping.timeRange | trimSuffix "m" }} minutes."
             runbook: "Please, contact PerfectScale support"
             summary: "{{ $fullName }} high cAdvisor scraping error rate"
           expr: |

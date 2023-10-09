@@ -101,6 +101,22 @@ Create the name of the service account to use
 {{- end }}
 {{- end }}
 
+{{- define "helm.exporter.remoteLogBatchSize" -}}
+{{- if .Values.settings.remoteLogBatchSize }}
+{{- .Values.settings.remoteLogBatchSize }}
+{{- else }}
+{{- "1000" }}
+{{- end }}
+{{- end }}
+
+{{- define "helm.exporter.remoteLogBatchInterval" -}}
+{{- if .Values.settings.remoteLogBatchInterval }}
+{{- .Values.settings.remoteLogBatchInterval }}
+{{- else }}
+{{- "15s" }}
+{{- end }}
+{{- end }}
+
 {{/*
 For testing purposes, in prod we want to get the actual cluster's UID
 */}}
