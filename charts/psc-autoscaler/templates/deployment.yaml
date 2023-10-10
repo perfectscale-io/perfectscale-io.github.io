@@ -63,6 +63,10 @@ spec:
                   optional: false
             - name: CLUSTER_UID
               value: "{{ include "psc-autoscaler.clusterUID" . }}"
+            - name: REMOTE_LOG_BATCH_SIZE
+              value: "{{ include "helm.autoscaler.remoteLogBatchSize" . }}"
+            - name: REMOTE_LOG_BATCH_INTERVAL
+              value: "{{ include "helm.autoscaler.remoteLogBatchInterval" . }}"
           command:
             - "./app"
             - "serve"
@@ -163,6 +167,10 @@ spec:
                   optional: false
             - name: CLUSTER_UID
               value: "{{ include "psc-autoscaler.clusterUID" . }}"
+            - name: REMOTE_LOG_BATCH_SIZE
+              value: "{{ include "helm.autoscaler.remoteLogBatchSize" . }}"
+            - name: REMOTE_LOG_BATCH_INTERVAL
+              value: "{{ include "helm.autoscaler.remoteLogBatchInterval" . }}"
           command:
             - "./app"
             - "sync"
@@ -245,6 +253,10 @@ spec:
                   optional: false
             - name: CLUSTER_UID
               value: "{{ include "psc-autoscaler.clusterUID" . }}"
+            - name: REMOTE_LOG_BATCH_SIZE
+              value: "{{ include "helm.autoscaler.remoteLogBatchSize" . }}"
+            - name: REMOTE_LOG_BATCH_INTERVAL
+              value: "{{ include "helm.autoscaler.remoteLogBatchInterval" . }}"
           command:
             - "./app"
             - "evict"
