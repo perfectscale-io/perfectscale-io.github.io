@@ -40,6 +40,8 @@ spec:
                   type: string
                 revision:
                   type: string
+                revisionHash:
+                  type: string
                 waste:
                   type: number
                   format: double
