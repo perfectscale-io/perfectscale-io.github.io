@@ -8,7 +8,7 @@ spec:
       automountServiceAccountToken: true
       containers:
         - name: lovely-plugin
-          image: public.ecr.aws/perfectscale-io/psc-argocd-plugin:v0.0.14
+          image: public.ecr.aws/perfectscale-io/psc-argocd-plugin:v0.0.15
           env:
             - name: ARGOCD_ENV_PSC_CLUSTER_UID
               value: your-cluster-uid
