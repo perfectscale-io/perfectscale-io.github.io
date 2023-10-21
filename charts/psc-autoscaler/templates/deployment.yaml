@@ -19,6 +19,7 @@ spec:
   template:
     metadata:
       labels:
+        automation.perfectscale.io/enabled: "false"
         perfectscale.io/psc-autoscaler-cmd: serve
         {{- include "psc-autoscaler.selectorLabels" . | nindent 8 }}
     spec:
@@ -120,6 +121,8 @@ metadata:
   {{- end }}
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       perfectscale.io/psc-autoscaler-cmd: sync
@@ -127,6 +130,7 @@ spec:
   template:
     metadata:
       labels:
+        automation.perfectscale.io/enabled: "false"
         perfectscale.io/psc-autoscaler-cmd: sync
         {{- include "psc-autoscaler.selectorLabels" . | nindent 8 }}
     spec:
@@ -206,6 +210,8 @@ metadata:
   {{- end }}
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       perfectscale.io/psc-autoscaler-cmd: evict
@@ -213,6 +219,7 @@ spec:
   template:
     metadata:
       labels:
+        automation.perfectscale.io/enabled: "false"
         perfectscale.io/psc-autoscaler-cmd: evict
         {{- include "psc-autoscaler.selectorLabels" . | nindent 8 }}
     spec:
