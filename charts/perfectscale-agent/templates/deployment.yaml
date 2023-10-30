@@ -124,6 +124,14 @@ spec:
             value: "{{ include "helm.exporter.remoteLogBatchSize" . }}"
           - name: REMOTE_LOG_BATCH_INTERVAL
             value: "{{ include "helm.exporter.remoteLogBatchInterval" . }}"
+          {{- if .Values.settings.httpProxyEnabled | default false }}
+          - name: HTTP_PROXY
+            value: "{{ .Values.settings.httpProxy }}"
+          - name: HTTPS_PROXY
+            value: "{{ .Values.settings.httpsProxy }}"
+          - name: NO_PROXY
+            value: "{{ .Values.settings.noProxy }}{{ .Release.Name }}-kube-state-metrics"
+          {{- end }}
           ports:
             - name: http
               containerPort: 8080

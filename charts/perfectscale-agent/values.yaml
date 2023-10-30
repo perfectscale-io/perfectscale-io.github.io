@@ -2,7 +2,7 @@ replicaCount: 1
 image:
   repository: public.ecr.aws/perfectscale-io/psc-exporter
   pullPolicy: Always
-  tag: "v1.0.7"
+  tag: "v1.0.8"
 settings:
   deployKubeStateMetrics: true
   serviceId: "psc-exporter"
@@ -32,6 +32,10 @@ settings:
     scrapeExternalKSM: false
     scrapeNamespace: ""
     ksmImageName: "kube-state-metrics"
+  httpProxyEnabled: false
+  httpProxy: "" #example: http://squid-proxy-service.default:3128
+  httpsProxy: "" #example$ http://squid-proxy-service.default:3128
+  noProxy: "" #example: ".cluster.local,.svc.cluster.local,172.20.0.1," the line must end with a coma, 172.20.0.1 it is KUBERNETES_SERVICE_HOST, API SERVICE
 secret:
   create: false
   name: "perfectscale-secret"
