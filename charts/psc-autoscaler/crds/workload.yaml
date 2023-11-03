@@ -32,6 +32,13 @@ spec:
             spec:
               type: object
               properties:
+                targetRef:
+                  type: object
+                  properties:
+                    kind:
+                      type: string
+                    name:
+                      type: string
                 namespace:
                   type: string
                 name:
