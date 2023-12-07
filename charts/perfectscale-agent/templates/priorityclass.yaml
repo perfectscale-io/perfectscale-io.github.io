@@ -1,12 +1,11 @@
-{{- if .Values.priorityClass.create }}
-{{- $priorityClassExists := lookup "scheduling.k8s.io/v1" "PriorityClass" "" .Values.priorityClass.name }}
+{{- if ne .Values.priorityClass.create false }}
+{{- $priorityClassName := .Values.priorityClass.name | default "perfectscale-exporter" }}
+{{- $priorityClassExists := lookup "scheduling.k8s.io/v1" "PriorityClass" "" $priorityClassName }}
 {{- if not $priorityClassExists }}
 apiVersion: scheduling.k8s.io/v1
 kind: PriorityClass
 metadata:
-  name:  {{ .Values.priorityClass.name }}
-  annotations:
-    "helm.sh/hook": pre-install,pre-upgrade
+  name: {{ $priorityClassName }}
 value: {{ .Values.priorityClass.value | default "1000000" }}
 preemptionPolicy: {{ .Values.priorityClass.preemptionpolicy | default "PreemptLowerPriority" }}
 globalDefault: false

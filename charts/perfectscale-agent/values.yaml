@@ -2,7 +2,7 @@ replicaCount: 1
 image:
   repository: public.ecr.aws/perfectscale-io/psc-exporter
   pullPolicy: Always
-  tag: "v1.0.13"
+  tag: "v1.0.14"
 settings:
   deployKubeStateMetrics: true
   serviceId: "psc-exporter"
@@ -79,12 +79,14 @@ containerSecurityContext:
   allowPrivilegeEscalation: false
   seccompProfile:
     type: RuntimeDefault
+## Pod Priority
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/
 priorityClass:
   enabled: true
   create: true
   name: perfectscale-exporter
   preemptionpolicy: PreemptLowerPriority
-  value: ''
+  value: '1000000'
 # Pod toleration rules.
 # Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 tolerations: {}

@@ -21,8 +21,8 @@ spec:
       labels:
         {{- include "helm.selectorLabels" . | nindent 8 }}
     spec:
-      {{- if .Values.priorityClass.enabled }}
-      priorityClassName: {{ .Values.priorityClass.name }}
+      {{- if ne .Values.priorityClass.enabled false}}
+      priorityClassName: {{ .Values.priorityClass.name | default "perfectscale-exporter" }}
       {{- end }}
       serviceAccountName: {{ include "helm.serviceAccountName" . }}
       automountServiceAccountToken: true
