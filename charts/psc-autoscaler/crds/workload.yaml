@@ -28,12 +28,15 @@ spec:
       schema:
         openAPIV3Schema:
           type: object
+          x-kubernetes-preserve-unknown-fields: true
           properties:
             spec:
               type: object
+              x-kubernetes-preserve-unknown-fields: true
               properties:
                 targetRef:
                   type: object
+                  x-kubernetes-preserve-unknown-fields: true
                   properties:
                     kind:
                       type: string
@@ -41,14 +44,26 @@ spec:
                       type: string
                 namespace:
                   type: string
-                name:
-                  type: string
-                kind:
-                  type: string
-                revision:
+                revision: # Deprecated, use currentRevisionInfo or targetRevisionInfo.
                   type: string
                 revisionHash:
                   type: string
+                currentRevisionInfo:
+                  type: object
+                  x-kubernetes-preserve-unknown-fields: true
+                  properties:
+                    revision:
+                      type: string
+                    revisionHash:
+                      type: string
+                targetRevisionInfo:
+                  type: object
+                  x-kubernetes-preserve-unknown-fields: true
+                  properties:
+                    revision:
+                      type: string
+                    revisionHash:
+                      type: string
                 waste:
                   type: number
                   format: double
@@ -58,8 +73,10 @@ spec:
                   type: string
                 indicators:
                   type: object
+                  x-kubernetes-preserve-unknown-fields: true
                   additionalProperties:
                     type: object
+                    x-kubernetes-preserve-unknown-fields: true
                     properties:
                       name:
                         type: string
@@ -69,15 +86,19 @@ spec:
                         type: integer
                 containers:
                   type: object
+                  x-kubernetes-preserve-unknown-fields: true
                   additionalProperties:
                     type: object
+                    x-kubernetes-preserve-unknown-fields: true
                     properties:
                       name:
                         type: string
                       indicators:
                         type: object
+                        x-kubernetes-preserve-unknown-fields: true
                         additionalProperties:
                           type: object
+                          x-kubernetes-preserve-unknown-fields: true
                           properties:
                             name:
                               type: string
@@ -87,9 +108,11 @@ spec:
                               type: integer
                       current:
                         type: object
+                        x-kubernetes-preserve-unknown-fields: true
                         properties:
                           requests:
                             type: object
+                            x-kubernetes-preserve-unknown-fields: true
                             properties:
                               cpu:
                                 type: string
@@ -97,6 +120,7 @@ spec:
                                 type: string
                           limits:
                             type: object
+                            x-kubernetes-preserve-unknown-fields: true
                             properties:
                               cpu:
                                 type: string
@@ -104,9 +128,11 @@ spec:
                                 type: string
                       target:
                         type: object
+                        x-kubernetes-preserve-unknown-fields: true
                         properties:
                           requests:
                             type: object
+                            x-kubernetes-preserve-unknown-fields: true
                             properties:
                               cpu:
                                 type: string
@@ -114,9 +140,9 @@ spec:
                                 type: string
                           limits:
                             type: object
+                            x-kubernetes-preserve-unknown-fields: true
                             properties:
                               cpu:
                                 type: string
                               memory:
                                 type: string
-
