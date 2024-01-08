@@ -2,7 +2,7 @@ replicaCount: 1
 image:
   repository: public.ecr.aws/perfectscale-io/psc-exporter
   pullPolicy: Always
-  tag: "v1.0.15"
+  tag: "v1.0.16"
 settings:
   deployKubeStateMetrics: true
   serviceId: "psc-exporter"
