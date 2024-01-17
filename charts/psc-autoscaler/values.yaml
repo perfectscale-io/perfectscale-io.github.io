@@ -2,7 +2,7 @@ replicaCount: 3
 image:
   repository: public.ecr.aws/perfectscale-io/psc-autoscaler
   pullPolicy: Always
-  tag: "v0.1.12"
+  tag: "v0.1.13"
 settings:
   env: "prod"
   logLevel: "DEBUG"

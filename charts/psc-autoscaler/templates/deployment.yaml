@@ -18,6 +18,8 @@ spec:
       {{- include "psc-autoscaler.selectorLabels" . | nindent 6 }}
   template:
     metadata:
+      annotations:
+        checksum/secret: {{ include (print $.Template.BasePath "/admission.yaml") . | sha256sum }}
       labels:
         automation.perfectscale.io/enabled: "false"
         perfectscale.io/psc-autoscaler-cmd: serve
