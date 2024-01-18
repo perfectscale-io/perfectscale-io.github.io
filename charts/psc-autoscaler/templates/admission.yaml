@@ -1,6 +1,6 @@
-{{- $altNames := list ( printf "%s.%s" (include "psc-autoscaler.name" .) .Release.Namespace ) ( printf "%s.%s.svc" (include "psc-autoscaler.name" .) .Release.Namespace ) -}}
+{{- $altNames := list ( printf "%s.%s" (include "psc-autoscaler.fullname" .) .Release.Namespace ) ( printf "%s.%s.svc" (include "psc-autoscaler.fullname" .) .Release.Namespace ) -}}
 {{- $ca := genCA "psc-autoscaler-ca" 1825 -}}
-{{- $cert := genSignedCert ( include "psc-autoscaler.name" . ) nil $altNames 1825 $ca -}}
+{{- $cert := genSignedCert ( include "psc-autoscaler.fullname" . ) nil $altNames 1825 $ca -}}
 {{- $label := "automation.perfectscale.io/enabled" -}}
 ---
 apiVersion: v1
