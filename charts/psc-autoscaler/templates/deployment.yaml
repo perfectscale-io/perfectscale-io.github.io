@@ -70,6 +70,10 @@ spec:
               value: "{{ include "helm.autoscaler.remoteLogBatchSize" . }}"
             - name: REMOTE_LOG_BATCH_INTERVAL
               value: "{{ include "helm.autoscaler.remoteLogBatchInterval" . }}"
+            - name: TELEMETRY_URL
+              value: "{{ .Values.settings.telemetryUrl }}"
+            - name: PUSH_TELEMETRY_FREQUENCY
+              value: "{{ .Values.settings.pushTelemetryFrequency }}"
           command:
             - "./app"
             - "serve"
@@ -177,6 +181,10 @@ spec:
               value: "{{ include "helm.autoscaler.remoteLogBatchSize" . }}"
             - name: REMOTE_LOG_BATCH_INTERVAL
               value: "{{ include "helm.autoscaler.remoteLogBatchInterval" . }}"
+            - name: TELEMETRY_URL
+              value: "{{ .Values.settings.telemetryUrl }}"
+            - name: PUSH_TELEMETRY_FREQUENCY
+              value: "{{ .Values.settings.pushTelemetryFrequency }}"
           command:
             - "./app"
             - "sync"
@@ -266,6 +274,10 @@ spec:
               value: "{{ include "helm.autoscaler.remoteLogBatchSize" . }}"
             - name: REMOTE_LOG_BATCH_INTERVAL
               value: "{{ include "helm.autoscaler.remoteLogBatchInterval" . }}"
+            - name: TELEMETRY_URL
+              value: "{{ .Values.settings.telemetryUrl }}"
+            - name: PUSH_TELEMETRY_FREQUENCY
+              value: "{{ .Values.settings.pushTelemetryFrequency }}"
           command:
             - "./app"
             - "evict"

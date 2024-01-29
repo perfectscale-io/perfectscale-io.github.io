@@ -126,7 +126,47 @@ spec:
                                 type: string
                               memory:
                                 type: string
+                      currentSpec:
+                        type: object
+                        x-kubernetes-preserve-unknown-fields: true
+                        properties:
+                          requests:
+                            type: object
+                            x-kubernetes-preserve-unknown-fields: true
+                            properties:
+                              cpu:
+                                type: string
+                              memory:
+                                type: string
+                          limits:
+                            type: object
+                            x-kubernetes-preserve-unknown-fields: true
+                            properties:
+                              cpu:
+                                type: string
+                              memory:
+                                type: string
                       target:
+                        type: object
+                        x-kubernetes-preserve-unknown-fields: true
+                        properties:
+                          requests:
+                            type: object
+                            x-kubernetes-preserve-unknown-fields: true
+                            properties:
+                              cpu:
+                                type: string
+                              memory:
+                                type: string
+                          limits:
+                            type: object
+                            x-kubernetes-preserve-unknown-fields: true
+                            properties:
+                              cpu:
+                                type: string
+                              memory:
+                                type: string
+                      targetSpec:
                         type: object
                         x-kubernetes-preserve-unknown-fields: true
                         properties:
