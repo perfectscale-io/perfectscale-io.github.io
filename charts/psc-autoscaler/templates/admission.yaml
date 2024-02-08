@@ -44,7 +44,7 @@ webhooks:
         port: 443
     admissionReviewVersions: [ "v1" ]
     sideEffects: None
-    timeoutSeconds: 5
+    timeoutSeconds: {{ (.Values.admission).timeout | default 15 }}
     failurePolicy: Ignore
   - name: namespace.perfectscale.io
     objectSelector:
@@ -72,5 +72,5 @@ webhooks:
         port: 443
     admissionReviewVersions: [ "v1" ]
     sideEffects: None
-    timeoutSeconds: 10
+    timeoutSeconds: {{ (.Values.admission).timeout | default 15 }}
     failurePolicy: Ignore

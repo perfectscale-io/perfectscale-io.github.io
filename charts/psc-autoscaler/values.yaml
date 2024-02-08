@@ -2,7 +2,7 @@ replicaCount: 3
 image:
   repository: public.ecr.aws/perfectscale-io/psc-autoscaler
   pullPolicy: Always
-  tag: "v0.1.17"
+  tag: "v0.1.18"
 settings:
   env: "prod"
   logLevel: "DEBUG"
@@ -80,3 +80,7 @@ nodeSelector: {}
 # Pod affinity rules.
 # Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 affinity: {}
+# Timeout for webhook
+# Ref: https://kubernetes.io/docs/reference/access-authn-authz/extensible-admission-controllers/#timeouts
+admission:
+  timeout: 15
