@@ -45,7 +45,7 @@ webhooks:
     admissionReviewVersions: [ "v1" ]
     sideEffects: None
     timeoutSeconds: {{ (.Values.admission).timeout | default 15 }}
-    failurePolicy: Ignore
+    failurePolicy: {{ (.Values.admission).failurePolicy | default "Ignore" }}
   - name: namespace.perfectscale.io
     objectSelector:
       matchExpressions:
@@ -73,4 +73,4 @@ webhooks:
     admissionReviewVersions: [ "v1" ]
     sideEffects: None
     timeoutSeconds: {{ (.Values.admission).timeout | default 15 }}
-    failurePolicy: Ignore
+    failurePolicy: {{ (.Values.admission).failurePolicy | default "Ignore" }}
