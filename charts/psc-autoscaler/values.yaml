@@ -2,13 +2,14 @@ replicaCount: 3
 image:
   repository: public.ecr.aws/perfectscale-io/psc-autoscaler
   pullPolicy: Always
-  tag: "v0.1.19"
+  tag: "v0.1.20"
 settings:
   env: "prod"
   logLevel: "DEBUG"
   psUrl: "https://api.app.perfectscale.io"
   telemetryUrl: "https://api.app.perfectscale.io/psc-telemetry"
   pushTelemetryFrequency: "1m"
+  httpTimeout: "3m"
 cmd:
   serve:
     resources:

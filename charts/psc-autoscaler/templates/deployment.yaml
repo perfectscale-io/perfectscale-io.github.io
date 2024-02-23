@@ -48,6 +48,8 @@ spec:
               value: "{{ .Values.settings.logLevel }}"
             - name: PS_URL
               value: "{{ .Values.settings.psUrl }}"
+            - name: HTTP_TIMEOUT
+              value: "{{ .Values.settings.httpTimeout }}"
             - name: TLS_CERT_FILE
               value: "/opt/tls/tls.crt"
             - name: TLS_KEY_FILE
@@ -159,6 +161,8 @@ spec:
           env:
             - name: ENV
               value: "{{ .Values.settings.env }}"
+            - name: HTTP_TIMEOUT
+              value: "{{ .Values.settings.httpTimeout }}"
             - name: LOG_LEVEL
               value: "{{ .Values.settings.logLevel }}"
             - name: PS_URL
@@ -252,6 +256,8 @@ spec:
           env:
             - name: ENV
               value: "{{ .Values.settings.env }}"
+            - name: HTTP_TIMEOUT
+              value: "{{ .Values.settings.httpTimeout }}"
             - name: LOG_LEVEL
               value: "{{ .Values.settings.logLevel }}"
             - name: PS_URL
