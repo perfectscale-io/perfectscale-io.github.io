@@ -86,6 +86,12 @@ spec:
             value: "{{ .Values.settings.demoEnvAddress }}"
           - name: ENABLE_PPROF
             value: "{{ .Values.settings.enablePProf | default "false" }}"
+          - name: ENABLE_OOM_DEBUG
+            value: "{{ .Values.settings.enableOomDebug | default "false" }}"
+          - name: POD_REGEX
+            value: "{{ .Values.settings.podRegex | default "" }}"
+          - name: CONTAINER_REGEX
+            value: "{{ .Values.settings.containerRegex | default "" }}"
           - name: "KUBERNETES_CLIENT_BURST"
             value: "{{ .Values.settings.k8sClientBurst }}"
           - name: "KUBERNETES_CLIENT_QPS"
