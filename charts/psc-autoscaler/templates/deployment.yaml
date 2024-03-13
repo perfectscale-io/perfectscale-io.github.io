@@ -284,6 +284,10 @@ spec:
               value: "{{ .Values.settings.telemetryUrl }}"
             - name: PUSH_TELEMETRY_FREQUENCY
               value: "{{ .Values.settings.pushTelemetryFrequency }}"
+            - name: "RESTART_DEPLOYMENT_THRESHOLD"
+              value: "{{ .Values.settings.restartDeploymentThreshold }}"
+            - name: "BYPASSED_PODS_CHECK_INTERVAL"
+              value: "{{ .Values.settings.bypassedPodsCheckInterval }}"
           command:
             - "./app"
             - "evict"
