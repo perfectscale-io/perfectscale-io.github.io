@@ -41,7 +41,7 @@ webhooks:
         namespace: {{ .Release.Namespace }}
         name: {{ include "psc-autoscaler.fullname" . }}
         path: /v1
-        port: 443
+        port: {{ (.Values.service).port | default 443 }}
     admissionReviewVersions: [ "v1" ]
     sideEffects: None
     timeoutSeconds: {{ (.Values.admission).timeout | default 15 }}
@@ -69,7 +69,7 @@ webhooks:
         namespace: {{ .Release.Namespace }}
         name: {{ include "psc-autoscaler.fullname" . }}
         path: /v1
-        port: 443
+        port: {{ (.Values.service).port | default 443 }}
     admissionReviewVersions: [ "v1" ]
     sideEffects: None
     timeoutSeconds: {{ (.Values.admission).timeout | default 15 }}

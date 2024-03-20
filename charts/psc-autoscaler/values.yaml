@@ -2,7 +2,7 @@ replicaCount: 3
 image:
   repository: public.ecr.aws/perfectscale-io/psc-autoscaler
   pullPolicy: Always
-  tag: "v0.1.21"
+  tag: "v0.1.22"
 settings:
   env: "prod"
   logLevel: "DEBUG"
@@ -54,6 +54,9 @@ priorityClass:
 ##
 rbac:
   enabled: true
+# Using host network namespace for serve pod
+hostNetwork:
+  enabled: false
 serviceAccount:
   # Specifies whether a service account should be created
   create: true

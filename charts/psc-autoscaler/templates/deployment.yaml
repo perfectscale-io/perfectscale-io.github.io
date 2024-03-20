@@ -25,6 +25,9 @@ spec:
         perfectscale.io/psc-autoscaler-cmd: serve
         {{- include "psc-autoscaler.selectorLabels" . | nindent 8 }}
     spec:
+      {{- if (.Values.hostNetwork).enabled }}
+      hostNetwork: true
+      {{- end }}
       {{- if .Values.priorityClass.enabled }}
       priorityClassName: {{ .Values.priorityClass.name }}
       {{- end }}
@@ -42,6 +45,8 @@ spec:
               containerPort: {{ .Values.service.port }}
               protocol: TCP
           env:
+            - name: HTTP_PORT
+              value: "{{ .Values.service.port }}"
             - name: ENV
               value: "{{ .Values.settings.env }}"
             - name: LOG_LEVEL
@@ -159,6 +164,8 @@ spec:
               containerPort: {{ .Values.service.port }}
               protocol: TCP
           env:
+            - name: HTTP_PORT
+              value: "{{ .Values.service.port }}"
             - name: ENV
               value: "{{ .Values.settings.env }}"
             - name: HTTP_TIMEOUT
@@ -254,6 +261,8 @@ spec:
               containerPort: {{ .Values.service.port }}
               protocol: TCP
           env:
+            - name: HTTP_PORT
+              value: "{{ .Values.service.port }}"
             - name: ENV
               value: "{{ .Values.settings.env }}"
             - name: HTTP_TIMEOUT
