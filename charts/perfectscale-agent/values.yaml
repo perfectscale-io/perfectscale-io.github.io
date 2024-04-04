@@ -2,7 +2,7 @@ replicaCount: 1
 image:
   repository: public.ecr.aws/perfectscale-io/psc-exporter
   pullPolicy: Always
-  tag: "v1.0.22"
+  tag: "v1.0.23"
 settings:
   deployKubeStateMetrics: true
   serviceId: "psc-exporter"
@@ -50,7 +50,7 @@ service:
 resources:
   requests:
     cpu: 200m
-    memory: 300M
+    memory: 300Mi
 ## Annotations to add to the deployment
 annotations: {}
 ## Pods Service Account

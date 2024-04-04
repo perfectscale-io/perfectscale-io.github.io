@@ -46,6 +46,10 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
+{{- if eq .Values.settings.env "dev" }}
+          - name: GOMEMLIMIT
+            value: "{{ .Values.resources.requests.memory }}B"
+{{- end }}
           - name: SERVICE_ID
             value: "{{ .Values.settings.serviceId }}"
           - name: ENV
