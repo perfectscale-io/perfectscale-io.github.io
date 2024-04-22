@@ -1,0 +1,16 @@
+{{- if .Values.integrationTests.rbac.enabled -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ include "psc-autoscaler.fullname" . }}-int-tests
+rules:
+  - apiGroups: [ "" ]
+    resources: [ "pods" ]
+    verbs: [ "get", "list", "watch" ]
+  - apiGroups: [ "apps" ]
+    resources: [ "replicasets", "deployments", "statefulsets", "daemonsets", "jobs", "cronjobs" ]
+    verbs: [ "get", "list", "watch", "patch", "create", "delete" ]
+  - apiGroups: [ "perfectscale.io" ]
+    resources: [ "workloads" ]
+    verbs: [ "create", "get", "delete", "list", "patch", "update", "watch" ]
+{{ end }}

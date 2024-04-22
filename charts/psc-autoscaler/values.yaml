@@ -2,7 +2,7 @@ replicaCount: 3
 image:
   repository: public.ecr.aws/perfectscale-io/psc-autoscaler
   pullPolicy: Always
-  tag: "v0.1.22"
+  tag: "v0.1.23"
 settings:
   env: "prod"
   logLevel: "DEBUG"
@@ -92,3 +92,24 @@ admission:
   timeout: 15
   # Optionally change it to "Fail"
   failurePolicy: "Ignore"
+integrationTests:
+  enabled: true
+  image:
+    repository: public.ecr.aws/perfectscale-io/psc-autoscaler
+    tag: "v0.1.23-int-tests"
+  serviceAccount:
+    # Specifies whether a service account should be created
+    create: true
+    # Annotations to add to the service account
+    annotations: {}
+    # The name of the service account to use.
+    # If not set and create is true, a name is generated using the fullname template
+    name: ""
+  rbac:
+    enabled: true
+  settings:
+    cleanup: "true"
+  resources:
+    requests:
+      cpu: 100m
+      memory: 100Mi

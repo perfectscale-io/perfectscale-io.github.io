@@ -1,0 +1,21 @@
+{{- if .Values.integrationTests.enabled -}}
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ include "psc-autoscaler.fullname" . }}-int-tests-mutation-check
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: mutation-check
+      image: "{{ .Values.image.repository }}:{{ .Values.integrationTests.image.tag |  default (  printf "%s-int-tests" .Chart.AppVersion) }}"
+      command:
+        - "./test"
+      env:
+       - name: CLEANUP
+         value: {{ .Values.integrationTests.settings.cleanup | quote }}
+      resources:
+        {{- toYaml .Values.cmd.serve.resources | nindent 8 }}
+  restartPolicy: Never
+  serviceAccountName: {{ include "psc-autoscaler.integrationTests.serviceAccountName" . }}
+{{ end }}

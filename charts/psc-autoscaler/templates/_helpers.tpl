@@ -79,6 +79,14 @@ Create the name of the service account to use
 {{- end }}
 {{- end }}
 
+{{- define "psc-autoscaler.integrationTests.serviceAccountName" -}}
+{{- if .Values.integrationTests.serviceAccount.create }}
+{{- default (printf "%s-int-tests" (include "psc-autoscaler.fullname" .)) .Values.integrationTests.serviceAccount.name }}
+{{- else }}
+{{- default "default" .Values.integrationTests.serviceAccount.name }}
+{{- end }}
+{{- end }}
+
 {{- define "helm.autoscaler.remoteLogBatchSize" -}}
 {{- if .Values.settings.remoteLogBatchSize }}
 {{- .Values.settings.remoteLogBatchSize }}
