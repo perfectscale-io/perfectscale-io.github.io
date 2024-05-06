@@ -17,11 +17,12 @@ spec:
       rules:
         - alert: PerfectScale exporter High KSM Scraping Error Rate
           annotations:
-            description: "More than 30% of kube-state-metrics scraping attempts resulted in an error in the last 5 minutes."
+            description: "More than 30% of kube-state-metrics scraping attempts resulted in an error in the last 30 minutes."
             runbook: "Please, contact PerfectScale support"
             summary: "{{ $fullName }} high kube-state-metrics scraping error rate"
           expr: |
-            (increase(psc_exporter_ksm_scraping_errors_total[10m]) / avg_over_time(psc_exporter_ksm_instances_scraped[10m])) > 0.3
+            (increase(psc_exporter_ksm_scraping_errors_total[30m]) / avg_over_time(psc_exporter_ksm_instances_scraped[30m])) > 0.3
+          for: 30m
           labels:
             {{- if .Values.prometheusRule.team }}
             team: {{ .Values.prometheusRule.team }}
