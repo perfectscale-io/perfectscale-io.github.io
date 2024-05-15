@@ -81,6 +81,14 @@ spec:
               value: "{{ .Values.settings.telemetryUrl }}"
             - name: PUSH_TELEMETRY_FREQUENCY
               value: "{{ .Values.settings.pushTelemetryFrequency }}"
+            {{- if .Values.settings.httpProxyEnabled | default false }}
+            - name: HTTP_PROXY
+              value: "{{ .Values.settings.httpProxy }}"
+            - name: HTTPS_PROXY
+              value: "{{ .Values.settings.httpsProxy }}"
+            - name: NO_PROXY
+              value: "{{ .Values.settings.noProxy }}"
+            {{- end }}
           command:
             - "./app"
             - "serve"
@@ -196,6 +204,14 @@ spec:
               value: "{{ .Values.settings.telemetryUrl }}"
             - name: PUSH_TELEMETRY_FREQUENCY
               value: "{{ .Values.settings.pushTelemetryFrequency }}"
+            {{- if .Values.settings.httpProxyEnabled | default false }}
+            - name: HTTP_PROXY
+              value: "{{ .Values.settings.httpProxy }}"
+            - name: HTTPS_PROXY
+              value: "{{ .Values.settings.httpsProxy }}"
+            - name: NO_PROXY
+              value: "{{ .Values.settings.noProxy }}"
+            {{- end }}
           command:
             - "./app"
             - "sync"
@@ -297,6 +313,14 @@ spec:
               value: "{{ .Values.settings.restartDeploymentThreshold }}"
             - name: "BYPASSED_PODS_CHECK_INTERVAL"
               value: "{{ .Values.settings.bypassedPodsCheckInterval }}"
+            {{- if .Values.settings.httpProxyEnabled | default false }}
+            - name: HTTP_PROXY
+              value: "{{ .Values.settings.httpProxy }}"
+            - name: HTTPS_PROXY
+              value: "{{ .Values.settings.httpsProxy }}"
+            - name: NO_PROXY
+              value: "{{ .Values.settings.noProxy }}"
+            {{- end }}
           command:
             - "./app"
             - "evict"

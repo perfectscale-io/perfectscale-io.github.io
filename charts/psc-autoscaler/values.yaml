@@ -2,7 +2,7 @@ replicaCount: 3
 image:
   repository: public.ecr.aws/perfectscale-io/psc-autoscaler
   pullPolicy: Always
-  tag: "v0.1.24"
+  tag: "v0.1.25"
 settings:
   env: "prod"
   logLevel: "DEBUG"
@@ -12,6 +12,10 @@ settings:
   restartDeploymentThreshold: 0.1 # defines the number of bypassed pods of the deployment below which we restart individual pods
   bypassedPodsCheckInterval: "30m"
   httpTimeout: "3m"
+  httpProxyEnabled: false
+  httpProxy: "" #example: http://squid-proxy-service.default:3128
+  httpsProxy: "" #example$ http://squid-proxy-service.default:3128
+  noProxy: "" #example: ".cluster.local,.svc.cluster.local,172.20.0.1," the line must end with a coma, 172.20.0.1 it is KUBERNETES_SERVICE_HOST, API SERVICE
 cmd:
   serve:
     resources:
