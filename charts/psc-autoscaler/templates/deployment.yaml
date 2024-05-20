@@ -42,11 +42,11 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: https
-              containerPort: {{ .Values.service.port }}
+              containerPort: {{ .Values.settings.port }}
               protocol: TCP
           env:
             - name: HTTP_PORT
-              value: "{{ .Values.service.port }}"
+              value: "{{ .Values.settings.port }}"
             - name: ENV
               value: "{{ .Values.settings.env }}"
             - name: LOG_LEVEL
@@ -169,11 +169,11 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: https
-              containerPort: {{ .Values.service.port }}
+              containerPort: {{ .Values.settings.port }}
               protocol: TCP
           env:
             - name: HTTP_PORT
-              value: "{{ .Values.service.port }}"
+              value: "{{ .Values.settings.port }}"
             - name: ENV
               value: "{{ .Values.settings.env }}"
             - name: HTTP_TIMEOUT
@@ -274,11 +274,11 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: https
-              containerPort: {{ .Values.service.port }}
+              containerPort: {{ .Values.settings.port }}
               protocol: TCP
           env:
             - name: HTTP_PORT
-              value: "{{ .Values.service.port }}"
+              value: "{{ .Values.settings.port }}"
             - name: ENV
               value: "{{ .Values.settings.env }}"
             - name: HTTP_TIMEOUT
