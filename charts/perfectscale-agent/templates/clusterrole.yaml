@@ -82,6 +82,17 @@ rules:
     verbs:
       - get
       - list
+  - apiGroups:
+      - argoproj.io
+    resources:
+      - rollouts
+      - rollouts/scale
+      - rollouts/status
+      - replicasets
+    verbs:
+      - "get"
+      - "list"
+      - "watch"
   - nonResourceURLs:
       - "/version"
     verbs:
