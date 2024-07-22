@@ -1,7 +1,6 @@
 {{- $altNames := list ( printf "%s.%s" (include "psc-autoscaler.fullname" .) .Release.Namespace ) ( printf "%s.%s.svc" (include "psc-autoscaler.fullname" .) .Release.Namespace ) -}}
 {{- $ca := genCA "psc-autoscaler-ca" 1825 -}}
 {{- $cert := genSignedCert ( include "psc-autoscaler.fullname" . ) nil $altNames 1825 $ca -}}
-{{- $label := "automation.perfectscale.io/enabled" -}}
 ---
 apiVersion: v1
 kind: Secret
@@ -19,44 +18,12 @@ kind: MutatingWebhookConfiguration
 metadata:
   name: {{ include "psc-autoscaler.fullname" . }}
 webhooks:
-  - name: label.perfectscale.io
-    objectSelector:
-      matchExpressions:
-        - key: {{ $label }}
-          operator: In
-          values: [ "true" ]
+  - name: pods.perfectscale.io
     namespaceSelector:
       matchExpressions:
-        - key: {{ $label }}
-          operator: DoesNotExist
-    rules:
-      - apiGroups: [ "" ]
-        apiVersions: [ "v1" ]
-        operations: [ "CREATE" ]
-        resources: [ "pods" ]
-        scope: "Namespaced"
-    clientConfig:
-      caBundle: {{ $ca.Cert | b64enc }}
-      service:
-        namespace: {{ .Release.Namespace }}
-        name: {{ include "psc-autoscaler.fullname" . }}
-        path: /v1
-        port: {{ (.Values.service).port | default 443 }}
-    admissionReviewVersions: [ "v1" ]
-    sideEffects: None
-    timeoutSeconds: {{ (.Values.admission).timeout | default 15 }}
-    failurePolicy: {{ (.Values.admission).failurePolicy | default "Ignore" }}
-  - name: namespace.perfectscale.io
-    objectSelector:
-      matchExpressions:
-        - key: {{ $label }}
+        - key: kubernetes.io/metadata.name
           operator: NotIn
-          values: [ "false" ]
-    namespaceSelector:
-      matchExpressions:
-        - key: {{ $label }}
-          operator: In
-          values: [ "true" ]
+          values: {{ (.Values.settings).excludedNamespaces }}
     rules:
       - apiGroups: [ "" ]
         apiVersions: [ "v1" ]
@@ -74,3 +41,27 @@ webhooks:
     sideEffects: None
     timeoutSeconds: {{ (.Values.admission).timeout | default 15 }}
     failurePolicy: {{ (.Values.admission).failurePolicy | default "Ignore" }}
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: {{ include "psc-autoscaler.fullname" . }}
+webhooks:
+  - name: configs.perfectscale.io
+    rules:
+      - apiGroups: [ "perfectscale.io" ]
+        apiVersions: [ "v1" ]
+        operations: [ "CREATE", "UPDATE" ]
+        resources: [ "namespaceautomationconfigs", "workloadautomationconfigs" ]
+        scope: "Namespaced"
+    clientConfig:
+      caBundle: {{ $ca.Cert | b64enc }}
+      service:
+        namespace: {{ .Release.Namespace }}
+        name: {{ include "psc-autoscaler.fullname" . }}
+        path: /v1/validate/config
+        port: {{ (.Values.service).port | default 443 }}
+    admissionReviewVersions: [ "v1" ]
+    sideEffects: None
+    timeoutSeconds: {{ (.Values.admission).timeout | default 15 }}
+    failurePolicy: "Fail"

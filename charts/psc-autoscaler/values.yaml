@@ -2,7 +2,7 @@ replicaCount: 3
 image:
   repository: public.ecr.aws/perfectscale-io/psc-autoscaler
   pullPolicy: Always
-  tag: "v0.1.30"
+  tag: "v1.0.0"
 settings:
   port: 8443
   env: "prod"
@@ -17,6 +17,7 @@ settings:
   httpProxy: "" #example: http://squid-proxy-service.default:3128
   httpsProxy: "" #example$ http://squid-proxy-service.default:3128
   noProxy: "" #example: ".cluster.local,.svc.cluster.local,172.20.0.1," the line must end with a coma, 172.20.0.1 it is KUBERNETES_SERVICE_HOST, API SERVICE
+  excludedNamespaces: ["kube-system"]
 cmd:
   serve:
     resources:
@@ -118,3 +119,50 @@ integrationTests:
     requests:
       cpu: 100m
       memory: 100Mi
+# Cluster automation configuration
+clusterAutomationConfig:
+  automation:
+    operational:
+      stopAllAutomation: false
+      timeConstraints:
+        maxAutomationFrequency: "30m"
+        maintenanceWindow:
+          monday:
+            - "00:00-23:59"
+          tuesday:
+            - "00:00-23:59"
+          wednesday:
+            - "00:00-23:59"
+          thursday:
+            - "00:00-23:59"
+          friday:
+            - "00:00-23:59"
+          saturday:
+            - "00:00-23:59"
+          sunday:
+            - "00:00-23:59"
+      restrictions:
+        workloadMinWasteUSDPerMonth: 5
+        cpuManagement:
+          request:
+            increaseEnabled: false
+            decreaseEnabled: true
+            minimumCores: -1
+            maximumCores: -1
+          limit:
+            keepLimit: true
+        memoryManagement:
+          request:
+            increaseEnabled: false
+            decreaseEnabled: true
+            minimumGiB: -1
+            maximumGiB: -1
+          limit:
+            increaseEnabled: false
+            decreaseEnabled: false
+            minimumGiB: -1
+            maximumGiB: -1
+            memoryLeakDetection:
+              maxMemoryIncreaseIterations:
+                daily: 3
+                weekly: 6

@@ -21,7 +21,7 @@ spec:
       annotations:
         checksum/secret: {{ include (print $.Template.BasePath "/admission.yaml") . | sha256sum }}
       labels:
-        automation.perfectscale.io/enabled: "false"
+        automation.perfectscale.io/excluded: "true"
         perfectscale.io/psc-autoscaler-cmd: serve
         {{- include "psc-autoscaler.selectorLabels" . | nindent 8 }}
     spec:
@@ -89,6 +89,8 @@ spec:
             - name: NO_PROXY
               value: "{{ .Values.settings.noProxy }}"
             {{- end }}
+            - name: "EXCLUDED_NAMESPACES"
+              value: "{{ .Values.settings.excludedNamespaces }}"
           command:
             - "./app"
             - "serve"
@@ -151,7 +153,7 @@ spec:
   template:
     metadata:
       labels:
-        automation.perfectscale.io/enabled: "false"
+        automation.perfectscale.io/excluded: "true"
         perfectscale.io/psc-autoscaler-cmd: sync
         {{- include "psc-autoscaler.selectorLabels" . | nindent 8 }}
     spec:
@@ -212,6 +214,8 @@ spec:
             - name: NO_PROXY
               value: "{{ .Values.settings.noProxy }}"
             {{- end }}
+            - name: "EXCLUDED_NAMESPACES"
+              value: "{{ .Values.settings.excludedNamespaces }}"
           command:
             - "./app"
             - "sync"
@@ -256,7 +260,7 @@ spec:
   template:
     metadata:
       labels:
-        automation.perfectscale.io/enabled: "false"
+        automation.perfectscale.io/excluded: "true"
         perfectscale.io/psc-autoscaler-cmd: evict
         {{- include "psc-autoscaler.selectorLabels" . | nindent 8 }}
     spec:
@@ -321,6 +325,8 @@ spec:
             - name: NO_PROXY
               value: "{{ .Values.settings.noProxy }}"
             {{- end }}
+            - name: "EXCLUDED_NAMESPACES"
+              value: "{{ .Values.settings.excludedNamespaces }}"
           command:
             - "./app"
             - "evict"

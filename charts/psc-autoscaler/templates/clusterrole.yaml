@@ -5,7 +5,7 @@ metadata:
   name: {{ include "psc-autoscaler.fullname" . }}
 rules:
   - apiGroups: [ "admissionregistration.k8s.io" ]
-    resources: [ "mutatingwebhookconfigurations" ]
+    resources: [ "mutatingwebhookconfigurations", "validatingwebhookconfigurations" ]
     verbs: [ "create", "get", "delete", "list", "patch", "update", "watch" ]
   - apiGroups: [ "" ]
     resources: [ "pods", "namespaces" ]
@@ -20,6 +20,6 @@ rules:
     resources: [ "rollouts" ]
     verbs: [ "get", "list", "watch", "patch" ]
   - apiGroups: [ "perfectscale.io" ]
-    resources: [ "workloads" ]
+    resources: [ "workloads", "clusterautomationconfigs", "namespaceautomationconfigs", "workloadautomationconfigs", "workloadautomationstatuses" ]
     verbs: [ "create", "get", "delete", "list", "patch", "update", "watch" ]
 {{ end }}

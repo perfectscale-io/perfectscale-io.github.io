@@ -1,0 +1,321 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  # name must match the spec fields below, and be in the form: <plural>.<group>
+  name: workloadautomationconfigs.perfectscale.io
+spec:
+  # either Namespaced or Cluster
+  scope: Namespaced
+  # group name to use for REST API: /apis/<group>/<version>
+  group: perfectscale.io
+  names:
+    # plural name to be used in the URL: /apis/<group>/<version>/<plural>
+    plural: workloadautomationconfigs
+    # singular name to be used as an alias on the CLI and for display
+    singular: workloadautomationconfig
+    # kind is normally the CamelCased singular type. Your resource manifests use this.
+    kind: WorkloadAutomationConfig
+    # shortNames allow shorter string to match your resource on the CLI
+    shortNames:
+      - waconf
+  # list of versions supported by this CustomResourceDefinition
+  versions:
+    - name: v1
+      # Each version can be enabled/disabled by Served flag.
+      served: true
+      # One and only one version must be marked as the storage version.
+      storage: true
+      additionalPrinterColumns:
+        - name: AutomationMode
+          type: string
+          jsonPath: .spec.automation.operational.automationMode
+        - name: MaxAutomationFrequency
+          type: string
+          jsonPath: .spec.automation.operational.timeConstraints.maxAutomationFrequency
+        - name: Age
+          type: date
+          jsonPath: .metadata.creationTimestamp
+      schema:
+        openAPIV3Schema:
+          type: object
+          x-kubernetes-preserve-unknown-fields: true
+          properties:
+            spec:
+              type: object
+              x-kubernetes-preserve-unknown-fields: true
+              required:
+                - targetRef
+              properties:
+                targetRef:
+                  type: object
+                  x-kubernetes-preserve-unknown-fields: true
+                  properties:
+                    kind:
+                      type: string
+                    name:
+                      type: string
+                  required:
+                    - kind
+                    - name
+                automation:
+                  type: object
+                  x-kubernetes-preserve-unknown-fields: true
+                  properties:
+                    operational:
+                      type: object
+                      x-kubernetes-preserve-unknown-fields: true
+                      properties:
+                        automationMode:
+                          type: string
+                        timeConstraints:
+                          type: object
+                          x-kubernetes-preserve-unknown-fields: true
+                          properties:
+                            maxAutomationFrequency:
+                              type: string
+                            maintenanceWindow:
+                              type: object
+                              x-kubernetes-preserve-unknown-fields: true
+                              properties:
+                                monday:
+                                  type: array
+                                  items:
+                                    type: string
+                                tuesday:
+                                  type: array
+                                  items:
+                                    type: string
+                                wednesday:
+                                  type: array
+                                  items:
+                                    type: string
+                                thursday:
+                                  type: array
+                                  items:
+                                    type: string
+                                friday:
+                                  type: array
+                                  items:
+                                    type: string
+                                saturday:
+                                  type: array
+                                  items:
+                                    type: string
+                                sunday:
+                                  type: array
+                                  items:
+                                    type: string
+                        restrictions:
+                          type: object
+                          x-kubernetes-preserve-unknown-fields: true
+                          properties:
+                            workloadMinWasteUSDPerMonth:
+                              type: integer
+                              minimum: 0
+                              exclusiveMinimum: true
+                            cpuManagement:
+                              type: object
+                              x-kubernetes-preserve-unknown-fields: true
+                              properties:
+                                request:
+                                  type: object
+                                  x-kubernetes-preserve-unknown-fields: true
+                                  properties:
+                                    increaseEnabled:
+                                      type: boolean
+                                    decreaseEnabled:
+                                      type: boolean
+                                    minimumCores:
+                                      type: number
+                                      format: double
+                                      oneOf:
+                                        - enum: [ -1 ]
+                                        - minimum: 0
+                                          exclusiveMinimum: true
+                                    maximumCores:
+                                      type: number
+                                      format: double
+                                      oneOf:
+                                        - enum: [ -1 ]
+                                        - minimum: 0
+                                          exclusiveMinimum: true
+                                limit:
+                                  type: object
+                                  x-kubernetes-preserve-unknown-fields: true
+                                  properties:
+                                    keepLimit:
+                                      type: boolean
+                            memoryManagement:
+                              type: object
+                              x-kubernetes-preserve-unknown-fields: true
+                              properties:
+                                request:
+                                  type: object
+                                  x-kubernetes-preserve-unknown-fields: true
+                                  properties:
+                                    increaseEnabled:
+                                      type: boolean
+                                    decreaseEnabled:
+                                      type: boolean
+                                    minimumGiB:
+                                      type: number
+                                      format: double
+                                      oneOf:
+                                        - enum: [ -1 ]
+                                        - minimum: 0
+                                          exclusiveMinimum: true
+                                    maximumGiB:
+                                      type: number
+                                      format: double
+                                      oneOf:
+                                        - enum: [ -1 ]
+                                        - minimum: 0
+                                          exclusiveMinimum: true
+                                limit:
+                                  type: object
+                                  x-kubernetes-preserve-unknown-fields: true
+                                  properties:
+                                    increaseEnabled:
+                                      type: boolean
+                                    decreaseEnabled:
+                                      type: boolean
+                                    minimumGiB:
+                                      type: number
+                                      format: double
+                                      oneOf:
+                                        - enum: [ -1 ]
+                                        - minimum: 0
+                                          exclusiveMinimum: true
+                                    maximumGiB:
+                                      type: number
+                                      format: double
+                                      oneOf:
+                                        - enum: [ -1 ]
+                                        - minimum: 0
+                                          exclusiveMinimum: true
+                                    memoryLeakDetection:
+                                      type: object
+                                      x-kubernetes-preserve-unknown-fields: true
+                                      properties:
+                                        maxMemoryIncreaseIterations:
+                                          type: object
+                                          x-kubernetes-preserve-unknown-fields: true
+                                          properties:
+                                            daily:
+                                              type: integer
+                                              minimum: 0
+                                              exclusiveMinimum: true
+                                            weekly:
+                                              type: integer
+                                              minimum: 0
+                                              exclusiveMinimum: true
+                    containers:
+                      type: object
+                      additionalProperties:
+                        type: object
+                        x-kubernetes-preserve-unknown-fields: true
+                        properties:
+                          operational:
+                            type: object
+                            x-kubernetes-preserve-unknown-fields: true
+                            properties:
+                              restrictions:
+                                type: object
+                                x-kubernetes-preserve-unknown-fields: true
+                                properties:
+                                  cpuManagement:
+                                    type: object
+                                    x-kubernetes-preserve-unknown-fields: true
+                                    properties:
+                                      request:
+                                        type: object
+                                        x-kubernetes-preserve-unknown-fields: true
+                                        properties:
+                                          increaseEnabled:
+                                            type: boolean
+                                          decreaseEnabled:
+                                            type: boolean
+                                          minimumCores:
+                                            type: number
+                                            format: double
+                                            oneOf:
+                                              - enum: [ -1 ]
+                                              - minimum: 0
+                                                exclusiveMinimum: true
+                                          maximumCores:
+                                            type: number
+                                            format: double
+                                            oneOf:
+                                              - enum: [ -1 ]
+                                              - minimum: 0
+                                                exclusiveMinimum: true
+                                      limit:
+                                        type: object
+                                        x-kubernetes-preserve-unknown-fields: true
+                                        properties:
+                                          keepLimit:
+                                            type: boolean
+                                  memoryManagement:
+                                    type: object
+                                    x-kubernetes-preserve-unknown-fields: true
+                                    properties:
+                                      request:
+                                        type: object
+                                        x-kubernetes-preserve-unknown-fields: true
+                                        properties:
+                                          increaseEnabled:
+                                            type: boolean
+                                          decreaseEnabled:
+                                            type: boolean
+                                          minimumGiB:
+                                            type: number
+                                            format: double
+                                            oneOf:
+                                              - enum: [ -1 ]
+                                              - minimum: 0
+                                                exclusiveMinimum: true
+                                          maximumGiB:
+                                            type: number
+                                            format: double
+                                            oneOf:
+                                              - enum: [ -1 ]
+                                              - minimum: 0
+                                                exclusiveMinimum: true
+                                      limit:
+                                        type: object
+                                        x-kubernetes-preserve-unknown-fields: true
+                                        properties:
+                                          increaseEnabled:
+                                            type: boolean
+                                          decreaseEnabled:
+                                            type: boolean
+                                          minimumGiB:
+                                            type: number
+                                            format: double
+                                            oneOf:
+                                              - enum: [ -1 ]
+                                              - minimum: 0
+                                                exclusiveMinimum: true
+                                          maximumGiB:
+                                            type: number
+                                            format: double
+                                            oneOf:
+                                              - enum: [ -1 ]
+                                              - minimum: 0
+                                                exclusiveMinimum: true
+                                          memoryLeakDetection:
+                                            type: object
+                                            x-kubernetes-preserve-unknown-fields: true
+                                            properties:
+                                              maxMemoryIncreaseIterations:
+                                                type: object
+                                                x-kubernetes-preserve-unknown-fields: true
+                                                properties:
+                                                  daily:
+                                                    type: integer
+                                                    minimum: 0
+                                                    exclusiveMinimum: true
+                                                  weekly:
+                                                    type: integer
+                                                    minimum: 0
+                                                    exclusiveMinimum: true
