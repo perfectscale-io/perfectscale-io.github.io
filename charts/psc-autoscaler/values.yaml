@@ -2,7 +2,7 @@ replicaCount: 3
 image:
   repository: public.ecr.aws/perfectscale-io/psc-autoscaler
   pullPolicy: Always
-  tag: "v1.0.1"
+  tag: "v1.0.2"
 settings:
   port: 8443
   env: "prod"
@@ -122,8 +122,12 @@ integrationTests:
 # Cluster automation configuration
 clusterAutomationConfig:
   automation:
+    workloadTypes:
+      Deployment:
+        operational:
+          automationMode: "Enabled"
     operational:
-      stopAllAutomation: false
+      stopAllAutomation: true
       timeConstraints:
         maxAutomationFrequency: "30m"
         maintenanceWindow:
