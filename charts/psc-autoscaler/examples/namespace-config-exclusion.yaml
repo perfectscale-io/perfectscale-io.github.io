@@ -1,0 +1,8 @@
+apiVersion: perfectscale.io/v1
+kind: NamespaceAutomationConfig
+metadata:
+  name: your-namespace-automation-config
+spec:
+  automation:
+    operational:
+      automationMode: "Disabled"

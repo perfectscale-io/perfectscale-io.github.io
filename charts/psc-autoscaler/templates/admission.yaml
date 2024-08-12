@@ -52,6 +52,11 @@ webhooks:
       - apiGroups: [ "perfectscale.io" ]
         apiVersions: [ "v1" ]
         operations: [ "CREATE", "UPDATE" ]
+        resources: [ "clusterautomationconfigs" ]
+        scope: "*"
+      - apiGroups: [ "perfectscale.io" ]
+        apiVersions: [ "v1" ]
+        operations: [ "CREATE", "UPDATE" ]
         resources: [ "namespaceautomationconfigs", "workloadautomationconfigs" ]
         scope: "Namespaced"
     clientConfig:

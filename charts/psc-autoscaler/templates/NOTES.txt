@@ -14,3 +14,6 @@
   echo "Visit http://127.0.0.1:8443 to use your application"
   kubectl --namespace {{ .Release.Namespace }} port-forward $POD_NAME 8443:$CONTAINER_PORT
 {{- end }}
+
+2. To view Automation CRD Examples, visit:
+{{ .Values.settings.automationCRDExamplesUrl }}

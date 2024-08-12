@@ -1,6 +1,0 @@
-apiVersion: perfectscale.io/v1
-kind: ClusterAutomationConfig
-metadata:
-  name: cluster-automation-config
-spec:
-  {{- toYaml .Values.clusterAutomationConfig | nindent 2 }}

@@ -1,0 +1,38 @@
+apiVersion: perfectscale.io/v1
+kind: WorkloadAutomationConfig
+metadata:
+  name: your-workload-automation-config
+spec:
+  targetRef:
+    kind: Deployment
+    name: deployment-name
+  automation:
+    operational:
+      automationMode: "Enabled"
+    containers:
+      container-name:
+        operational:
+          restrictions:
+            cpuManagement:
+              request:
+                increaseEnabled: true
+                decreaseEnabled: true
+                minimumCores: 0.5
+                maximumCores: 8
+              limit:
+                keepLimit: false
+            memoryManagement:
+              request:
+                increaseEnabled: true
+                decreaseEnabled: true
+                minimumGiB: 1
+                maximumGiB: 16
+              limit:
+                increaseEnabled: true
+                decreaseEnabled: true
+                minimumGiB: 2
+                maximumGiB: 31
+                memoryLeakDetection:
+                  maxMemoryIncreaseIterations:
+                    daily: 4
+                    weekly: 7

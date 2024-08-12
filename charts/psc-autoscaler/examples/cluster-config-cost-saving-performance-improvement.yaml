@@ -1,0 +1,26 @@
+apiVersion: perfectscale.io/v1
+kind: ClusterAutomationConfig
+metadata:
+  name: cluster-automation-config
+spec:
+  automation:
+    operational:
+      stopAllAutomation: false
+    workloadTypes:
+      Deployment:
+        operational:
+          automationMode: "Enabled"
+          restrictions:
+            cpuManagement:
+              request:
+                increaseEnabled: true
+                decreaseEnabled: true
+              limit:
+                keepLimit: false
+            memoryManagement:
+              request:
+                increaseEnabled: true
+                decreaseEnabled: true
+              limit:
+                increaseEnabled: true
+                decreaseEnabled: true

@@ -1,0 +1,51 @@
+apiVersion: perfectscale.io/v1
+kind: NamespaceAutomationConfig
+metadata:
+  name: your-namespace-automation-config
+spec:
+  automation:
+    workloadTypes:
+      Deployment:
+        operational:
+          automationMode: "Enabled"
+          timeConstraints:
+            maxAutomationFrequency: "15m"
+            maintenanceWindow:
+              monday:
+                - "10:00-18:00"
+              tuesday:
+                - "10:00-18:00"
+              wednesday:
+                - "10:00-18:00"
+              thursday:
+                - "10:00-18:00"
+              friday:
+                - "10:00-18:00"
+              saturday:
+                - "10:00-18:00"
+              sunday:
+                - "10:00-18:00"
+          restrictions:
+            cpuManagement:
+              request:
+                increaseEnabled: true
+                decreaseEnabled: true
+                minimumCores: 0.5
+                maximumCores: 8
+              limit:
+                keepLimit: false
+            memoryManagement:
+              request:
+                increaseEnabled: true
+                decreaseEnabled: true
+                minimumGiB: 1
+                maximumGiB: 16
+              limit:
+                increaseEnabled: true
+                decreaseEnabled: true
+                minimumGiB: 2
+                maximumGiB: 31
+                memoryLeakDetection:
+                  maxMemoryIncreaseIterations:
+                    daily: 4
+                    weekly: 7

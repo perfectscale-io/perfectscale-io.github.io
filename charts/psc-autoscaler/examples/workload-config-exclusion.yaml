@@ -1,0 +1,11 @@
+apiVersion: perfectscale.io/v1
+kind: WorkloadAutomationConfig
+metadata:
+  name: your-workload-automation-config
+spec:
+  targetRef:
+    kind: Deployment
+    name: deployment-name
+  automation:
+    operational:
+      automationMode: "Disabled"
