@@ -19,11 +19,13 @@ metadata:
   name: {{ include "psc-autoscaler.fullname" . }}
 webhooks:
   - name: pods.perfectscale.io
+    {{- if and (.Values.settings.excludedNamespaces) (ne (.Values.settings.excludedNamespaces | toString) "[]") }}
     namespaceSelector:
       matchExpressions:
         - key: kubernetes.io/metadata.name
           operator: NotIn
           values: {{ (.Values.settings).excludedNamespaces }}
+    {{- end }}
     rules:
       - apiGroups: [ "" ]
         apiVersions: [ "v1" ]
