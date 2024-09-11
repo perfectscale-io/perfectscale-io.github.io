@@ -2,7 +2,7 @@ replicaCount: 1
 image:
   repository: public.ecr.aws/perfectscale-io/psc-exporter
   pullPolicy: Always
-  tag: "v1.0.37"
+  tag: "v1.0.38"
 initContainer:
   image:
     repository: public.ecr.aws/perfectscale-io/alpine
@@ -137,7 +137,7 @@ kube-state-metrics:
     - pods=[*]
     - namespaces=[*]
   metricAnnotationsAllowList:
-    - pods=[gitops.perfectscale.io/user-spec]
+    - pods=[*]
   collectors:
     - cronjobs
     - daemonsets
