@@ -2,7 +2,7 @@ replicaCount: 3
 image:
   repository: public.ecr.aws/perfectscale-io/psc-autoscaler
   pullPolicy: Always
-  tag: "v1.0.6"
+  tag: "v1.0.7"
 settings:
   port: 8443
   env: "prod"
@@ -18,7 +18,7 @@ settings:
   httpProxy: "" #example: http://squid-proxy-service.default:3128
   httpsProxy: "" #example$ http://squid-proxy-service.default:3128
   noProxy: "" #example: ".cluster.local,.svc.cluster.local,172.20.0.1," the line must end with a coma, 172.20.0.1 it is KUBERNETES_SERVICE_HOST, API SERVICE
-  excludedNamespaces: ["kube-system"]
+  excludedNamespaces: []
 cmd:
   serve:
     resources:

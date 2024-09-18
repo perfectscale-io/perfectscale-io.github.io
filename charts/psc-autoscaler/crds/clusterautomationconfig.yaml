@@ -54,6 +54,8 @@ spec:
                       properties:
                         stopAllAutomation:
                           type: boolean
+                        cleanupAllAutomation:
+                          type: boolean
                         timeConstraints:
                           type: object
                           x-kubernetes-preserve-unknown-fields: true
