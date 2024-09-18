@@ -4,6 +4,9 @@ kind: ClusterRoleBinding
 metadata:
   name: {{ template "helm.fullname" . }}
   labels: {{- include "helm.labels" . | nindent 4 }}
+    {{- if .Values.additionalLabels }}
+    {{ toYaml .Values.additionalLabels | nindent 4 }}
+    {{- end }}
 subjects:
   - kind: ServiceAccount
     name: {{ include "helm.serviceAccountName" . }}

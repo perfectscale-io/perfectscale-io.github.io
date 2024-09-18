@@ -7,6 +7,9 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels:
     {{- include "helm.labels" . | nindent 4 }}
+    {{- if .Values.additionalLabels }}
+    {{ toYaml .Values.additionalLabels | nindent 4 }}
+    {{- end }}
   {{- with .Values.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
@@ -20,6 +23,13 @@ spec:
     metadata:
       labels:
         {{- include "helm.selectorLabels" . | nindent 8 }}
+        {{- if .Values.podLabels }}
+        {{ toYaml .Values.podLabels | nindent 8 }}
+        {{- end }}
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
     spec:
       {{- if ne .Values.priorityClass.enabled false}}
       priorityClassName: {{ .Values.priorityClass.name | default "perfectscale-exporter" }}

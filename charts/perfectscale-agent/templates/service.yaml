@@ -4,6 +4,9 @@ metadata:
   name: {{ include "helm.fullname" . }}
   labels:
     {{- include "helm.labels" . | nindent 4 }}
+    {{- if .Values.additionalLabels }}
+    {{ toYaml .Values.additionalLabels | nindent 4 }}
+    {{- end }}
 spec:
   type: {{ .Values.service.type }}
   ports:

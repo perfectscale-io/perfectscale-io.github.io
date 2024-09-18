@@ -2,7 +2,7 @@ replicaCount: 1
 image:
   repository: public.ecr.aws/perfectscale-io/psc-exporter
   pullPolicy: Always
-  tag: "v1.0.38"
+  tag: "v1.0.39"
 initContainer:
   image:
     repository: public.ecr.aws/perfectscale-io/alpine
@@ -55,8 +55,13 @@ resources:
   requests:
     cpu: 200m
     memory: 300Mi
+## Additional labels to set in the all objects. Together with standard labels from the chart
+additionalLabels: {}
+podLabels: {}
 ## Annotations to add to the deployment
 annotations: {}
+## Annotations to add to the pod
+podAnnotation: {}
 ## Pods Service Account
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 serviceAccount:
@@ -126,6 +131,12 @@ prometheusRule:
   cAdvisorScraping:
     timeRange: "30m"
     threshold: 0.3
+grafana:
+  dashboard:
+    enabled: false
+    namespace: monitoring
+    labels:
+      grafana_dashboard: "1"
 kube-state-metrics:
   containerSecurityContext:
     allowPrivilegeEscalation: false
