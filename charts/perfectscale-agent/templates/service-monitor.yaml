@@ -9,6 +9,10 @@ metadata:
     {{- range $key, $value := .Values.serviceMonitor.labels }}
     {{ $key }}: {{ $value | quote }}
     {{- end }}
+  {{- with .Values.serviceMonitor.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}  
 spec:
   endpoints:
     - port: http

@@ -8,7 +8,7 @@ metadata:
   labels:
     {{- include "helm.labels" . | nindent 4 }}
     {{- if .Values.additionalLabels }}
-    {{ toYaml .Values.additionalLabels | nindent 4 }}
+    {{- toYaml .Values.additionalLabels | nindent 4 }}
     {{- end }}
   {{- with .Values.annotations }}
   annotations:
@@ -24,7 +24,7 @@ spec:
       labels:
         {{- include "helm.selectorLabels" . | nindent 8 }}
         {{- if .Values.podLabels }}
-        {{ toYaml .Values.podLabels | nindent 8 }}
+        {{- toYaml .Values.podLabels | nindent 8 }}
         {{- end }}
       {{- with .Values.podAnnotations }}
       annotations:

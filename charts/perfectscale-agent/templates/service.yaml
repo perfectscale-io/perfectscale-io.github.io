@@ -5,8 +5,12 @@ metadata:
   labels:
     {{- include "helm.labels" . | nindent 4 }}
     {{- if .Values.additionalLabels }}
-    {{ toYaml .Values.additionalLabels | nindent 4 }}
+    {{- toYaml .Values.additionalLabels | nindent 4 }}
     {{- end }}
+  {{- with .Values.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 spec:
   type: {{ .Values.service.type }}
   ports:

@@ -9,8 +9,10 @@ metadata:
   name: {{ $fullName }}
   labels:
   {{ toYaml .Values.prometheusRule.labels | indent 4 }}
+  {{- with .Values.prometheusRule.annotations }}
   annotations:
-  {{ toYaml .Values.prometheusRule.annotations | indent 4 }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}  
 spec:
   groups:
     - name: {{ $fullName }}
