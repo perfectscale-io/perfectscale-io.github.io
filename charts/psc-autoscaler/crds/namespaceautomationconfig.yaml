@@ -54,6 +54,18 @@ spec:
                       properties:
                         automationMode:
                           type: string
+                        workloadLabelSelectors:
+                          type: array
+                          items:
+                            type: object
+                            x-kubernetes-preserve-unknown-fields: true
+                            properties:
+                              key:
+                                type: string
+                              value:
+                                type: string
+                              allowAutomation:
+                                type: boolean
                         timeConstraints:
                           type: object
                           x-kubernetes-preserve-unknown-fields: true
@@ -208,6 +220,18 @@ spec:
                             properties:
                               automationMode:
                                 type: string
+                              workloadLabelSelectors:
+                                type: array
+                                items:
+                                  type: object
+                                  x-kubernetes-preserve-unknown-fields: true
+                                  properties:
+                                    key:
+                                      type: string
+                                    value:
+                                      type: string
+                                    allowAutomation:
+                                      type: boolean
                               timeConstraints:
                                 type: object
                                 x-kubernetes-preserve-unknown-fields: true
