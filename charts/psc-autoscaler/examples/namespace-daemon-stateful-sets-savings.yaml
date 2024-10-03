@@ -1,13 +1,11 @@
 apiVersion: perfectscale.io/v1
-kind: ClusterAutomationConfig
+kind: NamespaceAutomationConfig
 metadata:
-  name: cluster-automation-config
+  name: your-namespace-automation-config
 spec:
   automation:
-    operational:
-      stopAllAutomation: false
     workloadTypes:
-      Deployment:
+      DaemonSet:
         operational:
           automationMode: "Enabled"
           restrictions:
@@ -24,7 +22,10 @@ spec:
               limit:
                 increaseEnabled: false
                 decreaseEnabled: false
-      DaemonSet:
+      #  You should consider if you want to enable StatefulSets automation.
+      #  You might want a human eye while restarting production databases, in general, pods with persistent volume are more fragile.
+      #  As well, if your StatefulSet runs on dedicated nodes, reducing workload resources will not help to reduce the cost
+      StatefulSet:
         operational:
           automationMode: "Enabled"
           restrictions:

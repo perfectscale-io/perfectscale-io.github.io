@@ -1,0 +1,28 @@
+#  You should consider if you want to enable StatefulSets automation.
+#  You might want a human eye while restarting production databases, in general, pods with persistent volume are more fragile.
+#  As well, if your StatefulSet runs on dedicated nodes, reducing workload resources will not help to reduce the cost
+apiVersion: perfectscale.io/v1
+kind: WorkloadAutomationConfig
+metadata:
+  name: your-workload-automation-config
+spec:
+  targetRef:
+    kind: StatefulSet
+    name: sts-name
+  automation:
+    operational:
+      automationMode: "Enabled"
+      restrictions:
+        cpuManagement:
+          request:
+            increaseEnabled: true
+            decreaseEnabled: true
+          limit:
+            keepLimit: false
+        memoryManagement:
+          request:
+            increaseEnabled: true
+            decreaseEnabled: true
+          limit:
+            increaseEnabled: true
+            decreaseEnabled: true

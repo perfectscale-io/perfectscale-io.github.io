@@ -2,7 +2,7 @@ replicaCount: 3
 image:
   repository: public.ecr.aws/perfectscale-io/psc-autoscaler
   pullPolicy: Always
-  tag: "v1.0.9"
+  tag: "v1.0.10"
 settings:
   port: 8443
   env: "prod"
@@ -99,6 +99,11 @@ admission:
   timeout: 15
   # Optionally change it to "Fail"
   failurePolicy: "Ignore"
+  staticCerts:
+    enabled: false
+    # caCert: ""
+    # tlsCert: ""
+    # tlsKey: ""
 integrationTests:
   enabled: true
   image:

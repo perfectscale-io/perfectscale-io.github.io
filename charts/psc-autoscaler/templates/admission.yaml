@@ -10,8 +10,14 @@ metadata:
   labels:
     {{- include "psc-autoscaler.labels" . | nindent 4 }}
 data:
+{{- if .Values.admission.staticCerts.enabled }}
+  tls.crt: {{ .Values.admission.staticCerts.tlsCert }}
+  tls.key: {{ .Values.admission.staticCerts.tlsKey }}
+{{- else }}
   tls.crt: {{ $cert.Cert | b64enc }}
   tls.key: {{ $cert.Key | b64enc }}
+{{- end }}
+
 ---
 apiVersion: admissionregistration.k8s.io/v1
 kind: MutatingWebhookConfiguration
@@ -33,7 +39,11 @@ webhooks:
         resources: [ "pods" ]
         scope: "Namespaced"
     clientConfig:
+{{- if .Values.admission.staticCerts.enabled }}
+      caBundle: {{ .Values.admission.staticCerts.caCert }}
+{{- else }}
       caBundle: {{ $ca.Cert | b64enc }}
+{{- end }}
       service:
         namespace: {{ .Release.Namespace }}
         name: {{ include "psc-autoscaler.fullname" . }}
@@ -62,7 +72,11 @@ webhooks:
         resources: [ "namespaceautomationconfigs", "workloadautomationconfigs" ]
         scope: "Namespaced"
     clientConfig:
+{{- if .Values.admission.staticCerts.enabled }}
+      caBundle: {{ .Values.admission.staticCerts.caCert }}
+{{- else }}
       caBundle: {{ $ca.Cert | b64enc }}
+{{- end }}
       service:
         namespace: {{ .Release.Namespace }}
         name: {{ include "psc-autoscaler.fullname" . }}

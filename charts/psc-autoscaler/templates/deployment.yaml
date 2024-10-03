@@ -20,6 +20,10 @@ spec:
     metadata:
       annotations:
         checksum/secret: {{ include (print $.Template.BasePath "/admission.yaml") . | sha256sum }}
+        {{- if not .Values.admission.staticCerts.enabled }}
+        {{- /* it requires to reload the latest re-generated certs for mtls after helm upgrade*/}}
+        rolloutme: {{ randAlphaNum 5 | quote }}
+        {{- end }}
       labels:
         automation.perfectscale.io/excluded: "true"
         perfectscale.io/psc-autoscaler-cmd: serve

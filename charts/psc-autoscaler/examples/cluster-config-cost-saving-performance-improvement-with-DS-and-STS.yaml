@@ -1,0 +1,63 @@
+apiVersion: perfectscale.io/v1
+kind: ClusterAutomationConfig
+metadata:
+  name: cluster-automation-config
+spec:
+  automation:
+    operational:
+      stopAllAutomation: false
+    workloadTypes:
+      Deployment:
+        operational:
+          automationMode: "Enabled"
+          restrictions:
+            cpuManagement:
+              request:
+                increaseEnabled: true
+                decreaseEnabled: true
+              limit:
+                keepLimit: false
+            memoryManagement:
+              request:
+                increaseEnabled: true
+                decreaseEnabled: true
+              limit:
+                increaseEnabled: true
+                decreaseEnabled: true
+      DaemonSet:
+        operational:
+          automationMode: "Enabled"
+          restrictions:
+            cpuManagement:
+              request:
+                increaseEnabled: true
+                decreaseEnabled: true
+              limit:
+                keepLimit: false
+            memoryManagement:
+              request:
+                increaseEnabled: true
+                decreaseEnabled: true
+              limit:
+                increaseEnabled: true
+                decreaseEnabled: true
+      #  You should consider if you want to enable StatefulSets automation.
+      #  You might want a human eye while restarting production databases, in general, pods with persistent volume are more fragile.
+      #  As well, if your StatefulSet runs on dedicated nodes, reducing workload resources will not help to reduce the cost
+      StatefulSet:
+        operational:
+          automationMode: "Enabled"
+          restrictions:
+            cpuManagement:
+              request:
+                increaseEnabled: true
+                decreaseEnabled: true
+              limit:
+                keepLimit: false
+            memoryManagement:
+              request:
+                increaseEnabled: true
+                decreaseEnabled: true
+              limit:
+                increaseEnabled: true
+                decreaseEnabled: true

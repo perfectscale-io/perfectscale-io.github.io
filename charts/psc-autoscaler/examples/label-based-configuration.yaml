@@ -1,0 +1,33 @@
+apiVersion: perfectscale.io/v1
+kind: ClusterAutomationConfig
+metadata:
+  name: cluster-automation-config
+spec:
+  automation:
+    operational:
+      stopAllAutomation: false
+      workloadLabelSelectors:
+        # This means that if the workload has perfectscale.io/automation-disabled:true label,
+        # it will not be automated, regardless of the other labels.
+        - allowAutomation: false
+          key: perfectscale.io/automation-disabled
+          value: "true"
+        # This means that if the workload has team:dev label,
+        # it will be automated, unless it has perfectscale.io/automation-disabled:true label.
+        # Workloads without this labels will not be automated.
+        - allowAutomation: true
+          key: team
+          value: "dev"
+    workloadTypes:
+      Deployment:
+        operational:
+          automationMode: "Enabled"
+      DaemonSet:
+        operational:
+          automationMode: "Enabled"
+      #  You should consider if you want to enable StatefulSets automation.
+      #  You might want a human eye while restarting production databases, in general, pods with persistent volume are more fragile.
+      #  As well, if your StatefulSet runs on dedicated nodes, reducing workload resources will not help to reduce the cost
+      StatefulSet:
+        operational:
+          automationMode: "Enabled"

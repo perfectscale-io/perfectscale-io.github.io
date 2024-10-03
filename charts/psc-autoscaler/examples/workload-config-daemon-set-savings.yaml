@@ -1,0 +1,25 @@
+apiVersion: perfectscale.io/v1
+kind: WorkloadAutomationConfig
+metadata:
+  name: your-workload-automation-config
+spec:
+  targetRef:
+    kind: DaemonSet
+    name: ds-name
+  automation:
+    operational:
+      automationMode: "Enabled"
+      restrictions:
+        cpuManagement:
+          request:
+            increaseEnabled: false
+            decreaseEnabled: true
+          limit:
+            keepLimit: true
+        memoryManagement:
+          request:
+            increaseEnabled: false
+            decreaseEnabled: true
+          limit:
+            increaseEnabled: false
+            decreaseEnabled: false

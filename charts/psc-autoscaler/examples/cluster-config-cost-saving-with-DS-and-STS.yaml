@@ -41,3 +41,23 @@ spec:
               limit:
                 increaseEnabled: false
                 decreaseEnabled: false
+      #  You should consider if you want to enable StatefulSets automation.
+      #  You might want a human eye while restarting production databases, in general, pods with persistent volume are more fragile.
+      #  As well, if your StatefulSet runs on dedicated nodes, reducing workload resources will not help to reduce the cost
+      StatefulSet:
+        operational:
+          automationMode: "Enabled"
+          restrictions:
+            cpuManagement:
+              request:
+                increaseEnabled: false
+                decreaseEnabled: true
+              limit:
+                keepLimit: true
+            memoryManagement:
+              request:
+                increaseEnabled: false
+                decreaseEnabled: true
+              limit:
+                increaseEnabled: false
+                decreaseEnabled: false
