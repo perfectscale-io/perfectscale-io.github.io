@@ -98,6 +98,8 @@ spec:
             value: "{{ include "helm.exporter.clusterUID" . }}"
           - name: CLUSTER_RESILIENCE_LEVEL
             value: "{{ .Values.settings.clusterResilienceLevel }}"
+          - name: CLUSTER_OPTIMIZATION_POLICY
+            value: "{{ .Values.settings.clusterOptimizationPolicy }}"
           - name: DEMO_ENV_ADDRESS
             value: "{{ .Values.settings.demoEnvAddress }}"
           - name: ENABLE_PPROF
