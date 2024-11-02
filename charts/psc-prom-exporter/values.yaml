@@ -1,0 +1,218 @@
+replicaCount: 1
+image:
+  repository: public.ecr.aws/perfectscale-io/psc-prom-exporter
+  pullPolicy: Always
+  tag: "v0.0.1-alpha1"
+settings:
+  deployKubeStateMetrics: true
+  serviceId: "psc-prom-exporter"
+  env: "prod"
+  logLevel: "INFO"
+  httpPort: 8080
+  psUrl: "https://api.app.perfectscale.io"
+  telemetryUrl: "https://api.app.perfectscale.io/psc-telemetry"
+  pushTelemetryFrequency: "1m"
+  kubeAPITimeoutSec: "3s"
+  cAdvisorNumWorkers: "30"
+  k8sClientBurst: "150"
+  k8sClientQPS: "100"
+  enablePProf: false
+  enableOomDebug: false
+  podRegex: ""
+  containerRegex: ""
+  httpProxyEnabled: false
+  httpProxy: "" #example: http://squid-proxy-service.default:3128
+  httpsProxy: "" #example$ http://squid-proxy-service.default:3128
+  noProxy: "" #example: ".cluster.local,.svc.cluster.local,172.20.0.1," the line must end with a coma, 172.20.0.1 it is KUBERNETES_SERVICE_HOST, API SERVICE
+config:
+  metrics:
+    recommendations:
+      enabled: true
+    costs:
+      enabled: true
+    indicators:
+      enabled: true
+  filters:
+    workloads:
+      includeMuted: true
+      minRunningMinutes: 30
+      types:
+        - "*"
+    namespaces:
+      exclude:
+        - kube-system
+        - default
+    indicators:
+      types:
+        - waste
+        - risk
+  labels:
+    # excludedLabels have priority over includedLabels
+    # supported symbols:
+    # - "label_full_name" - represents single specific label
+    # - "*" - asterisk, - represents all available labels
+    # - "/some-regexp/" - represents regexp expression
+    includedLabels:
+      #- "label_automation_perfectscale_io_generated_from"
+      - "*"
+    excludedLabels:
+      - "/.*perfectscale.*/"
+      #- "*"
+    excludeClusterUID: false
+scrapers:
+  prometheus:
+    enabled: true
+    path: "/metrics"
+    port: "http" # Reference to the service port name
+    interval: "30s"
+    # Standard Prometheus annotations
+    annotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "8080"
+      prometheus.io/path: "/metrics"
+  datadog:
+    enabled: true
+    # Choose AD version: "v1" or "v2"
+    adVersion: "v2"
+    containerName: "psc-prom-exporter"
+    # Common configuration for both versions
+    config:
+      endpoint: "/metrics"
+      port: 8080
+      namespace: "perfectscale"
+      # List of metrics to collect with optional renaming
+      metrics:
+        # Wildcard pattern for ps_ metrics
+        - name: "ps_.*"
+          # Renaming exampple:
+          #- name: "ps_waste_usd"
+          #rename: "perfectscale.waste.usd"
+      # Additional configuration options
+      options:
+        minCollectionInterval: 5
+        skipOpenMetricsEndpointValidation: true
+  datadogOperator:
+    enabled: true
+    # Custom metrics collection using Datadog Operator
+    customConfig:
+      configName: "psc-prom-exporter"
+      namespaceSelector:
+        matchNames: [] # Empty means current namespace
+      endpoints:
+        - port: 8080
+          path: "/metrics"
+          metricspath: "/metrics"
+          scheme: "http"
+      pattern: "ps_.*" # Metric pattern to collect
+secret:
+  create: false
+  name: "perfectscale-secret"
+  clientId: ""
+  clientSecret: ""
+service:
+  type: ClusterIP
+  port: 80
+resources:
+  requests:
+    cpu: 200m
+    memory: 300Mi
+## Annotations to add to the deployment
+annotations: {}
+## Pods Service Account
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+## Role Based Access
+## Ref: https://kubernetes.io/docs/admin/authorization/rbac/
+##
+rbac:
+  create: true
+# Pod security context.
+# Ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+securityContext:
+  runAsNonRoot: true
+  fsGroup: 1002
+  runAsGroup: 1002
+  runAsUser: 1002
+## Specify security settings for a Container
+## Allows overrides and additional options compared to (Pod) securityContext
+## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  seccompProfile:
+    type: RuntimeDefault
+## Pod Priority
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/
+priorityClass:
+  enabled: false
+  create: false
+  name: perfectscale-exporter
+  preemptionpolicy: PreemptLowerPriority
+  value: '1000000'
+# Pod toleration rules.
+# Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+tolerations: {}
+# Pod node selector rules.
+# Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
+nodeSelector: {}
+# Pod affinity rules.
+# Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+affinity: {}
+serviceMonitor:
+  # When set true then use a ServiceMonitor to configure scraping
+  enable: true
+  # Set how frequently Prometheus should scrape
+  interval: 5m
+  # Set path to the metrics
+  path: /metrics
+  # Set timeout for scrape
+  timeout: 30s
+  # Additional Label to the serviceMonitor
+  # labels:
+  #   prometheus: kube-prometheus
+# requires serviceMonitor.enable=true
+prometheusRule:
+  enabled: true
+  labels:
+    release: prometheus
+  rules:
+    - alert: "PerfectScale Waste Cost Surge"
+      enabled: true
+      expr: |
+        (
+          ps_waste_usd > 0
+          and
+          (
+            ps_waste_usd
+            /
+            (ps_waste_usd offset 1h)
+          ) > 1.5
+        )
+      for: 15m # Wait for 15m to avoid false positives from temporary spikes
+      labels:
+        severity: warning
+        team: cost-optimization
+        type: waste
+      annotations:
+        summary: "Waste cost increased by more than 50%"
+        description: "Workload {{ $labels.workload_name }} in namespace {{ $labels.namespace }} has increased its waste by more than 50% in the last hour. Current waste: {{ $value | humanizePercentage }} USD/hour"
+        runbook: "Check the workload's resource configuration and usage patterns"
+    - alert: "PerfectScale High Absolute Waste"
+      enabled: true
+      expr: |
+        ps_waste_usd > 100
+      for: 30m
+      labels:
+        severity: warning
+        team: cost-optimization
+        type: waste
+      annotations:
+        summary: "High waste cost detected"
+        description: "Workload {{ $labels.workload_name }} in namespace {{ $labels.namespace }} has waste cost exceeding 100 USD/hour. Current waste: {{ $value | humanize }} USD/hour"
+        runbook: "Check the workload's resource allocation and consider rightsizing"

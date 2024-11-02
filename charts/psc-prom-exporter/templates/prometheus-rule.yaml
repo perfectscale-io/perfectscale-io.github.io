@@ -1,0 +1,20 @@
+{{- if .Values.prometheusRule.enabled -}}
+{{- $fullName := include "helm.fullname" . -}}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ $fullName }}
+  labels:
+  {{ toYaml .Values.prometheusRule.labels | indent 4 }}
+  annotations:
+  {{ toYaml .Values.prometheusRule.annotations | indent 4 }}
+spec:
+  groups:
+    - name: {{ include "helm.fullname" . }}
+      rules:
+        {{- range .Values.prometheusRule.rules }}
+        {{- if .enabled }}
+        - {{- toYaml (omit . "enabled") | nindent 10 }}
+        {{- end }}
+        {{- end }}
+{{- end }}

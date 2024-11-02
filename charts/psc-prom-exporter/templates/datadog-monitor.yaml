@@ -1,0 +1,17 @@
+{{- if and .Values.scrapers.datadogOperator.enabled }}
+apiVersion: datadoghq.com/v1alpha1
+kind: DatadogMonitor
+metadata:
+  name: {{ include "helm.fullname" . }}-openmetrics
+  labels:
+    {{- include "helm.labels" . | nindent 4 }}
+spec:
+  {{- with .Values.scrapers.datadogOperator.customConfig }}
+  name: {{ .configName | default "psc-prom-exporter" }}
+  namespaceSelector:
+    matchNames: {{ .namespaceSelector.matchNames | default list }}
+  endpoints:
+    {{- toYaml .endpoints | nindent 4 }}
+  pattern: {{ .pattern | default "ps_.*" }}
+  {{- end }}
+{{- end }}
