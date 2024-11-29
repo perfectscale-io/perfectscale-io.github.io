@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "image": {
+      "type": "object",
+      "properties": {
+        "repository": {
+          "type": "string",
+          "description": "Docker repository for the image"
+        },
+        "tag": {
+          "type": "string",
+          "description": "Tag for the image"
+        }
+      },
+      "required": ["repository", "tag"]
+    }
+  },
+  "required": ["image"]
+}

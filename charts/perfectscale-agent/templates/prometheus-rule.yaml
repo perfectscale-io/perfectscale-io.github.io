@@ -17,6 +17,23 @@ spec:
   groups:
     - name: {{ $fullName }}
       rules:
+        {{- if .Values.prometheusRule.cpuUtilization.enable }}
+        - alert: PerfectScale exporter high CPU utilization
+          annotations:
+            description: "More than {{ .Values.prometheusRule.cpuUtilization.threshold }} CPU cores where utilized by PerfectScale's exporter in the last 5 minutes."
+            runbook: "Please, contact PerfectScale support"
+            summary: "{{ $fullName }} high CPU utilization by exporter"
+          expr: |
+            avg_over_time(rate(container_cpu_usage_seconds_total{pod=~"{{ $fullName }}-.*", container="{{ .Chart.Name }}"}[1m])[5m:1s]) > {{ .Values.prometheusRule.cpuUtilization.threshold }}
+          for: 30m
+          labels:
+            {{- if .Values.prometheusRule.team }}
+            team: {{ .Values.prometheusRule.team }}
+            {{- end}}
+            {{- if .Values.prometheusRule.severity }}
+            severity: {{ .Values.prometheusRule.severity }}
+            {{- end}}
+        {{- end }}
         - alert: PerfectScale exporter High KSM Scraping Error Rate
           annotations:
             description: "More than 30% of kube-state-metrics scraping attempts resulted in an error in the last 30 minutes."

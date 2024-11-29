@@ -2,7 +2,7 @@ replicaCount: 1
 image:
   repository: public.ecr.aws/perfectscale-io/psc-exporter
   pullPolicy: Always
-  tag: "v1.0.45"
+  tag: "v1.0.46"
 initContainer:
   image:
     repository: public.ecr.aws/perfectscale-io/alpine
@@ -139,6 +139,9 @@ prometheusRule:
   cAdvisorScraping:
     timeRange: "30m"
     threshold: 0.3
+  cpuUtilization:
+    enable: false
+    threshold: 8 # default value
 grafana:
   dashboard:
     enabled: false
