@@ -2,7 +2,7 @@ replicaCount: 3
 image:
   repository: public.ecr.aws/perfectscale-io/psc-autoscaler
   pullPolicy: Always
-  tag: "v1.0.13"
+  tag: "v1.0.14"
 settings:
   port: 8443
   env: "prod"
@@ -104,6 +104,11 @@ admission:
     # caCert: ""
     # tlsCert: ""
     # tlsKey: ""
+  # Annotations to add to the admission webhook
+  annotations: {}
+  # Admission Enforcer on AKS excludes kube-system and AKS internal namespaces from being processed by the webhook.
+  # To disable this behavior, provide the following annotation:
+  # admissions.enforcer/disabled: "true"
 integrationTests:
   enabled: true
   image:
