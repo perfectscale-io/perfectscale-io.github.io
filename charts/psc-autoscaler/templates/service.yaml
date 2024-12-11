@@ -4,6 +4,13 @@ metadata:
   name: {{ include "psc-autoscaler.fullname" . }}
   labels:
     {{- include "psc-autoscaler.labels" . | nindent 4 }}
+    {{- if .Values.additionalLabels }}
+    {{- toYaml .Values.additionalLabels | nindent 4 }}
+    {{- end }}
+  {{- with .Values.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}    
 spec:
   type: {{ .Values.service.type }}
   ports:

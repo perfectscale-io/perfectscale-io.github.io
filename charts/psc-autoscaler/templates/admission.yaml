@@ -9,6 +9,13 @@ metadata:
   name: {{ include "psc-autoscaler.fullname" . }}-tls
   labels:
     {{- include "psc-autoscaler.labels" . | nindent 4 }}
+    {{- if .Values.additionalLabels }}
+    {{- toYaml .Values.additionalLabels | nindent 4 }}
+    {{- end }}
+  {{- with .Values.admission.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}     
 data:
 {{- if .Values.admission.staticCerts.enabled }}
   tls.crt: {{ .Values.admission.staticCerts.tlsCert }}
@@ -23,6 +30,11 @@ apiVersion: admissionregistration.k8s.io/v1
 kind: MutatingWebhookConfiguration
 metadata:
   name: {{ include "psc-autoscaler.fullname" . }}
+  labels:
+    {{- include "psc-autoscaler.labels" . | nindent 4 }}
+    {{- if .Values.additionalLabels }}
+    {{- toYaml .Values.additionalLabels | nindent 4 }}
+    {{- end }} 
   {{- with .Values.admission.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
@@ -62,6 +74,11 @@ apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingWebhookConfiguration
 metadata:
   name: {{ include "psc-autoscaler.fullname" . }}
+  labels:
+    {{- include "psc-autoscaler.labels" . | nindent 4 }}
+    {{- if .Values.additionalLabels }}
+    {{- toYaml .Values.additionalLabels | nindent 4 }}
+    {{- end }} 
   {{- with .Values.admission.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}

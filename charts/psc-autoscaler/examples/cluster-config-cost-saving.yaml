@@ -41,3 +41,37 @@ spec:
               limit:
                 increaseEnabled: false
                 decreaseEnabled: false
+      CronJob:
+        operational:
+          automationMode: "Enabled"
+          restrictions:
+            cpuManagement:
+              request:
+                increaseEnabled: false
+                decreaseEnabled: true
+              limit:
+                keepLimit: true
+            memoryManagement:
+              request:
+                increaseEnabled: false
+                decreaseEnabled: true
+              limit:
+                increaseEnabled: false
+                decreaseEnabled: false
+      Job:
+        operational:
+          automationMode: "Enabled"
+          restrictions:
+            cpuManagement:
+              request:
+                increaseEnabled: false
+                decreaseEnabled: true
+              limit:
+                keepLimit: true
+            memoryManagement:
+              request:
+                increaseEnabled: false
+                decreaseEnabled: true
+              limit:
+                increaseEnabled: false
+                decreaseEnabled: false

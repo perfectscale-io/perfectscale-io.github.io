@@ -6,6 +6,9 @@ metadata:
   name: {{ include "psc-autoscaler.fullname" . }}-serve
   labels:
     {{- include "psc-autoscaler.labels" . | nindent 4 }}
+    {{- if .Values.additionalLabels }}
+    {{- toYaml .Values.additionalLabels | nindent 4 }}
+    {{- end }}
   {{- with .Values.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
@@ -20,6 +23,9 @@ spec:
     metadata:
       annotations:
         checksum/secret: {{ include (print $.Template.BasePath "/admission.yaml") . | sha256sum }}
+        {{- with .Values.podAnnotations }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
         {{- if not .Values.admission.staticCerts.enabled }}
         {{- /* it requires to reload the latest re-generated certs for mtls after helm upgrade*/}}
         rolloutme: {{ randAlphaNum 5 | quote }}
@@ -28,6 +34,9 @@ spec:
         automation.perfectscale.io/excluded: "true"
         perfectscale.io/psc-autoscaler-cmd: serve
         {{- include "psc-autoscaler.selectorLabels" . | nindent 8 }}
+        {{- if .Values.podLabels }}
+        {{- toYaml .Values.podLabels | nindent 8 }}
+        {{- end }}        
     spec:
       {{- if (.Values.hostNetwork).enabled }}
       hostNetwork: true
@@ -142,6 +151,9 @@ metadata:
   name: {{ include "psc-autoscaler.fullname" . }}-sync
   labels:
     {{- include "psc-autoscaler.labels" . | nindent 4 }}
+    {{- if .Values.additionalLabels }}
+    {{- toYaml .Values.additionalLabels | nindent 4 }}
+    {{- end }}
   {{- with .Values.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
@@ -160,6 +172,13 @@ spec:
         automation.perfectscale.io/excluded: "true"
         perfectscale.io/psc-autoscaler-cmd: sync
         {{- include "psc-autoscaler.selectorLabels" . | nindent 8 }}
+        {{- if .Values.podLabels }}
+        {{- toYaml .Values.podLabels | nindent 8 }}
+        {{- end }}
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
     spec:
       {{- if .Values.priorityClass.enabled }}
       priorityClassName: {{ .Values.priorityClass.name }}
@@ -249,6 +268,9 @@ metadata:
   name: {{ include "psc-autoscaler.fullname" . }}-evict
   labels:
     {{- include "psc-autoscaler.labels" . | nindent 4 }}
+    {{- if .Values.additionalLabels }}
+    {{- toYaml .Values.additionalLabels | nindent 4 }}
+    {{- end }}
   {{- with .Values.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
@@ -267,6 +289,13 @@ spec:
         automation.perfectscale.io/excluded: "true"
         perfectscale.io/psc-autoscaler-cmd: evict
         {{- include "psc-autoscaler.selectorLabels" . | nindent 8 }}
+        {{- if .Values.podLabels }}
+        {{- toYaml .Values.podLabels | nindent 8 }}
+        {{- end }}
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
     spec:
       {{- if .Values.priorityClass.enabled }}
       priorityClassName: {{ .Values.priorityClass.name }}

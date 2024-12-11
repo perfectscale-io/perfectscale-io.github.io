@@ -2,7 +2,7 @@ replicaCount: 3
 image:
   repository: public.ecr.aws/perfectscale-io/psc-autoscaler
   pullPolicy: Always
-  tag: "v1.0.14"
+  tag: "v1.0.15"
 settings:
   port: 8443
   env: "prod"
@@ -48,8 +48,13 @@ secret:
   clientSecret: ""
 nameOverride: ""
 fullnameOverride: ""
+## Additional labels to set in the all objects. Together with standard labels from the chart
+additionalLabels: {}
+podLabels: {}
 ## Annotations to add to the deployment
 annotations: {}
+## Annotations to add to the pod
+podAnnotations: {}
 priorityClass:
   enabled: false
   create: false

@@ -4,6 +4,13 @@ kind: ClusterRoleBinding
 metadata:
   name: {{ template "psc-autoscaler.fullname" . }}
   labels: {{- include "psc-autoscaler.labels" . | nindent 4 }}
+    {{- if .Values.additionalLabels }}
+    {{- toYaml .Values.additionalLabels | nindent 4 }}
+    {{- end }}
+  {{- with .Values.serviceAccount.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 subjects:
   - kind: ServiceAccount
     name: {{ include "psc-autoscaler.serviceAccountName" . }}
