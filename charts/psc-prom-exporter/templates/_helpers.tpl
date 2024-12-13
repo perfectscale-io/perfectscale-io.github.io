@@ -106,29 +106,32 @@ For testing purposes, in prod we want to get the actual cluster's UID
 
 {{- define "datadogAD.v1annotations" -}}
 ad.datadoghq.com/{{ .containerName }}.check_names: '["openmetrics"]'
-ad.datadoghq.com/{{ .containerName }}.init_configs: '[{}]'
+ad.datadoghq.com/{{ .containerName }}.init_configs: "[{}]"
+{{- if .config.maxReturnedMetrics }}
+ad.datadoghq.com/{{ .containerName }}.max_returned_metrics: "{{ .config.maxReturnedMetrics }}"
+{{- end }}
 ad.datadoghq.com/{{ .containerName }}.instances: |
   [
     {
       "openmetrics_endpoint": "http://%%host%%:{{ .config.port }}{{ .config.endpoint }}",
       "namespace": "{{ .config.namespace }}",
+      {{- if .config.options }}
+      {{- range $key, $value := .config.options }}
+      "{{ $key }}": {{ $value }},
+      {{- end }}
       {{- if .config.metrics }}
       "metrics": [
         {{- range $index, $metric := .config.metrics }}
         {{- if $index }},{{ end }}
         {{- if .rename }}
         {
-          "{{ .name }}": "{{ .rename }}"
+        {"{{ .name }}": "{{ .rename }}"}
         }
         {{- else }}
         "{{ .name }}"
         {{- end }}
         {{- end }}
       ]
-      {{- end }}
-      {{- if .config.options }}
-      {{- range $key, $value := .config.options }}
-      ,"{{ $key }}": {{ $value }}
       {{- end }}
       {{- end }}
     }
@@ -144,22 +147,25 @@ ad.datadoghq.com/{{ .containerName }}.checks: |
         {
           "openmetrics_endpoint": "http://%%host%%:{{ .config.port }}{{ .config.endpoint }}",
           "namespace": "{{ .config.namespace }}",
-          {{- if .config.metrics }}
-          "metrics": {
-            {{- range $index, $metric := .config.metrics }}
-            {{- if $index }},{{ end }}
-            {{- if .rename }}
-            "{{ .name }}": "{{ .rename }}"
-            {{- else }}
-            "{{ .name }}": "{{ .name }}"
-            {{- end }}
-            {{- end }}
-          }
+          {{- if .config.maxReturnedMetrics }}
+          "max_returned_metrics": "{{ .config.maxReturnedMetrics }}",
           {{- end }}
           {{- if .config.options }}
           {{- range $key, $value := .config.options }}
-          ,"{{ $key }}": {{ $value }}
+          "{{ $key }}": {{ $value }},
           {{- end }}
+          {{- end }}
+          {{- if .config.metrics }}
+          "metrics": [
+            {{- range $index, $metric := .config.metrics }}
+            {{- if $index }},{{ end }}
+            {{- if .rename }}
+            {"{{ .name }}": "{{ .rename }}"}
+            {{- else }}
+            "{{ .name }}"
+            {{- end }}
+            {{- end }}
+          ]
           {{- end }}
         }
       ]

@@ -1,18 +1,22 @@
-{{- if .Values.prometheusRule.enabled -}}
+{{- if .Values.alerts.prometheusRule.enabled -}}
 {{- $fullName := include "helm.fullname" . -}}
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
   name: {{ $fullName }}
+  {{- if .Values.alerts.prometheusRule.labels }}
   labels:
-  {{ toYaml .Values.prometheusRule.labels | indent 4 }}
+  {{ toYaml .Values.alerts.prometheusRule.labels | indent 4 }}
+  {{- end }}
+  {{- if .Values.alerts.prometheusRule.annotations }}
   annotations:
-  {{ toYaml .Values.prometheusRule.annotations | indent 4 }}
+  {{ toYaml .Values.alerts.prometheusRule.annotations | indent 4 }}
+  {{- end }}
 spec:
   groups:
     - name: {{ include "helm.fullname" . }}
       rules:
-        {{- range .Values.prometheusRule.rules }}
+        {{- range .Values.alerts.prometheusRule.rules }}
         {{- if .enabled }}
         - {{- toYaml (omit . "enabled") | nindent 10 }}
         {{- end }}

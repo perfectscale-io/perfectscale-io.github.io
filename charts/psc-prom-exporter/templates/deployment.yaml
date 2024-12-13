@@ -33,6 +33,9 @@ spec:
         {{- if and .Values.scrapers.datadog.enabled (eq .Values.scrapers.datadog.adVersion "v2") }}
         {{- include "datadogAD.v2annotations" .Values.scrapers.datadog | nindent 8 }}
         {{- end }}
+        {{- with .Values.podAnnotations }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
     spec:
       {{- if ne .Values.priorityClass.enabled false}}
       priorityClassName: {{ .Values.priorityClass.name | default "perfectscale-exporter" }}
@@ -87,16 +90,6 @@ spec:
             value: "{{ include "helm.exporter.clusterUID" . }}"
           - name: CLUSTER_RESILIENCE_LEVEL
             value: "{{ .Values.settings.clusterResilienceLevel }}"
-          - name: DEMO_ENV_ADDRESS
-            value: "{{ .Values.settings.demoEnvAddress }}"
-          - name: ENABLE_PPROF
-            value: "{{ .Values.settings.enablePProf | default "false" }}"
-          - name: ENABLE_OOM_DEBUG
-            value: "{{ .Values.settings.enableOomDebug | default "false" }}"
-          - name: POD_REGEX
-            value: "{{ .Values.settings.podRegex | default "" }}"
-          - name: CONTAINER_REGEX
-            value: "{{ .Values.settings.containerRegex | default "" }}"
           - name: "KUBERNETES_CLIENT_BURST"
             value: "{{ .Values.settings.k8sClientBurst }}"
           - name: "KUBERNETES_CLIENT_QPS"
@@ -113,8 +106,6 @@ spec:
                 name: {{ .Values.secret.name | default $fullName }}
                 key: "clientSecret"
                 optional: false
-          - name: "CLUSTER_NAME"
-            value: "{{ .Values.settings.clusterName }}"
           - name: REMOTE_LOG_BATCH_SIZE
             value: "{{ include "helm.exporter.remoteLogBatchSize" . }}"
           - name: REMOTE_LOG_BATCH_INTERVAL

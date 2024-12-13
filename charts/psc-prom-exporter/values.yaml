@@ -2,7 +2,7 @@ replicaCount: 1
 image:
   repository: public.ecr.aws/perfectscale-io/psc-prom-exporter
   pullPolicy: Always
-  tag: "v0.0.1-alpha1"
+  tag: "v0.1.0"
 settings:
   deployKubeStateMetrics: true
   serviceId: "psc-prom-exporter"
@@ -13,13 +13,8 @@ settings:
   telemetryUrl: "https://api.app.perfectscale.io/psc-telemetry"
   pushTelemetryFrequency: "1m"
   kubeAPITimeoutSec: "3s"
-  cAdvisorNumWorkers: "30"
   k8sClientBurst: "150"
   k8sClientQPS: "100"
-  enablePProf: false
-  enableOomDebug: false
-  podRegex: ""
-  containerRegex: ""
   httpProxyEnabled: false
   httpProxy: "" #example: http://squid-proxy-service.default:3128
   httpsProxy: "" #example$ http://squid-proxy-service.default:3128
@@ -34,13 +29,12 @@ config:
       enabled: true
   filters:
     workloads:
-      includeMuted: true
+      includeMuted: false
       minRunningMinutes: 30
       types:
         - "*"
     namespaces:
       exclude:
-        - kube-system
         - default
     indicators:
       types:
@@ -60,18 +54,27 @@ config:
       #- "*"
     excludeClusterUID: false
 scrapers:
+  serviceMonitor:
+    # When set true then use a ServiceMonitor to configure scraping
+    ennbled: false
+    # Set how frequently Prometheus should scrape
+    interval: 5m
+    # Set path to the metrics
+    path: /metrics
+    # Set timeout for scrape
+    timeout: 30s
+    # Additional Label to the serviceMonitor
+    # labels:
+    #   prometheus: kube-prometheus
   prometheus:
-    enabled: true
-    path: "/metrics"
-    port: "http" # Reference to the service port name
-    interval: "30s"
+    enabled: false
     # Standard Prometheus annotations
     annotations:
       prometheus.io/scrape: "true"
       prometheus.io/port: "8080"
       prometheus.io/path: "/metrics"
   datadog:
-    enabled: true
+    enabled: false
     # Choose AD version: "v1" or "v2"
     adVersion: "v2"
     containerName: "psc-prom-exporter"
@@ -80,6 +83,8 @@ scrapers:
       endpoint: "/metrics"
       port: 8080
       namespace: "perfectscale"
+      # Set maxReturnedMetrics, DataDog default value is 2000. Increase if needed.
+      maxReturnedMetrics: 10000
       # List of metrics to collect with optional renaming
       metrics:
         # Wildcard pattern for ps_ metrics
@@ -88,22 +93,90 @@ scrapers:
           #- name: "ps_waste_usd"
           #rename: "perfectscale.waste.usd"
       # Additional configuration options
-      options:
-        minCollectionInterval: 5
-        skipOpenMetricsEndpointValidation: true
-  datadogOperator:
-    enabled: true
-    # Custom metrics collection using Datadog Operator
-    customConfig:
-      configName: "psc-prom-exporter"
-      namespaceSelector:
-        matchNames: [] # Empty means current namespace
-      endpoints:
-        - port: 8080
-          path: "/metrics"
-          metricspath: "/metrics"
-          scheme: "http"
-      pattern: "ps_.*" # Metric pattern to collect
+      options: {}
+dashboards:
+  grafana:
+    enabled: false
+    namespace: monitoring
+    labels:
+      grafana_dashboard: "1"
+      team: perfectscale
+    annotations:
+      grafana.folder: "PerfectScale"
+alerts:
+  prometheusRule:
+    enabled: false
+    # Additional labels to the PrometheusRule
+    #labels:
+    #release: prometheus
+    rules:
+      - alert: "PerfectScale Waste Cost Surge"
+        enabled: true
+        expr: |
+          (
+            ps_waste_usd > 0
+            and
+            (
+              ps_waste_usd
+              /
+              (ps_waste_usd offset 1h)
+            ) > 1.5
+          )
+        for: 15m # Wait for 15m to avoid false positives from temporary spikes
+        labels:
+          severity: warning
+          team: cost-optimization
+          type: waste
+        annotations:
+          summary: "Waste cost increased by more than 50%"
+          description: "Workload {{ $labels.workload_name }} in namespace {{ $labels.namespace }} has increased its waste by more than 50% in the last hour. Current waste: {{ $value | humanizePercentage }} USD/hour"
+          runbook: "Check the workload's resource configuration and usage patterns"
+      - alert: "PerfectScale High Absolute Waste"
+        enabled: true
+        expr: |
+          ps_waste_usd > 100
+        for: 30m
+        labels:
+          severity: warning
+          team: cost-optimization
+          type: waste
+        annotations:
+          summary: "High waste cost detected"
+          description: "Workload {{ $labels.workload_name }} in namespace {{ $labels.namespace }} has waste cost exceeding 100 USD/hour. Current waste: {{ $value | humanize }} USD/hour"
+          runbook: "Check the workload's resource allocation and consider rightsizing"
+  datadogMonitor:
+    enabled: false
+    namespace: "datadog"
+    labels:
+      team: cost-optimization
+      severity: warning
+    rules:
+      - alert: "Perfectscale Waste Cost Surge"
+        enabled: true
+        type: "metric alert"
+        query: |
+          avg(last_15m):avg:ps_waste_usd{*} > avg(last_1h):avg:ps_waste_usd{*} * 1.5
+        message: |
+          Workload {{name}} in namespace {{namespace}} has increased its waste by more than 50% in the last hour.
+          Current waste: {{value}} USD/hour
+        tags:
+          - "severity:warning"
+          - "team:cost-optimization"
+          - "type:waste"
+        runbook: "Check the workload's resource configuration and usage patterns"
+      - alert: "Perfectscale High Absolute Waste"
+        enabled: true
+        type: "metric alert"
+        query: |
+          avg(last_30m):avg:ps_waste_usd{*} > 100
+        message: |
+          Workload {{name}} in namespace {{namespace}} has waste cost exceeding 100 USD/hour
+          Current waste: {{value}} USD/hour
+        tags:
+          - "severity:warning"
+          - "team:cost-optimization"
+          - "type:waste"
+        runbook: "Check the workload's resource allocation and consider rightsizing"
 secret:
   create: false
   name: "perfectscale-secret"
@@ -118,6 +191,8 @@ resources:
     memory: 300Mi
 ## Annotations to add to the deployment
 annotations: {}
+## Annotations to add to the pod
+podAnnotations: {}
 ## Pods Service Account
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 serviceAccount:
@@ -164,55 +239,3 @@ nodeSelector: {}
 # Pod affinity rules.
 # Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 affinity: {}
-serviceMonitor:
-  # When set true then use a ServiceMonitor to configure scraping
-  enable: true
-  # Set how frequently Prometheus should scrape
-  interval: 5m
-  # Set path to the metrics
-  path: /metrics
-  # Set timeout for scrape
-  timeout: 30s
-  # Additional Label to the serviceMonitor
-  # labels:
-  #   prometheus: kube-prometheus
-# requires serviceMonitor.enable=true
-prometheusRule:
-  enabled: true
-  labels:
-    release: prometheus
-  rules:
-    - alert: "PerfectScale Waste Cost Surge"
-      enabled: true
-      expr: |
-        (
-          ps_waste_usd > 0
-          and
-          (
-            ps_waste_usd
-            /
-            (ps_waste_usd offset 1h)
-          ) > 1.5
-        )
-      for: 15m # Wait for 15m to avoid false positives from temporary spikes
-      labels:
-        severity: warning
-        team: cost-optimization
-        type: waste
-      annotations:
-        summary: "Waste cost increased by more than 50%"
-        description: "Workload {{ $labels.workload_name }} in namespace {{ $labels.namespace }} has increased its waste by more than 50% in the last hour. Current waste: {{ $value | humanizePercentage }} USD/hour"
-        runbook: "Check the workload's resource configuration and usage patterns"
-    - alert: "PerfectScale High Absolute Waste"
-      enabled: true
-      expr: |
-        ps_waste_usd > 100
-      for: 30m
-      labels:
-        severity: warning
-        team: cost-optimization
-        type: waste
-      annotations:
-        summary: "High waste cost detected"
-        description: "Workload {{ $labels.workload_name }} in namespace {{ $labels.namespace }} has waste cost exceeding 100 USD/hour. Current waste: {{ $value | humanize }} USD/hour"
-        runbook: "Check the workload's resource allocation and consider rightsizing"
