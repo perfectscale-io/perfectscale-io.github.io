@@ -146,7 +146,7 @@
             "uid": "${DataSource}"
           },
           "editorMode": "code",
-          "expr": "sum(ps_recommended_cpu_request_cores{ps_namespace=~\"${namespace}\", workload_name=~\"${workload}\", ps_container_name=~\"${container}\"}) by (pod, container_name)",
+          "expr": "sum(ps_recommended_cpu_request_cores{ps_namespace=~\"${namespace}\", workload_name=~\"${workload}\", ps_container_name=~\"${container}\", cluster_uid=~\"${cluster_uid}\"}) by (pod, container_name)",
           "hide": false,
           "instant": false,
           "legendFormat": "Recommendations Request: Pod: {{workload_name}} Container: {{container_name}}",
@@ -159,7 +159,7 @@
             "uid": "${DataSource}"
           },
           "editorMode": "code",
-          "expr": "sum(ps_current_cpu_request_cores{ps_namespace=~\"${namespace}\", workload_name=~\"${workload}\", ps_container_name=~\"${container}\"}) by (pod, container_name)",
+          "expr": "sum(ps_current_cpu_request_cores{ps_namespace=~\"${namespace}\", workload_name=~\"${workload}\", ps_container_name=~\"${container}\", cluster_uid=~\"${cluster_uid}\"}) by (pod, container_name)",
           "hide": false,
           "instant": false,
           "legendFormat": "Current Request: Pod: {{workload_name}} Container: {{container_name}}",
@@ -261,7 +261,7 @@
             "uid": "${DataSource}"
           },
           "editorMode": "code",
-          "expr": "sum(ps_recommended_cpu_limit_cores{ps_namespace=~\"${namespace}\", workload_name=~\"${workload}\", ps_container_name=~\"${container}\"}) by (pod, container_name)",
+          "expr": "sum(ps_recommended_cpu_limit_cores{ps_namespace=~\"${namespace}\", workload_name=~\"${workload}\", ps_container_name=~\"${container}\", cluster_uid=~\"${cluster_uid}\"}) by (pod, container_name)",
           "hide": false,
           "instant": false,
           "legendFormat": "Recommendations Limit: Pod: {{workload_name}} Container: {{container_name}}",
@@ -274,7 +274,7 @@
             "uid": "${DataSource}"
           },
           "editorMode": "code",
-          "expr": "sum(ps_current_cpu_limit_cores{ps_namespace=~\"${namespace}\", workload_name=~\"${workload}\", ps_container_name=~\"${container}\"}) by (pod, container_name)",
+          "expr": "sum(ps_current_cpu_limit_cores{ps_namespace=~\"${namespace}\", workload_name=~\"${workload}\", ps_container_name=~\"${container}\", cluster_uid=~\"${cluster_uid}\"}) by (pod, container_name)",
           "hide": false,
           "instant": false,
           "legendFormat": "Current Limit: Pod: {{workload_name}} Container: {{container_name}}",
@@ -376,7 +376,7 @@
             "uid": "${DataSource}"
           },
           "editorMode": "code",
-          "expr": "sum(ps_recommended_memory_request_bytes{ps_namespace=~\"${namespace}\", workload_name=~\"${workload}\", ps_container_name=~\"${container}\"}) by (pod, container_name)",
+          "expr": "sum(ps_recommended_memory_request_bytes{ps_namespace=~\"${namespace}\", workload_name=~\"${workload}\", ps_container_name=~\"${container}\", cluster_uid=~\"${cluster_uid}\"}) by (pod, container_name)",
           "hide": false,
           "instant": false,
           "legendFormat": "Recommendations Request: Pod: {{workload_name}} Container: {{container_name}}",
@@ -389,7 +389,7 @@
             "uid": "${DataSource}"
           },
           "editorMode": "code",
-          "expr": "sum(ps_current_memory_request_bytes{ps_namespace=~\"${namespace}\", workload_name=~\"${workload}\", ps_container_name=~\"${container}\"}) by (pod, container_name)",
+          "expr": "sum(ps_current_memory_request_bytes{ps_namespace=~\"${namespace}\", workload_name=~\"${workload}\", ps_container_name=~\"${container}\", cluster_uid=~\"${cluster_uid}\"}) by (pod, container_name)",
           "hide": false,
           "instant": false,
           "legendFormat": "Current Request: Pod: {{workload_name}} Container: {{container_name}}",
@@ -491,7 +491,7 @@
             "uid": "${DataSource}"
           },
           "editorMode": "code",
-          "expr": "sum(ps_recommended_memory_limit_bytes{ps_namespace=~\"${namespace}\", workload_name=~\"${workload}\", ps_container_name=~\"${container}\"}) by (pod, container_name)",
+          "expr": "sum(ps_recommended_memory_limit_bytes{ps_namespace=~\"${namespace}\", workload_name=~\"${workload}\", ps_container_name=~\"${container}\", cluster_uid=~\"${cluster_uid}\"}) by (pod, container_name)",
           "hide": false,
           "instant": false,
           "legendFormat": "Recommendations Limit: Pod: {{workload_name}} Container: {{container_name}}",
@@ -504,7 +504,7 @@
             "uid": "${DataSource}"
           },
           "editorMode": "code",
-          "expr": "sum(ps_current_memory_limit_bytes{ps_namespace=~\"${namespace}\", workload_name=~\"${workload}\", ps_container_name=~\"${container}\"}) by (pod, container_name)",
+          "expr": "sum(ps_current_memory_limit_bytes{ps_namespace=~\"${namespace}\", workload_name=~\"${workload}\", ps_container_name=~\"${container}\", cluster_uid=~\"${cluster_uid}\"}) by (pod, container_name)",
           "hide": false,
           "instant": false,
           "legendFormat": "Current Limit: Pod: {{workload_name}} Container: {{container_name}}",
@@ -574,7 +574,7 @@
             "uid": "${DataSource}"
           },
           "editorMode": "code",
-          "expr": "max(ps_replicas_avg{ps_namespace=~\"${namespace}\",workload_name=~\"${workload}\"})",
+          "expr": "max(ps_replicas_avg{ps_namespace=~\"${namespace}\",workload_name=~\"${workload}\", cluster_uid=~\"${cluster_uid}\"})",
           "hide": false,
           "instant": false,
           "legendFormat": "Avg replicas count",
@@ -587,7 +587,7 @@
             "uid": "${DataSource}"
           },
           "editorMode": "code",
-          "expr": "max(ps_replicas_max{ps_namespace=~\"${namespace}\",workload_name=~\"${workload}\"})",
+          "expr": "max(ps_replicas_max{ps_namespace=~\"${namespace}\",workload_name=~\"${workload}\", cluster_uid=~\"${cluster_uid}\"})",
           "hide": false,
           "instant": false,
           "legendFormat": "Max replicas count",
@@ -689,7 +689,7 @@
             "uid": "${DataSource}"
           },
           "editorMode": "code",
-          "expr": "sum(ps_waste_usd{ps_namespace=~\"${namespace}\", workload_name=~\"${workload}\"}) by (workload_name)",
+          "expr": "sum(ps_waste_usd{ps_namespace=~\"${namespace}\", workload_name=~\"${workload}\", cluster_uid=~\"${cluster_uid}\"}) by (workload_name)",
           "hide": false,
           "instant": false,
           "legendFormat": "Waste: {{workload_name}}",
@@ -702,7 +702,7 @@
             "uid": "${DataSource}"
           },
           "editorMode": "code",
-          "expr": "sum(ps_cost_usd{ps_namespace=~\"${namespace}\", workload_name=~\"${workload}\"}) by (workload_name)",
+          "expr": "sum(ps_cost_usd{ps_namespace=~\"${namespace}\", workload_name=~\"${workload}\", cluster_uid=~\"${cluster_uid}\"}) by (workload_name)",
           "hide": false,
           "instant": false,
           "legendFormat": "Cost: {{workload_name}}",
@@ -804,7 +804,7 @@
             "uid": "${DataSource}"
           },
           "editorMode": "code",
-          "expr": "sum(ps_workload_indicators{ps_namespace=~\"${namespace}\", workload_name=~\"${workload}\", ps_container_name=~\"${container}\", indicator_name!=\"\", indicator_level=~\"${indicator_level}\" }) by (indicator_name, indicator_level, container_name)",
+          "expr": "sum(ps_workload_indicators{ps_namespace=~\"${namespace}\", workload_name=~\"${workload}\", ps_container_name=~\"${container}\", indicator_name!=\"\", indicator_level=~\"${indicator_level}\", cluster_uid=~\"${cluster_uid}\"}) by (indicator_name, indicator_level, container_name)",
           "hide": false,
           "instant": false,
           "legendFormat": "__auto",
@@ -837,13 +837,38 @@
           "type": "prometheus",
           "uid": "${DataSource}"
         },
-        "definition": "label_values(ps_recommended_memory_request_bytes,ps_namespace)",
+        "definition": "label_values(ps_cost_usd,cluster_uid)",
+        "hide": 0,
+        "includeAll": true,
+        "allValue": ".*",
+        "label": "Cluster UID",
+        "multi": false,
+        "name": "cluster_uid",
+        "options": [],
+        "query": {
+          "qryType": 1,
+          "query": "label_values(ps_cost_usd,cluster_uid)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "current": {},
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DataSource}"
+        },
+        "definition": "label_values(ps_recommended_memory_request_bytes{cluster_uid=~\"$cluster_uid\"},ps_namespace)",
         "includeAll": false,
         "label": "Namespace",
         "name": "namespace",
         "options": [],
         "query": {
-          "query": "label_values(ps_recommended_memory_request_bytes,ps_namespace)",
+          "query": "label_values(ps_recommended_memory_request_bytes{cluster_uid=~\"$cluster_uid\"},ps_namespace)",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 2,
@@ -857,14 +882,14 @@
           "type": "prometheus",
           "uid": "${DataSource}"
         },
-        "definition": "label_values(ps_recommended_memory_request_bytes{ps_namespace=~\"$namespace\"},workload_name)",
+        "definition": "label_values(ps_recommended_memory_request_bytes{ps_namespace=~\"$namespace\", cluster_uid=~\"$cluster_uid\"},workload_name)",
         "includeAll": false,
         "label": "Workload",
         "name": "workload",
         "options": [],
         "query": {
           "qryType": 1,
-          "query": "label_values(ps_recommended_memory_request_bytes{ps_namespace=~\"$namespace\"},workload_name)",
+          "query": "label_values(ps_recommended_memory_request_bytes{ps_namespace=~\"$namespace\", cluster_uid=~\"$cluster_uid\"},workload_name)",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 2,
@@ -878,14 +903,14 @@
           "type": "prometheus",
           "uid": "${DataSource}"
         },
-        "definition": "label_values(ps_recommended_memory_request_bytes{ps_namespace=~\"$namespace\", workload_name=\"$workload\"},ps_container_name)",
+        "definition": "label_values(ps_recommended_memory_request_bytes{ps_namespace=~\"$namespace\", workload_name=\"$workload\", cluster_uid=~\"$cluster_uid\"},ps_container_name)",
         "includeAll": false,
         "label": "Container",
         "name": "container",
         "options": [],
         "query": {
           "qryType": 1,
-          "query": "label_values(ps_recommended_memory_request_bytes{ps_namespace=~\"$namespace\", workload_name=\"$workload\"},ps_container_name)",
+          "query": "label_values(ps_recommended_memory_request_bytes{ps_namespace=~\"$namespace\", workload_name=\"$workload\", cluster_uid=~\"$cluster_uid\"},ps_container_name)",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 2,
@@ -899,14 +924,14 @@
           "type": "prometheus",
           "uid": "${DataSource}"
         },
-        "definition": "label_values(ps_workload_indicators{ps_namespace=~\"$namespace\", workload_name=\"$workload\", ps_container_name=\"$container\"},indicator_level)",
+        "definition": "label_values(ps_workload_indicators{ps_namespace=~\"$namespace\", workload_name=\"$workload\", ps_container_name=\"$container\", cluster_uid=~\"$cluster_uid\"},indicator_level)",
         "includeAll": true,
         "label": "Indicator level",
         "multi": true,
         "name": "indicator_level",
         "options": [],
         "query": {
-          "query": "label_values(ps_workload_indicators{ps_namespace=~\"$namespace\", workload_name=\"$workload\", ps_container_name=\"$container\"},indicator_level)",
+          "query": "label_values(ps_workload_indicators{ps_namespace=~\"$namespace\", workload_name=\"$workload\", ps_container_name=\"$container\", cluster_uid=~\"$cluster_uid\"},indicator_level)",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 2,
