@@ -9,7 +9,8 @@ spec:
         operational:
           automationMode: "Enabled"
           timeConstraints:
-            maxAutomationFrequency: "15m"
+            wasteMaxAutomationFrequency: "1h"
+            fixResiliencyMaxAutomationFrequency: "15m"
             maintenanceWindow:
               monday:
                 - "10:00-18:00"

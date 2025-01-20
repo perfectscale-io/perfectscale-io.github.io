@@ -29,9 +29,12 @@ spec:
         - name: StopAllAutomation
           type: boolean
           jsonPath: .spec.automation.operational.stopAllAutomation
-        - name: MaxAutomationFrequency
+        - name: WasteMaxAutomationFrequency
           type: string
-          jsonPath: .spec.automation.operational.timeConstraints.maxAutomationFrequency
+          jsonPath: .spec.automation.operational.timeConstraints.wasteMaxAutomationFrequency
+        - name: FixResiliencyMaxAutomationFrequency
+          type: string
+          jsonPath: .spec.automation.operational.timeConstraints.fixResiliencyMaxAutomationFrequency
         - name: Age
           type: date
           jsonPath: .metadata.creationTimestamp
@@ -73,6 +76,10 @@ spec:
                           x-kubernetes-preserve-unknown-fields: true
                           properties:
                             maxAutomationFrequency:
+                              type: string
+                            wasteMaxAutomationFrequency:
+                              type: string
+                            fixResiliencyMaxAutomationFrequency:
                               type: string
                             maintenanceWindow:
                               type: object
@@ -239,6 +246,10 @@ spec:
                                 x-kubernetes-preserve-unknown-fields: true
                                 properties:
                                   maxAutomationFrequency:
+                                    type: string
+                                  wasteMaxAutomationFrequency:
+                                    type: string
+                                  fixResiliencyMaxAutomationFrequency:
                                     type: string
                                   maintenanceWindow:
                                     type: object

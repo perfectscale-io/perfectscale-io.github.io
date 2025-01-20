@@ -58,6 +58,14 @@ spec:
                       type: string
                     name:
                       type: string
+                customGrouping:
+                  type: object
+                  x-kubernetes-preserve-unknown-fields: true
+                  properties:
+                    isLabelBased:
+                      type: boolean
+                    isSpecHonored:
+                      type: boolean
             status:
               type: object
               x-kubernetes-preserve-unknown-fields: true
