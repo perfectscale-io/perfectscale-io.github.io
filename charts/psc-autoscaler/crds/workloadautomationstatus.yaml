@@ -66,13 +66,106 @@ spec:
                       type: boolean
                     isSpecHonored:
                       type: boolean
+                replicas:
+                  type: integer
             status:
               type: object
               x-kubernetes-preserve-unknown-fields: true
               properties:
+                selfHealing:
+                  type: object
+                  x-kubernetes-preserve-unknown-fields: true
+                  properties:
+                    status:
+                      type: string
+                    lastDetectedAt:
+                      type: string
+                      format: date-time
                 automationAppliedAt:
                   type: string
                   format: date-time
+                previous:
+                  type: object
+                  x-kubernetes-preserve-unknown-fields: true
+                  properties:
+                    recommendation:
+                      type: object
+                      x-kubernetes-preserve-unknown-fields: true
+                      properties:
+                        generatedAt:
+                          type: string
+                          format: date-time
+                        date:
+                          type: string
+                        revision:
+                          type: string
+                        revisionHash:
+                          type: string
+                        configVersion:
+                          type: string
+                    workload:
+                      type: object
+                      x-kubernetes-preserve-unknown-fields: true
+                      properties:
+                        waste:
+                          type: number
+                          format: double
+                        indicators:
+                          type: object
+                          x-kubernetes-preserve-unknown-fields: true
+                          additionalProperties:
+                            type: string
+                        containers:
+                          type: object
+                          additionalProperties:
+                            type: object
+                            x-kubernetes-preserve-unknown-fields: true
+                            properties:
+                              indicators:
+                                type: object
+                                x-kubernetes-preserve-unknown-fields: true
+                                additionalProperties:
+                                  type: string
+                              resources:
+                                type: object
+                                x-kubernetes-preserve-unknown-fields: true
+                                properties:
+                                  requests:
+                                    type: object
+                                    x-kubernetes-preserve-unknown-fields: true
+                                    properties:
+                                      cpu:
+                                        type: string
+                                      memory:
+                                        type: string
+                                  limits:
+                                    type: object
+                                    x-kubernetes-preserve-unknown-fields: true
+                                    properties:
+                                      cpu:
+                                        type: string
+                                      memory:
+                                        type: string
+                              spec:
+                                type: object
+                                x-kubernetes-preserve-unknown-fields: true
+                                properties:
+                                  requests:
+                                    type: object
+                                    x-kubernetes-preserve-unknown-fields: true
+                                    properties:
+                                      cpu:
+                                        type: string
+                                      memory:
+                                        type: string
+                                  limits:
+                                    type: object
+                                    x-kubernetes-preserve-unknown-fields: true
+                                    properties:
+                                      cpu:
+                                        type: string
+                                      memory:
+                                        type: string
                 current:
                   type: object
                   x-kubernetes-preserve-unknown-fields: true
