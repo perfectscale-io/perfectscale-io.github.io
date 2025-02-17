@@ -117,9 +117,6 @@ Create the name of the service account to use
 {{- end }}
 {{- end }}
 
-{{/*
-For testing purposes, in prod we want to get the actual cluster's UID
-*/}}
 {{- define "helm.exporter.clusterUID" -}}
 {{- if .Values.settings.clusterUID }}
 {{- .Values.settings.clusterUID }}
