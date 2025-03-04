@@ -156,6 +156,14 @@ spec:
           - name: NO_PROXY
             value: "{{ .Values.settings.noProxy }}{{ .Release.Name }}-kube-state-metrics"
           {{- end }}
+          {{- if .Values.settings.windowsExporterEnabled | default false }}
+          - name: WINDOWS_EXPORTER_NAMESPACE
+            value: "{{ .Values.settings.windowsExporterNamespace | default .Release.Namespace }}"
+          - name: WINDOWS_EXPORTER_LABEL_SELECTOR
+            value: "{{ .Values.settings.windowsExporterLabelSelector | default "app.kubernetes.io/name=prometheus-windows-exporter" }}"
+          - name: WINDOWS_EXPORTER_PORT
+            value: "{{ .Values.settings.windowsExporterPort | default "9182" }}"
+          {{- end }}
           ports:
             - name: http
               containerPort: 8080

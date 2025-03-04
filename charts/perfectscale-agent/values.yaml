@@ -2,7 +2,7 @@ replicaCount: 1
 image:
   repository: public.ecr.aws/perfectscale-io/psc-exporter
   pullPolicy: Always
-  tag: "v1.0.49"
+  tag: "v1.0.50"
 initContainer:
   image:
     repository: public.ecr.aws/perfectscale-io/alpine
@@ -46,6 +46,10 @@ settings:
   httpProxy: "" #example: http://squid-proxy-service.default:3128
   httpsProxy: "" #example$ http://squid-proxy-service.default:3128
   noProxy: "" #example: ".cluster.local,.svc.cluster.local,172.20.0.1," the line must end with a coma, 172.20.0.1 it is KUBERNETES_SERVICE_HOST, API SERVICE
+  windowsExporterEnabled: false
+  # windowsExporterNamespace: "perfectscale"
+  # windowsExporterPort: "9182"
+  # windowsExporterLabelSelector: "app.kubernetes.io/name=prometheus-windows-exporter"
 secret:
   create: false
   name: "perfectscale-secret"
@@ -186,3 +190,31 @@ kube-state-metrics:
     requests:
       cpu: 200m
       memory: 200M
+prometheus-windows-exporter:
+  image:
+    registry: ghcr.io
+    repository: prometheus-community/windows-exporter
+    tag: "0.30.4"
+  config: |-
+    collectors:
+      enabled: 'cpu,os,system,memory,container'
+  prometheus:
+    monitor:
+      enabled: false
+      additionalLabels: {}
+  resources: {}
+  # limits:
+  #   cpu: 200m
+  #   memory: 50Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 30Mi
+
+  serviceAccount:
+    # Specifies whether a ServiceAccount should be created
+    create: true
+    # The name of the ServiceAccount to use.
+    # If not set and create is true, a name is generated using the fullname template
+    name:
+  nodeSelector:
+    kubernetes.io/os: windows
