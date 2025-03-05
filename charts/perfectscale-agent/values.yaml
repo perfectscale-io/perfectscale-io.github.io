@@ -2,7 +2,7 @@ replicaCount: 1
 image:
   repository: public.ecr.aws/perfectscale-io/psc-exporter
   pullPolicy: Always
-  tag: "v1.0.50"
+  tag: "v1.0.51"
 initContainer:
   image:
     repository: public.ecr.aws/perfectscale-io/alpine
@@ -32,6 +32,7 @@ settings:
   clusterResilienceLevel: "medium"
   # supported optimization policies: MaxSavings, Balanced, ExtraHeadroom, MaxHeadroom
   clusterOptimizationPolicy: "Balanced"
+  optimizationPolicyTimeWindow: ""
   clusterName: ""
   collectorNumWorkers: "4"
   #  ksmAddress: "http://kube-state-metrics:8080"

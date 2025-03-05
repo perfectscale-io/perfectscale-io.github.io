@@ -13,6 +13,7 @@ rules:
       - ""
     resources:
       - pods
+      - pods/proxy
       - nodes
       - nodes/proxy
       - replicationcontrollers

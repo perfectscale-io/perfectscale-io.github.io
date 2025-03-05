@@ -100,6 +100,8 @@ spec:
             value: "{{ .Values.settings.clusterResilienceLevel }}"
           - name: CLUSTER_OPTIMIZATION_POLICY
             value: "{{ .Values.settings.clusterOptimizationPolicy }}"
+          - name: OPTIMIZATION_POLICY_TIME_WINDOW
+            value: "{{ .Values.settings.optimizationPolicyTimeWindow }}"
           - name: DEMO_ENV_ADDRESS
             value: "{{ .Values.settings.demoEnvAddress }}"
           - name: ENABLE_PPROF
@@ -163,6 +165,8 @@ spec:
             value: "{{ .Values.settings.windowsExporterLabelSelector | default "app.kubernetes.io/name=prometheus-windows-exporter" }}"
           - name: WINDOWS_EXPORTER_PORT
             value: "{{ .Values.settings.windowsExporterPort | default "9182" }}"
+          - name: WINDOWS_EXPORTER_ENABLED
+            value: "{{ .Values.settings.windowsExporterEnabled | default false }}"
           {{- end }}
           ports:
             - name: http
