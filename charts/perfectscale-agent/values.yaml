@@ -2,7 +2,7 @@ replicaCount: 1
 image:
   repository: public.ecr.aws/perfectscale-io/psc-exporter
   pullPolicy: Always
-  tag: "v1.0.52"
+  tag: "v1.0.53"
 initContainer:
   image:
     repository: public.ecr.aws/perfectscale-io/alpine
@@ -48,6 +48,7 @@ settings:
   httpsProxy: "" #example$ http://squid-proxy-service.default:3128
   noProxy: "" #example: ".cluster.local,.svc.cluster.local,172.20.0.1," the line must end with a coma, 172.20.0.1 it is KUBERNETES_SERVICE_HOST, API SERVICE
   windowsExporterEnabled: false
+  deployWindowsExporter: false
   # windowsExporterNamespace: "perfectscale"
   # windowsExporterPort: "9182"
   # windowsExporterLabelSelector: "app.kubernetes.io/name=prometheus-windows-exporter"
