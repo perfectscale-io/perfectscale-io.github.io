@@ -1,0 +1,60 @@
+apiVersion: perfectscale.io/v1
+kind: ClusterAutomationConfig
+metadata:
+  name: cluster-automation-config
+spec:
+  automation:
+    operational:
+      stopAllAutomation: false
+      timeConstraints:
+        wasteMaxAutomationFrequency: "30m"
+        fixResiliencyMaxAutomationFrequency: "30m"
+        maintenanceWindow:
+          monday:
+            - "10:00-18:00"
+          tuesday:
+            - "10:00-18:00"
+          wednesday:
+            - "10:00-18:00"
+          thursday:
+            - "10:00-18:00"
+          friday:
+            - "10:00-18:00"
+          saturday:
+            - "10:00-18:00"
+          sunday:
+            - "10:00-18:00"
+      restrictions:
+        workloadMinWasteUSDPerMonth: 5
+        cpuManagement:
+          request:
+            increaseEnabled: false
+            decreaseEnabled: true
+          limit:
+            keepLimit: true
+        memoryManagement:
+          request:
+            increaseEnabled: false
+            decreaseEnabled: true
+          limit:
+            increaseEnabled: false
+            decreaseEnabled: false
+    workloadTypes:
+      #  You should consider if you want to enable StatefulSets automation.
+      #  You might want a human eye while restarting production databases, in general, pods with persistent volume are more fragile.
+      #  As well, if your StatefulSet runs on dedicated nodes, reducing workload resources will not help to reduce the cost
+      StatefulSet:
+        operational:
+          automationMode: "Enabled"
+      Deployment:
+        operational:
+          automationMode: "Enabled"
+      DaemonSet:
+        operational:
+          automationMode: "Enabled"
+      CronJob:
+        operational:
+          automationMode: "Enabled"
+      Job:
+        operational:
+          automationMode: "Enabled"
