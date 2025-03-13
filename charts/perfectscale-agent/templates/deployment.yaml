@@ -168,6 +168,18 @@ spec:
           - name: WINDOWS_EXPORTER_ENABLED
             value: "{{ .Values.settings.windowsExporterEnabled | default false }}"
           {{- end }}
+          {{- if .Values.settings.dcgm.exporterEnabled | default false }}
+          - name: DCGM_EXPORTER_ENABLED
+            value: "{{ .Values.settings.dcgm.exporterEnabled | default false }}"
+          - name: DCGM_EXPORTER_NAMESPACE
+            value: "{{ .Values.settings.dcgm.exporterNamespace | default "" }}"
+          - name: DCGM_EXPORTER_LABEL_SELECTOR
+            value: "{{ .Values.settings.dcgm.exporterLabelSelector | default "app=nvidia-dcgm-exporter" }}"
+          - name: DCGM_EXPORTER_PORT
+            value: "{{ .Values.settings.dcgm.exporterPort | default "9400" }}"
+          - name: DCGM_EXPORTER_TIMEOUT
+            value: "{{ .Values.settings.dcgm.exporterTimeout | default "30s" }}"
+          {{- end }}
           ports:
             - name: http
               containerPort: 8080

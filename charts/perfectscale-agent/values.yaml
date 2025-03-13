@@ -2,7 +2,7 @@ replicaCount: 1
 image:
   repository: public.ecr.aws/perfectscale-io/psc-exporter
   pullPolicy: Always
-  tag: "v1.0.53"
+  tag: "v1.0.54"
 initContainer:
   image:
     repository: public.ecr.aws/perfectscale-io/alpine
@@ -52,6 +52,8 @@ settings:
   # windowsExporterNamespace: "perfectscale"
   # windowsExporterPort: "9182"
   # windowsExporterLabelSelector: "app.kubernetes.io/name=prometheus-windows-exporter"
+  dcgm:
+    exporterEnabled: false
 secret:
   create: false
   name: "perfectscale-secret"
