@@ -2,7 +2,7 @@ replicaCount: 3
 image:
   repository: public.ecr.aws/perfectscale-io/psc-autoscaler
   pullPolicy: Always
-  tag: "v1.0.19"
+  tag: "v1.0.20"
 settings:
   port: 8443
   env: "prod"
@@ -11,6 +11,7 @@ settings:
   psUrl: "https://api.app.perfectscale.io"
   telemetryUrl: "https://api.app.perfectscale.io/psc-telemetry"
   pushTelemetryFrequency: "1m"
+  maxParallelRestarts: 3
   restartDeploymentThreshold: 0.1 # defines the number of bypassed pods of the deployment below which we restart individual pods
   bypassedPodsCheckInterval: "30m"
   httpTimeout: "3m"

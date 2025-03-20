@@ -346,6 +346,8 @@ spec:
               value: "{{ .Values.settings.telemetryUrl }}"
             - name: PUSH_TELEMETRY_FREQUENCY
               value: "{{ .Values.settings.pushTelemetryFrequency }}"
+            - name: "MAX_PARALLEL_RESTARTS"
+              value: "{{ .Values.settings.maxParallelRestarts }}"
             - name: "RESTART_DEPLOYMENT_THRESHOLD"
               value: "{{ .Values.settings.restartDeploymentThreshold }}"
             - name: "BYPASSED_PODS_CHECK_INTERVAL"
