@@ -2,7 +2,7 @@ replicaCount: 1
 image:
   repository: public.ecr.aws/perfectscale-io/psc-exporter
   pullPolicy: Always
-  tag: "v1.0.55"
+  tag: "v1.0.56"
 initContainer:
   image:
     repository: public.ecr.aws/perfectscale-io/alpine
@@ -19,7 +19,7 @@ settings:
   pushTelemetryFrequency: "1m"
   scrapingInterval: "30s"
   ksmTimeout: "30s"
-  kubeAPITimeoutSec: "3"
+  kubeAPITimeoutSec: "15"
   cAdvisorNumWorkers: "30"
   k8sClientBurst: "150"
   k8sClientQPS: "100"
@@ -54,6 +54,9 @@ settings:
   # windowsExporterLabelSelector: "app.kubernetes.io/name=prometheus-windows-exporter"
   dcgm:
     exporterEnabled: false
+  unschedulablePods:
+    scrapingInterval: "240s"
+    numWorkers: "30"
 secret:
   create: false
   name: "perfectscale-secret"

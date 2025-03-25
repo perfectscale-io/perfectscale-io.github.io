@@ -180,6 +180,10 @@ spec:
           - name: DCGM_EXPORTER_TIMEOUT
             value: "{{ .Values.settings.dcgm.exporterTimeout | default "30s" }}"
           {{- end }}
+          - name: UNSCHEDULABLE_PODS_SCRAPE_FREQUENCY_TIME
+            value: "{{ .Values.settings.unschedulablePods.scrapingInterval }}"
+          - name: UNSCHEDULABLE_PODS_NUM_WORKERS
+            value: "{{ .Values.settings.unschedulablePods.numWorkers }}"
           ports:
             - name: http
               containerPort: 8080
