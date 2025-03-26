@@ -75,6 +75,8 @@ spec:
                           type: object
                           x-kubernetes-preserve-unknown-fields: true
                           properties:
+                            maintenanceWindowIgnoredForResiliency:
+                              type: boolean
                             maxAutomationFrequency:
                               type: string
                             wasteMaxAutomationFrequency:
@@ -251,6 +253,8 @@ spec:
                                     type: string
                                   fixResiliencyMaxAutomationFrequency:
                                     type: string
+                                  maintenanceWindowIgnoredForResiliency:
+                                    type: boolean
                                   maintenanceWindow:
                                     type: object
                                     x-kubernetes-preserve-unknown-fields: true
