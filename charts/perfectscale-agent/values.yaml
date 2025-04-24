@@ -2,7 +2,7 @@ replicaCount: 1
 image:
   repository: public.ecr.aws/perfectscale-io/psc-exporter
   pullPolicy: Always
-  tag: "v1.0.56"
+  tag: "v1.0.57"
 initContainer:
   image:
     repository: public.ecr.aws/perfectscale-io/alpine
@@ -16,6 +16,7 @@ settings:
   psUrl: "https://api.app.perfectscale.io/psc-tenant-manager"
   uploadPolicyUrl: "https://api.app.perfectscale.io/psc-presigned-policy"
   telemetryUrl: "https://api.app.perfectscale.io/psc-telemetry"
+  aggregatorUrl: "https://api.app.perfectscale.io/psc-aggregator"
   pushTelemetryFrequency: "1m"
   scrapingInterval: "30s"
   ksmTimeout: "30s"
@@ -57,6 +58,9 @@ settings:
   unschedulablePods:
     scrapingInterval: "240s"
     numWorkers: "30"
+  karpenter:
+    enabled: true
+    scrapingInterval: "20m"
 secret:
   create: false
   name: "perfectscale-secret"

@@ -97,6 +97,14 @@ rules:
       - "get"
       - "list"
       - "watch"
+  - apiGroups:
+      - "karpenter.sh"
+    resources:
+      - nodepools
+    verbs:
+      - get
+      - list
+      - watch
   - nonResourceURLs:
       - "/version"
     verbs:

@@ -90,6 +90,8 @@ spec:
             value: "{{ .Values.settings.uploadPolicyUrl }}"
           - name: TELEMETRY_URL
             value: "{{ .Values.settings.telemetryUrl }}"
+          - name: AGGREGATOR_URL
+            value: "{{ .Values.settings.aggregatorUrl }}"
           - name: RAW_TIME_WINDOW_SIZE_MINUTES
             value: "{{ .Values.settings.rawTimeWindowSizeMinutes | default "10m" }}"
           - name: UPLOAD_POLICY_REFRESH_PCT
@@ -184,6 +186,10 @@ spec:
             value: "{{ .Values.settings.unschedulablePods.scrapingInterval }}"
           - name: UNSCHEDULABLE_PODS_NUM_WORKERS
             value: "{{ .Values.settings.unschedulablePods.numWorkers }}"
+          - name: KARPENTER_ENABLED
+            value: "{{ .Values.settings.karpenter.enabled }}"
+          - name: KARPENTER_SCRAPE_FREQUENCY_TIME
+            value: "{{ .Values.settings.karpenter.scrapingInterval }}"
           ports:
             - name: http
               containerPort: 8080
