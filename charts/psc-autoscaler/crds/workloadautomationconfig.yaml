@@ -76,6 +76,8 @@ spec:
                           properties:
                             maintenanceWindowIgnoredForResiliency:
                               type: boolean
+                            maintenanceWindowIgnoredMinResiliencyLevel:
+                              type: string
                             maxAutomationFrequency:
                               type: string
                             wasteMaxAutomationFrequency:
