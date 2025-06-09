@@ -2,11 +2,13 @@ replicaCount: 1
 image:
   repository: public.ecr.aws/perfectscale-io/psc-exporter
   pullPolicy: Always
-  tag: "v1.0.60"
+  tag: "v1.0.61"
 initContainer:
   image:
     repository: public.ecr.aws/perfectscale-io/alpine
     tag: 3.21-init
+# Notes generation override web portal
+webAppUrl: "http://app.perfectscale.io/"
 settings:
   deployKubeStateMetrics: true
   serviceId: "psc-exporter"
@@ -49,6 +51,9 @@ settings:
   httpsProxy: "" #example$ http://squid-proxy-service.default:3128
   noProxy: "" #example: ".cluster.local,.svc.cluster.local,172.20.0.1," the line must end with a coma, 172.20.0.1 it is KUBERNETES_SERVICE_HOST, API SERVICE
   windowsExporterEnabled: false
+  corootExporter:
+    Enabled: false
+    LabelSelector: ""
   deployWindowsExporter: false
   # windowsExporterNamespace: "perfectscale"
   # windowsExporterPort: "9182"
@@ -61,6 +66,8 @@ settings:
   karpenter:
     enabled: true
     scrapingInterval: "20m"
+  coroot:
+    enabled: false
 secret:
   create: false
   name: "perfectscale-secret"
@@ -229,3 +236,29 @@ prometheus-windows-exporter:
     name:
   nodeSelector:
     kubernetes.io/os: windows
+coroot:
+  image:
+    repository: public.ecr.aws/perfectscale-io/debug-gha
+    pullPolicy: Always
+    tag: "coroot-01"
+  resources:
+    requests:
+      cpu: 10m
+      memory: 50Mi
+  ## Additional labels to set in the all objects. Together with standard labels from the chart
+  additionalLabels: {}
+  ## Labels to add to the pod
+  podLabels: {}
+  ## Annotations to add to the daemonset
+  annotations: {}
+  ## Annotations to add to the pod
+  podAnnotations: {}
+  # Pod toleration rules.
+  # Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  tolerations: {}
+  # Pod node selector rules.
+  # Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
+  nodeSelector: {}
+  # Pod affinity rules.
+  # Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  affinity: {}

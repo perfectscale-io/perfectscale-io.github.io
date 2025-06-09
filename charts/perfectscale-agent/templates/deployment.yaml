@@ -190,6 +190,10 @@ spec:
             value: "{{ .Values.settings.karpenter.enabled }}"
           - name: KARPENTER_SCRAPE_FREQUENCY_TIME
             value: "{{ .Values.settings.karpenter.scrapingInterval }}"
+          - name: COROOT_EXPORTER_ENABLED
+            value: "{{ .Values.settings.corootExporter.Enabled | default false }}"
+          - name: COROOT_EXPORTER_LABEL_SELECTOR
+            value: "{{ .Values.settings.corootExporter.LabelSelector | default "app=psc-exporter-coroot" }}"
           ports:
             - name: http
               containerPort: 8080

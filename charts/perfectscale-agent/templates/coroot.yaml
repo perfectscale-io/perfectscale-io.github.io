@@ -1,0 +1,88 @@
+{{- if .Values.settings.coroot.enabled -}}
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  labels:
+    app: {{ .Release.Name }}-coroot
+    {{- if .Values.coroot.additionalLabels }}
+    {{- toYaml .Values.coroot.additionalLabels | nindent 4 }}
+    {{- end }}
+  name: {{ .Release.Name }}-coroot
+  namespace: {{ .Release.Namespace }}
+  {{- with .Values.coroot.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-coroot
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-coroot
+        {{- if .Values.coroot.podLabels }}
+        {{- toYaml .Values.coroot.podLabels | nindent 8 }}
+        {{- end }}
+      {{- with .Values.coroot.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    spec:
+      hostPID: true #TO DO check code if we need it?
+      containers:
+        - name: coroot-node-agent
+          image: "{{ .Values.coroot.image.repository }}:{{ .Values.coroot.image.tag }}"
+          imagePullPolicy: {{ .Values.coroot.image.pullPolicy }}
+          args: ["--cgroupfs-root", "/host/sys/fs/cgroup"]
+          ports:
+            - containerPort: 80
+              name: http
+          resources:
+            {{- toYaml .Values.coroot.resources | nindent 12 }}
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - mountPath: /host/sys/fs/cgroup
+              name: cgroupfs
+              readOnly: true
+            - mountPath: /sys/kernel/tracing
+              name: tracefs
+            - mountPath: /sys/kernel/debug
+              name: debugfs
+              readOnly: false
+            - mountPath: /tmp
+              name: tmp
+      {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+      - name: {{ .Values.imagePullSecrets.secretName }}
+      {{- end }}
+      {{- with .Values.coroot.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.coroot.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.coroot.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if ne .Values.priorityClass.enabled false}}
+      priorityClassName: {{ .Values.priorityClass.name | default "perfectscale-exporter" }}
+      {{- end }}
+      volumes:
+        - hostPath:
+            path: /sys/fs/cgroup
+          name: cgroupfs
+        - hostPath:
+            path: /sys/kernel/tracing
+            type: ""
+          name: tracefs
+        - hostPath:
+            path: /sys/kernel/debug
+          name: debugfs
+        - emptyDir: {}
+          name: tmp
+{{- end }}
