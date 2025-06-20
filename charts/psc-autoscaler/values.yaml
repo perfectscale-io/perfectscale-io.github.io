@@ -3,7 +3,7 @@ revisionHistoryLimit: 10
 image:
   repository: public.ecr.aws/perfectscale-io/psc-autoscaler
   pullPolicy: Always
-  tag: "v1.0.24"
+  tag: "v1.0.25"
 settings:
   port: 8443
   env: "prod"
@@ -116,6 +116,16 @@ admission:
   # Admission Enforcer on AKS excludes kube-system and AKS internal namespaces from being processed by the webhook.
   # To disable this behavior, provide the following annotation:
   # admissions.enforcer/disabled: "true"
+
+  certManager:
+    enabled: false
+  #If you have a Kubernetes secret containing the certificates for the webhook created outside of the Helm chart, 
+  # set enabled: true under externalCertSecret, specify the secret name in the tlsName field, 
+  # and provide the actual base64 encoded CA bundle in the caCert field.
+  externalCertSecret:
+    enabled: false
+    tlsName: "somename"
+    caCert: "someCAbundle"
 integrationTests:
   enabled: true
   image:

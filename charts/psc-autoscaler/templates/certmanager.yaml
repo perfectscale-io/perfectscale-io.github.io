@@ -1,0 +1,68 @@
+{{- if .Values.admission.certManager.enabled }}
+{{- $fullname := include "psc-autoscaler.fullname" . -}}
+{{- $namespace := .Release.Namespace -}}
+{{- $altNames := list (printf "%s.%s" $fullname $namespace) (printf "%s.%s.svc" $fullname $namespace) -}}
+{{- $commonName := printf "%s.%s" $fullname $namespace -}}
+{{- $labels := include "psc-autoscaler.labels" . }}
+
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: {{ $fullname }}-selfsigned
+  namespace: {{ $namespace }}
+spec:
+  selfSigned: {}
+
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ $fullname }}-ca
+  namespace: {{ $namespace }}
+spec:
+  isCA: true
+  commonName: ca.{{ $fullname }}.psc.local
+  secretName: {{ $fullname }}-ca-keypair
+  duration: 87600h # 10 years
+  renewBefore: 720h
+  issuerRef:
+    name: {{ $fullname }}-selfsigned
+    kind: Issuer
+    group: cert-manager.io
+
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: {{ $fullname }}-ca-issuer
+  namespace: {{ $namespace }}
+spec:
+  ca:
+    secretName: {{ $fullname }}-ca-keypair
+
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ $fullname }}-tls
+  namespace: {{ $namespace }}
+  labels:
+    {{- $labels | nindent 4 }}
+spec:
+  secretName: {{ $fullname }}-tls
+  duration: 2160h # 90 days
+  renewBefore: 360h # 15 days
+  subject:
+    organizations:
+      - psc-autoscaler
+  commonName: {{ $commonName }}
+  dnsNames:
+    {{- range $altNames }}
+    - {{ . }}
+    {{- end }}
+  issuerRef:
+    name: {{ $fullname }}-ca-issuer
+    kind: Issuer
+    group: cert-manager.io
+{{- end }}

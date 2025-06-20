@@ -143,7 +143,11 @@ spec:
       volumes:
         - name: tls
           secret:
+      {{- if .Values.admission.externalCertSecret.enabled }}
+            secretName: {{ .Values.admission.externalCertSecret.tlsName }}
+      {{- else }}
             secretName: {{ include "psc-autoscaler.fullname" . }}-tls
+      {{- end }}
 
 ---
 apiVersion: apps/v1
