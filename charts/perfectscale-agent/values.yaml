@@ -3,7 +3,7 @@ revisionHistoryLimit: 10
 image:
   repository: public.ecr.aws/perfectscale-io/psc-exporter
   pullPolicy: Always
-  tag: "v1.0.62"
+  tag: "v1.0.63"
 initContainer:
   image:
     repository: public.ecr.aws/perfectscale-io/alpine
@@ -60,7 +60,11 @@ settings:
   # windowsExporterPort: "9182"
   # windowsExporterLabelSelector: "app.kubernetes.io/name=prometheus-windows-exporter"
   dcgm:
-    exporterEnabled: false
+    exporterEnabled: true
+    exporterNamespace: ""
+    exporterPort: "9400"
+    exporterLabelSelector: "" # by default pods with "app=nvidia-dcgm-exporter" OR "app.kubernetes.io/name=nvidia-dcgm-exporter" are selected.
+    exporterTimeout: "30s"
   unschedulablePods:
     scrapingInterval: "240s"
     numWorkers: "30"
