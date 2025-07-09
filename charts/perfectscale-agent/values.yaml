@@ -3,7 +3,7 @@ revisionHistoryLimit: 10
 image:
   repository: public.ecr.aws/perfectscale-io/psc-exporter
   pullPolicy: Always
-  tag: "v1.0.64"
+  tag: "v1.0.65"
 initContainer:
   image:
     repository: public.ecr.aws/perfectscale-io/alpine
