@@ -109,4 +109,12 @@ rules:
       - "/version"
     verbs:
       - "get"
+  - apiGroups:
+      - "policy"
+    resources:
+      - poddisruptionbudgets
+    verbs:
+      - get
+      - list
+      - watch
 {{- end }}
