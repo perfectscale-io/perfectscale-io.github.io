@@ -30,6 +30,7 @@ rules:
       - ""
     resources:
       - namespaces
+      - nodes/metrics
     verbs:
       - get
   - apiGroups:
