@@ -1,0 +1,22 @@
+{{- if .Values.integrationTests.rbac.enabled -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ include "psc-autoscaler.fullname" . }}-int-tests-cluster
+  labels: {{- include "psc-autoscaler.labels" . | nindent 4 }}
+    {{- if .Values.additionalLabels }}
+    {{- toYaml .Values.additionalLabels | nindent 4 }}
+    {{- end }}
+  {{- with .Values.integrationTests.serviceAccount.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "psc-autoscaler.integrationTests.serviceAccountName" . }}
+    namespace: {{ .Release.Namespace }}
+roleRef:
+  kind: ClusterRole
+  name: {{ include "psc-autoscaler.fullname" . }}-int-tests-cluster
+  apiGroup: rbac.authorization.k8s.io
+{{- end }} 

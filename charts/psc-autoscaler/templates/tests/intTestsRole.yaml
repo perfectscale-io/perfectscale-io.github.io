@@ -14,11 +14,11 @@ metadata:
 rules:
   - apiGroups: [ "" ]
     resources: [ "pods" ]
-    verbs: [ "get", "list", "watch" ]
+    verbs: [ "get", "list", "watch", "patch", "create", "delete", "update" ]
   - apiGroups: [ "apps" ]
     resources: [ "replicasets", "deployments", "statefulsets", "daemonsets", "jobs", "cronjobs" ]
-    verbs: [ "get", "list", "watch", "patch", "create", "delete" ]
+    verbs: [ "get", "list", "watch", "patch", "create", "delete", "update" ]
   - apiGroups: [ "perfectscale.io" ]
-    resources: [ "workloads" ]
-    verbs: [ "create", "get", "delete", "list", "patch", "update", "watch" ]
+    resources: [ "workloadautomationstatuses", "workloadautomationconfigs", "namespaceautomationconfigs" ]
+    verbs: [ "create", "get", "delete", "list", "patch", "update", "watch", "deletecollection" ]
 {{ end }}

@@ -70,6 +70,10 @@ spec:
                       properties:
                         automationMode:
                           type: string
+                        automationStrategy:
+                          type: string
+                        podResizePendingStrategy:
+                          type: string
                         timeConstraints:
                           type: object
                           x-kubernetes-preserve-unknown-fields: true

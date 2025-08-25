@@ -53,7 +53,7 @@ webhooks:
       matchExpressions:
         - key: kubernetes.io/metadata.name
           operator: NotIn
-          values: {{ (.Values.settings).excludedNamespaces }}
+          values: {{ .Values.settings.excludedNamespaces | toJson }}
     {{- end }}
     rules:
       - apiGroups: [ "" ]

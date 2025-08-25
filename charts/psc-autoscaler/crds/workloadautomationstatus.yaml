@@ -84,6 +84,9 @@ spec:
                 automationAppliedAt:
                   type: string
                   format: date-time
+                inPlaceResizedAt:
+                  type: string
+                  format: date-time
                 previous:
                   type: object
                   x-kubernetes-preserve-unknown-fields: true

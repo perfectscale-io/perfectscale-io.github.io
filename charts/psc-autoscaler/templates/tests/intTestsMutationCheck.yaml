@@ -1,3 +1,4 @@
+{{- $fullName := include "helm.fullname" . -}}
 {{- if .Values.integrationTests.enabled -}}
 apiVersion: v1
 kind: Pod
@@ -15,12 +16,29 @@ metadata:
 spec:
   containers:
     - name: mutation-check
-      image: "{{ .Values.image.repository }}:{{ .Values.integrationTests.image.tag |  default (  printf "%s-int-tests" .Chart.AppVersion) }}"
+      image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
       command:
-        - "./test"
+        - "./app"
+        - "helm-test"
       env:
+       - name: ENV
+         value: "{{ .Values.settings.env }}"
        - name: CLEANUP
          value: {{ .Values.integrationTests.settings.cleanup | quote }}
+       - name: PS_URL
+         value: "{{ .Values.settings.psUrl }}"
+       - name: CLIENT_ID
+         valueFrom:
+           secretKeyRef:
+             name: {{ .Values.secret.name | default $fullName }}
+             key: "clientId"
+             optional: false
+       - name: CLIENT_SECRET
+         valueFrom:
+           secretKeyRef:
+             name: {{ .Values.secret.name | default $fullName }}
+             key: "clientSecret"
+             optional: false
       resources:
         {{- toYaml .Values.cmd.serve.resources | nindent 8 }}
   restartPolicy: Never

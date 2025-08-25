@@ -59,6 +59,10 @@ spec:
                           type: boolean
                         cleanupAllAutomation:
                           type: boolean
+                        automationStrategy:
+                          type: string
+                        podResizePendingStrategy:
+                          type: string
                         workloadLabelSelectors:
                           type: array
                           items:
@@ -232,6 +236,10 @@ spec:
                             x-kubernetes-preserve-unknown-fields: true
                             properties:
                               automationMode:
+                                type: string
+                              automationStrategy:
+                                type: string
+                              podResizePendingStrategy:
                                 type: string
                               workloadLabelSelectors:
                                 type: array

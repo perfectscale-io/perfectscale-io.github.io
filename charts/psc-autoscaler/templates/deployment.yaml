@@ -104,7 +104,7 @@ spec:
               value: "{{ .Values.settings.noProxy }}"
             {{- end }}
             - name: "EXCLUDED_NAMESPACES"
-              value: "{{ .Values.settings.excludedNamespaces }}"
+              value: "{{ .Values.settings.excludedNamespaces | join "," }}"
           command:
             - "./app"
             - "serve"
@@ -243,7 +243,7 @@ spec:
               value: "{{ .Values.settings.noProxy }}"
             {{- end }}
             - name: "EXCLUDED_NAMESPACES"
-              value: "{{ .Values.settings.excludedNamespaces }}"
+              value: "{{ .Values.settings.excludedNamespaces | join "," }}"
           command:
             - "./app"
             - "sync"
@@ -366,7 +366,7 @@ spec:
               value: "{{ .Values.settings.noProxy }}"
             {{- end }}
             - name: "EXCLUDED_NAMESPACES"
-              value: "{{ .Values.settings.excludedNamespaces }}"
+              value: "{{ .Values.settings.excludedNamespaces | join "," }}"
           command:
             - "./app"
             - "evict"
