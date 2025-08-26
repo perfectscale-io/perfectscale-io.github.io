@@ -2,17 +2,17 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: {{ template "helm.fullname" . }}
-  labels: {{- include "helm.labels" . | nindent 4 }}
+  name: {{ template "perfectscale-agent.fullname" . }}
+  labels: {{- include "perfectscale-agent.labels" . | nindent 4 }}
     {{- if .Values.additionalLabels }}
     {{- toYaml .Values.additionalLabels | nindent 4 }}
     {{- end }}
 subjects:
   - kind: ServiceAccount
-    name: {{ include "helm.serviceAccountName" . }}
+    name: {{ include "perfectscale-agent.serviceAccountName" . }}
     namespace: {{ .Release.Namespace }}
 roleRef:
   kind: ClusterRole
-  name: {{ template "helm.fullname" . }}
+  name: {{ template "perfectscale-agent.fullname" . }}
   apiGroup: rbac.authorization.k8s.io
 {{- end }}

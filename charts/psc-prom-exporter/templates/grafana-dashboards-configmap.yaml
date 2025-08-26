@@ -3,10 +3,10 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Values.dashboards.grafana.name | default (printf "%s-dashboards" (include "helm.fullname" .)) }}
+  name: {{ .Values.dashboards.grafana.name | default (printf "%s-dashboards" (include "psc-prom-exporter.fullname" .)) }}
   namespace: {{ .Values.dashboards.grafana.namespace | default .Release.Namespace }}
   labels:
-    {{- include "helm.labels" . | nindent 4 }}
+    {{- include "psc-prom-exporter.labels" . | nindent 4 }}
     {{- with .Values.dashboards.grafana.labels }}
     {{- toYaml . | nindent 4 }}
     {{- end }}

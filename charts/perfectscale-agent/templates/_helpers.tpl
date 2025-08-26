@@ -1,7 +1,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "helm.name" -}}
+{{- define "perfectscale-agent.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
@@ -10,7 +10,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "helm.fullname" -}}
+{{- define "perfectscale-agent.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -26,16 +26,16 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "helm.chart" -}}
+{{- define "perfectscale-agent.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
-{{- define "helm.labels" -}}
-helm.sh/chart: {{ include "helm.chart" . }}
-{{ include "helm.selectorLabels" . }}
+{{- define "perfectscale-agent.labels" -}}
+perfectscale-agent.sh/chart: {{ include "perfectscale-agent.chart" . }}
+{{ include "perfectscale-agent.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -45,23 +45,23 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "helm.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "helm.name" . }}
+{{- define "perfectscale-agent.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "perfectscale-agent.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "helm.serviceAccountName" -}}
+{{- define "perfectscale-agent.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create }}
-{{- default (include "helm.fullname" .) .Values.serviceAccount.name }}
+{{- default (include "perfectscale-agent.fullname" .) .Values.serviceAccount.name }}
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
 
-{{- define "helm.exporter.ksmAddress" -}}
+{{- define "perfectscale-agent.exporter.ksmAddress" -}}
 {{- if .Values.settings.ksmAddress }}
 {{- .Values.settings.ksmAddress }}
 {{- else }}
@@ -69,7 +69,7 @@ Create the name of the service account to use
 {{- end }}
 {{- end }}
 
-{{- define "helm.exporter.dataRetentionTime" -}}
+{{- define "perfectscale-agent.exporter.dataRetentionTime" -}}
 {{- if .Values.settings.dataRetentionTime }}
 {{- .Values.settings.dataRetentionTime }}
 {{- else }}
@@ -77,7 +77,7 @@ Create the name of the service account to use
 {{- end }}
 {{- end }}
 
-{{- define "helm.exporter.ksmTimeout" -}}
+{{- define "perfectscale-agent.exporter.ksmTimeout" -}}
 {{- if .Values.settings.ksmTimeout }}
 {{- .Values.settings.ksmTimeout }}
 {{- else }}
@@ -85,7 +85,7 @@ Create the name of the service account to use
 {{- end }}
 {{- end }}
 
-{{- define "helm.exporter.rawTimeWindowSizeMinutes" -}}
+{{- define "perfectscale-agent.exporter.rawTimeWindowSizeMinutes" -}}
 {{- if .Values.settings.rawTimeWindowSizeMinutes }}
 {{- .Values.settings.rawTimeWindowSizeMinutes }}
 {{- else }}
@@ -93,7 +93,7 @@ Create the name of the service account to use
 {{- end }}
 {{- end }}
 
-{{- define "helm.exporter.policyRefreshPct" -}}
+{{- define "perfectscale-agent.exporter.policyRefreshPct" -}}
 {{- if .Values.settings.policyRefreshPct }}
 {{- .Values.settings.policyRefreshPct }}
 {{- else }}
@@ -101,7 +101,7 @@ Create the name of the service account to use
 {{- end }}
 {{- end }}
 
-{{- define "helm.exporter.remoteLogBatchSize" -}}
+{{- define "perfectscale-agent.exporter.remoteLogBatchSize" -}}
 {{- if .Values.settings.remoteLogBatchSize }}
 {{- .Values.settings.remoteLogBatchSize }}
 {{- else }}
@@ -109,7 +109,7 @@ Create the name of the service account to use
 {{- end }}
 {{- end }}
 
-{{- define "helm.exporter.remoteLogBatchInterval" -}}
+{{- define "perfectscale-agent.exporter.remoteLogBatchInterval" -}}
 {{- if .Values.settings.remoteLogBatchInterval }}
 {{- .Values.settings.remoteLogBatchInterval }}
 {{- else }}
@@ -117,7 +117,7 @@ Create the name of the service account to use
 {{- end }}
 {{- end }}
 
-{{- define "helm.exporter.clusterUID" -}}
+{{- define "perfectscale-agent.exporter.clusterUID" -}}
 {{- if .Values.settings.clusterUID }}
 {{- .Values.settings.clusterUID }}
 {{- else }}

@@ -2,9 +2,9 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ template "helm.fullname" . }}
+  name: {{ template "perfectscale-agent.fullname" . }}
   labels:
-    {{- include "helm.labels" . | nindent 4 }}
+    {{- include "perfectscale-agent.labels" . | nindent 4 }}
     {{- if .Values.additionalLabels }}
     {{- toYaml .Values.additionalLabels | nindent 4 }}
     {{- end }}

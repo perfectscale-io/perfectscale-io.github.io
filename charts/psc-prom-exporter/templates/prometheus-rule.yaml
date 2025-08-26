@@ -1,5 +1,5 @@
 {{- if .Values.alerts.prometheusRule.enabled -}}
-{{- $fullName := include "helm.fullname" . -}}
+{{- $fullName := include "psc-prom-exporter.fullname" . -}}
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
@@ -14,7 +14,7 @@ metadata:
   {{- end }}
 spec:
   groups:
-    - name: {{ include "helm.fullname" . }}
+    - name: {{ include "psc-prom-exporter.fullname" . }}
       rules:
         {{- range .Values.alerts.prometheusRule.rules }}
         {{- if .enabled }}

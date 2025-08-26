@@ -1,4 +1,4 @@
-{{- $fullName := include "helm.fullname" . -}}
+{{- $fullName := include "psc-autoscaler.fullname" . -}}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -88,9 +88,9 @@ spec:
             - name: CLUSTER_UID
               value: "{{ include "psc-autoscaler.clusterUID" . }}"
             - name: REMOTE_LOG_BATCH_SIZE
-              value: "{{ include "helm.autoscaler.remoteLogBatchSize" . }}"
+              value: "{{ include "psc-autoscaler.autoscaler.remoteLogBatchSize" . }}"
             - name: REMOTE_LOG_BATCH_INTERVAL
-              value: "{{ include "helm.autoscaler.remoteLogBatchInterval" . }}"
+              value: "{{ include "psc-autoscaler.autoscaler.remoteLogBatchInterval" . }}"
             - name: TELEMETRY_URL
               value: "{{ .Values.settings.telemetryUrl }}"
             - name: PUSH_TELEMETRY_FREQUENCY
@@ -227,9 +227,9 @@ spec:
             - name: CLUSTER_UID
               value: "{{ include "psc-autoscaler.clusterUID" . }}"
             - name: REMOTE_LOG_BATCH_SIZE
-              value: "{{ include "helm.autoscaler.remoteLogBatchSize" . }}"
+              value: "{{ include "psc-autoscaler.autoscaler.remoteLogBatchSize" . }}"
             - name: REMOTE_LOG_BATCH_INTERVAL
-              value: "{{ include "helm.autoscaler.remoteLogBatchInterval" . }}"
+              value: "{{ include "psc-autoscaler.autoscaler.remoteLogBatchInterval" . }}"
             - name: TELEMETRY_URL
               value: "{{ .Values.settings.telemetryUrl }}"
             - name: PUSH_TELEMETRY_FREQUENCY
@@ -344,9 +344,9 @@ spec:
             - name: CLUSTER_UID
               value: "{{ include "psc-autoscaler.clusterUID" . }}"
             - name: REMOTE_LOG_BATCH_SIZE
-              value: "{{ include "helm.autoscaler.remoteLogBatchSize" . }}"
+              value: "{{ include "psc-autoscaler.autoscaler.remoteLogBatchSize" . }}"
             - name: REMOTE_LOG_BATCH_INTERVAL
-              value: "{{ include "helm.autoscaler.remoteLogBatchInterval" . }}"
+              value: "{{ include "psc-autoscaler.autoscaler.remoteLogBatchInterval" . }}"
             - name: TELEMETRY_URL
               value: "{{ .Values.settings.telemetryUrl }}"
             - name: PUSH_TELEMETRY_FREQUENCY

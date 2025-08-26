@@ -1,4 +1,4 @@
-{{- $fullName := include "helm.fullname" . -}}
+{{- $fullName := include "psc-autoscaler.fullname" . -}}
 {{- if .Values.integrationTests.enabled -}}
 apiVersion: v1
 kind: Pod

@@ -1,7 +1,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "helm.name" -}}
+{{- define "psc-prom-exporter.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
@@ -10,7 +10,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "helm.fullname" -}}
+{{- define "psc-prom-exporter.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -26,16 +26,16 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "helm.chart" -}}
+{{- define "psc-prom-exporter.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
-{{- define "helm.labels" -}}
-helm.sh/chart: {{ include "helm.chart" . }}
-{{ include "helm.selectorLabels" . }}
+{{- define "psc-prom-exporter.labels" -}}
+helm.sh/chart: {{ include "psc-prom-exporter.chart" . }}
+{{ include "psc-prom-exporter.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -45,23 +45,23 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "helm.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "helm.name" . }}
+{{- define "psc-prom-exporter.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "psc-prom-exporter.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "helm.serviceAccountName" -}}
+{{- define "psc-prom-exporter.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create }}
-{{- default (include "helm.fullname" .) .Values.serviceAccount.name }}
+{{- default (include "psc-prom-exporter.fullname" .) .Values.serviceAccount.name }}
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
 
-{{- define "helm.exporter.ksmAddress" -}}
+{{- define "psc-prom-exporter.exporter.ksmAddress" -}}
 {{- if .Values.settings.ksmAddress }}
 {{- .Values.settings.ksmAddress }}
 {{- else }}
@@ -69,7 +69,7 @@ Create the name of the service account to use
 {{- end }}
 {{- end }}
 
-{{- define "helm.exporter.dataRetentionTime" -}}
+{{- define "psc-prom-exporter.exporter.dataRetentionTime" -}}
 {{- if .Values.settings.dataRetentionTime }}
 {{- .Values.settings.dataRetentionTime }}
 {{- else }}
@@ -77,7 +77,7 @@ Create the name of the service account to use
 {{- end }}
 {{- end }}
 
-{{- define "helm.exporter.remoteLogBatchSize" -}}
+{{- define "psc-prom-exporter.exporter.remoteLogBatchSize" -}}
 {{- if .Values.settings.remoteLogBatchSize }}
 {{- .Values.settings.remoteLogBatchSize }}
 {{- else }}
@@ -85,7 +85,7 @@ Create the name of the service account to use
 {{- end }}
 {{- end }}
 
-{{- define "helm.exporter.remoteLogBatchInterval" -}}
+{{- define "psc-prom-exporter.exporter.remoteLogBatchInterval" -}}
 {{- if .Values.settings.remoteLogBatchInterval }}
 {{- .Values.settings.remoteLogBatchInterval }}
 {{- else }}
@@ -96,7 +96,7 @@ Create the name of the service account to use
 {{/*
 For testing purposes, in prod we want to get the actual cluster's UID
 */}}
-{{- define "helm.exporter.clusterUID" -}}
+{{- define "psc-prom-exporter.exporter.clusterUID" -}}
 {{- if .Values.settings.clusterUID }}
 {{- .Values.settings.clusterUID }}
 {{- else }}

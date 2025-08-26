@@ -1,12 +1,12 @@
-{{- $fullName := include "helm.fullname" . -}}
+{{- $fullName := include "perfectscale-agent.fullname" . -}}
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "helm.fullname" . }}
+  name: {{ include "perfectscale-agent.fullname" . }}
   namespace: {{ .Release.Namespace }}
   labels:
-    {{- include "helm.labels" . | nindent 4 }}
+    {{- include "perfectscale-agent.labels" . | nindent 4 }}
     {{- if .Values.additionalLabels }}
     {{- toYaml .Values.additionalLabels | nindent 4 }}
     {{- end }}
@@ -19,11 +19,11 @@ spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "helm.selectorLabels" . | nindent 6 }}
+      {{- include "perfectscale-agent.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "helm.selectorLabels" . | nindent 8 }}
+        {{- include "perfectscale-agent.selectorLabels" . | nindent 8 }}
         {{- if .Values.podLabels }}
         {{- toYaml .Values.podLabels | nindent 8 }}
         {{- end }}
@@ -35,7 +35,7 @@ spec:
       {{- if ne .Values.priorityClass.enabled false}}
       priorityClassName: {{ .Values.priorityClass.name | default "perfectscale-exporter" }}
       {{- end }}
-      serviceAccountName: {{ include "helm.serviceAccountName" . }}
+      serviceAccountName: {{ include "perfectscale-agent.serviceAccountName" . }}
       automountServiceAccountToken: true
       {{- with .Values.securityContext }}
       securityContext:
@@ -46,7 +46,7 @@ spec:
         - name: depends-on
           image: "{{ .Values.initContainer.image.repository }}:{{ .Values.initContainer.image.tag }}"
           command: [ 'sh' ]
-          args: [ '-c', 'curl --retry-all-errors --retry 30 --retry-delay 5 -s {{ include "helm.exporter.ksmAddress" . }}; sleep {{ .Values.settings.initSleep | default "1s" }}' ]
+          args: [ '-c', 'curl --retry-all-errors --retry 30 --retry-delay 5 -s {{ include "perfectscale-agent.exporter.ksmAddress" . }}; sleep {{ .Values.settings.initSleep | default "1s" }}' ]
           {{- if .Values.containerSecurityContext }}
           securityContext:
             {{- toYaml .Values.containerSecurityContext | nindent 12 }}
@@ -80,9 +80,9 @@ spec:
           - name: DATA_RETENTION_TIME
             value: "{{ .Values.settings.dataRetentionTime | default "15m" }}"
           - name: KSM_ADDRESS
-            value: "{{ include "helm.exporter.ksmAddress" . }}"
+            value: "{{ include "perfectscale-agent.exporter.ksmAddress" . }}"
           - name: KSM_TIMEOUT
-            value: "{{ include "helm.exporter.ksmTimeout" . }}"
+            value: "{{ include "perfectscale-agent.exporter.ksmTimeout" . }}"
           - name: CADVISOR_NUM_WORKERS
             value: "{{ .Values.settings.cAdvisorNumWorkers }}"
           - name: PS_URL
@@ -98,7 +98,7 @@ spec:
           - name: UPLOAD_POLICY_REFRESH_PCT
             value: "{{ .Values.settings.policyRefreshPct | default "0.5" }}"
           - name: CLUSTER_UID
-            value: "{{ include "helm.exporter.clusterUID" . }}"
+            value: "{{ include "perfectscale-agent.exporter.clusterUID" . }}"
           - name: CLUSTER_RESILIENCE_LEVEL
             value: "{{ .Values.settings.clusterResilienceLevel }}"
           - name: CLUSTER_OPTIMIZATION_POLICY
@@ -150,9 +150,9 @@ spec:
           - name: "CLUSTER_NAME"
             value: "{{ .Values.settings.clusterName }}"
           - name: REMOTE_LOG_BATCH_SIZE
-            value: "{{ include "helm.exporter.remoteLogBatchSize" . }}"
+            value: "{{ include "perfectscale-agent.exporter.remoteLogBatchSize" . }}"
           - name: REMOTE_LOG_BATCH_INTERVAL
-            value: "{{ include "helm.exporter.remoteLogBatchInterval" . }}"
+            value: "{{ include "perfectscale-agent.exporter.remoteLogBatchInterval" . }}"
           {{- if .Values.settings.httpProxyEnabled | default false }}
           - name: HTTP_PROXY
             value: "{{ .Values.settings.httpProxy }}"

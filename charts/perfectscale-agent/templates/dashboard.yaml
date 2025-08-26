@@ -2,10 +2,10 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "helm.fullname" . }}-grafan-dashboard
+  name: {{ include "perfectscale-agent.fullname" . }}-grafan-dashboard
   namespace: {{ .Values.grafana.dashboard.namespace}}
   labels:
-    {{- include "helm.labels" . | nindent 4 }}
+    {{- include "perfectscale-agent.labels" . | nindent 4 }}
     {{- range $key, $value := .Values.grafana.dashboard.labels }}
     {{ $key }}: {{ $value | quote }}
     {{- end }}

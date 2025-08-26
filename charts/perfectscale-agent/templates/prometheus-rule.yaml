@@ -2,7 +2,7 @@
 {{- if .Values.serviceMonitor.enable -}}
 {{- if .Values.prometheusRule -}}
 {{- if .Values.prometheusRule.enable -}}
-{{- $fullName := include "helm.fullname" . -}}
+{{- $fullName := include "perfectscale-agent.fullname" . -}}
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:

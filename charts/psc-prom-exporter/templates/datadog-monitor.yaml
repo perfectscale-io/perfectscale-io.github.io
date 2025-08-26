@@ -5,12 +5,12 @@
 apiVersion: datadoghq.com/v1alpha1
 kind: DatadogMonitor
 metadata:
-  name: {{ include "helm.fullname" $ }}-{{ kebabcase .alert }}
+  name: {{ include "psc-prom-exporter.fullname" $ }}-{{ kebabcase .alert }}
   {{- if $.Values.alerts.datadogMonitor.namespace }}
   namespace: {{ $.Values.alerts.datadogMonitor.namespace }}
   {{- end }}
   labels:
-    {{- include "helm.labels" $ | nindent 4 }}
+    {{- include "psc-prom-exporter.labels" $ | nindent 4 }}
     {{- with $.Values.alerts.datadogMonitor.labels }}
     {{- toYaml . | nindent 4 }}
     {{- end }}

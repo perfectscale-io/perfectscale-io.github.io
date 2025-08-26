@@ -3,7 +3,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "helm.fullname" -}}
+{{- define "psc-autoscaler.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -87,7 +87,7 @@ Create the name of the service account to use
 {{- end }}
 {{- end }}
 
-{{- define "helm.autoscaler.remoteLogBatchSize" -}}
+{{- define "psc-autoscaler.autoscaler.remoteLogBatchSize" -}}
 {{- if .Values.settings.remoteLogBatchSize }}
 {{- .Values.settings.remoteLogBatchSize }}
 {{- else }}
@@ -95,7 +95,7 @@ Create the name of the service account to use
 {{- end }}
 {{- end }}
 
-{{- define "helm.autoscaler.remoteLogBatchInterval" -}}
+{{- define "psc-autoscaler.autoscaler.remoteLogBatchInterval" -}}
 {{- if .Values.settings.remoteLogBatchInterval }}
 {{- .Values.settings.remoteLogBatchInterval }}
 {{- else }}

@@ -1,12 +1,12 @@
-{{- $fullName := include "helm.fullname" . -}}
+{{- $fullName := include "psc-prom-exporter.fullname" . -}}
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "helm.fullname" . }}
+  name: {{ include "psc-prom-exporter.fullname" . }}
   namespace: {{ .Release.Namespace }}
   labels:
-    {{- include "helm.labels" . | nindent 4 }}
+    {{- include "psc-prom-exporter.labels" . | nindent 4 }}
   {{- with .Values.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
@@ -15,11 +15,11 @@ spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "helm.selectorLabels" . | nindent 6 }}
+      {{- include "psc-prom-exporter.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "helm.selectorLabels" . | nindent 8 }}
+        {{- include "psc-prom-exporter.selectorLabels" . | nindent 8 }}
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
         {{- if .Values.scrapers.prometheus.enabled }}
@@ -40,7 +40,7 @@ spec:
       {{- if ne .Values.priorityClass.enabled false}}
       priorityClassName: {{ .Values.priorityClass.name | default "perfectscale-exporter" }}
       {{- end }}
-      serviceAccountName: {{ include "helm.serviceAccountName" . }}
+      serviceAccountName: {{ include "psc-prom-exporter.serviceAccountName" . }}
       automountServiceAccountToken: true
       {{- with .Values.securityContext }}
       securityContext:
@@ -87,7 +87,7 @@ spec:
           - name: UPLOAD_POLICY_REFRESH_PCT
             value: "{{ .Values.settings.policyRefreshPct | default "0.5" }}"
           - name: CLUSTER_UID
-            value: "{{ include "helm.exporter.clusterUID" . }}"
+            value: "{{ include "psc-prom-exporter.exporter.clusterUID" . }}"
           - name: CLUSTER_RESILIENCE_LEVEL
             value: "{{ .Values.settings.clusterResilienceLevel }}"
           - name: "KUBERNETES_CLIENT_BURST"
@@ -107,9 +107,9 @@ spec:
                 key: "clientSecret"
                 optional: false
           - name: REMOTE_LOG_BATCH_SIZE
-            value: "{{ include "helm.exporter.remoteLogBatchSize" . }}"
+            value: "{{ include "psc-prom-exporter.exporter.remoteLogBatchSize" . }}"
           - name: REMOTE_LOG_BATCH_INTERVAL
-            value: "{{ include "helm.exporter.remoteLogBatchInterval" . }}"
+            value: "{{ include "psc-prom-exporter.exporter.remoteLogBatchInterval" . }}"
           {{- if .Values.settings.httpProxyEnabled | default false }}
           - name: HTTP_PROXY
             value: "{{ .Values.settings.httpProxy }}"
@@ -139,7 +139,7 @@ spec:
       volumes:
         - name: config
           configMap:
-            name: {{  include "helm.fullname" .  }}
+            name: {{  include "psc-prom-exporter.fullname" .  }}
         - name: temp-storage
           emptyDir: {}
       {{- if .Values.imagePullSecrets }}

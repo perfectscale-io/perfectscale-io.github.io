@@ -3,9 +3,9 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ include "helm.fullname" . }}
+  name: {{ include "psc-prom-exporter.fullname" . }}
   labels:
-    {{- include "helm.labels" . | nindent 4 }}
+    {{- include "psc-prom-exporter.labels" . | nindent 4 }}
     {{- range $key, $value := .Values.scrapers.serviceMonitor.labels }}
     {{ $key }}: {{ $value | quote }}
     {{- end }}
@@ -26,6 +26,6 @@ spec:
       - {{ .Release.Namespace }}
   selector:
     matchLabels:
-      {{- include "helm.selectorLabels" . | nindent 6 }}
+      {{- include "psc-prom-exporter.selectorLabels" . | nindent 6 }}
 {{- end }}
 {{- end }}
