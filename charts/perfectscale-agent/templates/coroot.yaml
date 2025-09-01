@@ -1,4 +1,4 @@
-{{- if .Values.settings.coroot.enabled -}}
+{{- if .Values.settings.corootNodeAgent.enabled -}}
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:

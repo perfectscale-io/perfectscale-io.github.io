@@ -191,10 +191,14 @@ spec:
             value: "{{ .Values.settings.karpenter.enabled }}"
           - name: KARPENTER_SCRAPE_FREQUENCY_TIME
             value: "{{ .Values.settings.karpenter.scrapingInterval }}"
-          - name: COROOT_EXPORTER_ENABLED
-            value: "{{ .Values.settings.corootExporter.Enabled | default false }}"
-          - name: COROOT_EXPORTER_LABEL_SELECTOR
-            value: "{{ .Values.settings.corootExporter.LabelSelector | default "app=psc-exporter-coroot" }}"
+          - name: COROOT_NODE_AGENT_ENABLED
+            value: "{{ .Values.settings.corootNodeAgent.enabled | default false }}"
+          - name: COROOT_NODE_AGENT_LABEL_SELECTOR
+            value: "{{ .Values.settings.corootNodeAgent.labelSelector | default "app=psc-coroot-node-agent " }}"
+          - name: COROOT_NODE_AGENT_PORT
+            value: "{{ .Values.settings.corootNodeAgent.port | default 80 }}"
+          - name: COROOT_NODE_AGENT_NUM_WORKERS
+            value: "{{ .Values.settings.corootNodeAgent.numWorkers | default "30" }}"
           ports:
             - name: http
               containerPort: 8080

@@ -3,7 +3,7 @@ revisionHistoryLimit: 10
 image:
   repository: public.ecr.aws/perfectscale-io/psc-exporter
   pullPolicy: Always
-  tag: "v1.0.68"
+  tag: "v1.0.69"
 initContainer:
   image:
     repository: public.ecr.aws/perfectscale-io/alpine
@@ -52,9 +52,10 @@ settings:
   httpsProxy: "" #example$ http://squid-proxy-service.default:3128
   noProxy: "" #example: ".cluster.local,.svc.cluster.local,172.20.0.1," the line must end with a coma, 172.20.0.1 it is KUBERNETES_SERVICE_HOST, API SERVICE
   windowsExporterEnabled: false
-  corootExporter:
-    Enabled: false
-    LabelSelector: ""
+  corootNodeAgent:
+    enabled: false
+    labelSelector: ""
+    numWorkers: "30"
   deployWindowsExporter: false
   # windowsExporterNamespace: "perfectscale"
   # windowsExporterPort: "9182"
@@ -71,8 +72,6 @@ settings:
   karpenter:
     enabled: true
     scrapingInterval: "20m"
-  coroot:
-    enabled: false
 secret:
   create: false
   name: "perfectscale-secret"
