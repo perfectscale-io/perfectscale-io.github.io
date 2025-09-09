@@ -3,7 +3,7 @@ revisionHistoryLimit: 10
 image:
   repository: public.ecr.aws/perfectscale-io/psc-exporter
   pullPolicy: Always
-  tag: "v1.0.69"
+  tag: "v1.0.70"
 initContainer:
   image:
     repository: public.ecr.aws/perfectscale-io/alpine
@@ -54,7 +54,6 @@ settings:
   windowsExporterEnabled: false
   corootNodeAgent:
     enabled: false
-    labelSelector: ""
     numWorkers: "30"
   deployWindowsExporter: false
   # windowsExporterNamespace: "perfectscale"
@@ -242,9 +241,9 @@ prometheus-windows-exporter:
     kubernetes.io/os: windows
 coroot:
   image:
-    repository: public.ecr.aws/perfectscale-io/debug-gha
+    repository: public.ecr.aws/perfectscale-io/coroot-node-agent
     pullPolicy: Always
-    tag: "coroot-01"
+    tag: "v0.0.2"
   resources:
     requests:
       cpu: 10m

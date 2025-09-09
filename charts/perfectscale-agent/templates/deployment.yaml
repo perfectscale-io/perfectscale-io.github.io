@@ -194,7 +194,7 @@ spec:
           - name: COROOT_NODE_AGENT_ENABLED
             value: "{{ .Values.settings.corootNodeAgent.enabled | default false }}"
           - name: COROOT_NODE_AGENT_LABEL_SELECTOR
-            value: "{{ .Values.settings.corootNodeAgent.labelSelector | default "app=psc-coroot-node-agent " }}"
+            value: "part-of={{ .Release.Name }}-psc-coroot-node-agent"
           - name: COROOT_NODE_AGENT_PORT
             value: "{{ .Values.settings.corootNodeAgent.port | default 80 }}"
           - name: COROOT_NODE_AGENT_NUM_WORKERS

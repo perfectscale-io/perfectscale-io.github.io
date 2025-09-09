@@ -3,11 +3,12 @@ apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   labels:
-    app: {{ .Release.Name }}-coroot
+    app: psc-coroot-node-agent
+    part-of: {{ .Release.Name }}-psc-coroot-node-agent
     {{- if .Values.coroot.additionalLabels }}
     {{- toYaml .Values.coroot.additionalLabels | nindent 4 }}
     {{- end }}
-  name: {{ .Release.Name }}-coroot
+  name: {{ .Release.Name }}-psc-coroot-node-agent
   namespace: {{ .Release.Namespace }}
   {{- with .Values.coroot.annotations }}
   annotations:
@@ -16,11 +17,13 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-coroot
+      app: psc-coroot-node-agent
+      part-of: {{ .Release.Name }}-psc-coroot-node-agent
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}-coroot
+        app: psc-coroot-node-agent
+        part-of: {{ .Release.Name }}-psc-coroot-node-agent
         {{- if .Values.coroot.podLabels }}
         {{- toYaml .Values.coroot.podLabels | nindent 8 }}
         {{- end }}
