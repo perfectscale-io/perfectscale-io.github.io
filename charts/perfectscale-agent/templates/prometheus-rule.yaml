@@ -56,6 +56,9 @@ spec:
             summary: "{{ $fullName }} high cAdvisor scraping error rate"
           expr: |
             (increase(psc_exporter_cadvisor_scraping_errors_total[{{ .Values.prometheusRule.cAdvisorScraping.timeRange }}]) / avg_over_time(psc_exporter_cadvisor_instances_scraped[{{ .Values.prometheusRule.cAdvisorScraping.timeRange }}])) > {{ .Values.prometheusRule.cAdvisorScraping.threshold }}
+          {{- if .Values.prometheusRule.cAdvisorScraping.for }}
+          for: {{ .Values.prometheusRule.cAdvisorScraping.for }}
+          {{- end }}
           labels:
             {{- if .Values.prometheusRule.team }}
             team: {{ .Values.prometheusRule.team }}
