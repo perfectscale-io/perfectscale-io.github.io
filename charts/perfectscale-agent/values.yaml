@@ -164,6 +164,7 @@ prometheusRule:
   cAdvisorScraping:
     timeRange: "30m"
     threshold: 0.3
+    for: "30m"
   cpuUtilization:
     enable: false
     threshold: 8 # default value
