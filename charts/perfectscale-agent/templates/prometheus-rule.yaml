@@ -40,7 +40,7 @@ spec:
             runbook: "Please, contact PerfectScale support"
             summary: "{{ $fullName }} high kube-state-metrics scraping error rate"
           expr: |
-            (increase(psc_exporter_ksm_scraping_errors_total[30m]) / avg_over_time(psc_exporter_ksm_instances_scraped[30m])) > 0.3
+            (sum(rate(psc_exporter_ksm_scraping_errors_total[30m])) / sum(rate(psc_exporter_ksm_scrapings_total[30m]))) > 0.3
           for: 30m
           labels:
             {{- if .Values.prometheusRule.team }}
@@ -55,7 +55,7 @@ spec:
             runbook: "Please, contact PerfectScale support"
             summary: "{{ $fullName }} high cAdvisor scraping error rate"
           expr: |
-            (increase(psc_exporter_cadvisor_scraping_errors_total[{{ .Values.prometheusRule.cAdvisorScraping.timeRange }}]) / avg_over_time(psc_exporter_cadvisor_instances_scraped[{{ .Values.prometheusRule.cAdvisorScraping.timeRange }}])) > {{ .Values.prometheusRule.cAdvisorScraping.threshold }}
+            (sum(rate(psc_exporter_cadvisor_scraping_errors_total[{{ .Values.prometheusRule.cAdvisorScraping.timeRange }}])) / sum(rate(psc_exporter_cadvisor_scrapings_total[{{ .Values.prometheusRule.cAdvisorScraping.timeRange }}]))) > {{ .Values.prometheusRule.cAdvisorScraping.threshold }}
           labels:
             {{- if .Values.prometheusRule.team }}
             team: {{ .Values.prometheusRule.team }}
