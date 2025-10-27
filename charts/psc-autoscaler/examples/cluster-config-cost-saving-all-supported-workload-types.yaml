@@ -6,12 +6,16 @@ spec:
   automation:
     operational:
       stopAllAutomation: false
+      automationStrategy: "inPlace" # "inPlace" or "evictMutate", default is "inPlace"
+      podResizePendingStrategy: "rollingRestart" # "rollingRestart" or "deleteRecreatePendingPod", default is "rollingRestart"
     workloadTypes:
       #  You should consider if you want to enable StatefulSets automation.
       #  You might want a human eye while restarting production databases, in general, pods with persistent volume are more fragile.
       #  As well, if your StatefulSet runs on dedicated nodes, reducing workload resources will not help to reduce the cost
       StatefulSet:
         operational:
+          automationStrategy: "inPlace" # "inPlace" or "evictMutate", default is "inPlace"
+          podResizePendingStrategy: "rollingRestart" # "rollingRestart" or "deleteRecreatePendingPod", default is "rollingRestart"
           automationMode: "Enabled"
           restrictions:
             cpuManagement:

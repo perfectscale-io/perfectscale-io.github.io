@@ -9,6 +9,8 @@ spec:
   automation:
     operational:
       automationMode: "Enabled"
+      automationStrategy: "evictMutate" # "inPlace" or "evictMutate", default is "inPlace"
+      podResizePendingStrategy: "deleteRecreatePendingPod" # "rollingRestart" or "deleteRecreatePendingPod", default is "rollingRestart"
       timeConstraints:
         wasteMaxAutomationFrequency: "1h"
         fixResiliencyMaxAutomationFrequency: "15m"
