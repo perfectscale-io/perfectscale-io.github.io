@@ -105,6 +105,8 @@ spec:
             {{- end }}
             - name: "EXCLUDED_NAMESPACES"
               value: "{{ .Values.settings.excludedNamespaces | join "," }}"
+            - name: KUBE_API_QPS
+              value: "{{ .Values.settings.kubeApiQPS | default "20" }}"
           command:
             - "./app"
             - "serve"
@@ -247,7 +249,9 @@ spec:
             - name: UPDATE_CR_WORKERS_NUM
               value: "{{ .Values.settings.updateCRWorkersNum }}"
             - name: KUBE_API_QPS
-              value: "{{ .Values.settings.kubeApiQPS | default "20" }}"
+              value: "{{ .Values.settings.kubeApiQPS | default "30" }}"
+            - name: "AUTOMATED_REVISIONS_RETENTION_HOURS"
+              value: "{{ .Values.settings.automatedRevisionsRetentionHours }}"
           command:
             - "./app"
             - "sync"
@@ -371,6 +375,8 @@ spec:
             {{- end }}
             - name: "EXCLUDED_NAMESPACES"
               value: "{{ .Values.settings.excludedNamespaces | join "," }}"
+            - name: KUBE_API_QPS
+              value: "{{ .Values.settings.kubeApiQPS | default "20" }}"
           command:
             - "./app"
             - "evict"

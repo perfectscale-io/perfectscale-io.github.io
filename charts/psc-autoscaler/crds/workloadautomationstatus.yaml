@@ -87,6 +87,12 @@ spec:
                 inPlaceResizedAt:
                   type: string
                   format: date-time
+                automationAppliedAtByRevision:
+                  type: object
+                  x-kubernetes-preserve-unknown-fields: true
+                  additionalProperties:
+                    type: string
+                    format: date-time
                 previous:
                   type: object
                   x-kubernetes-preserve-unknown-fields: true
