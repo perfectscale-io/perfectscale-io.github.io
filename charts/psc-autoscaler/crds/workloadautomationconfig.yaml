@@ -74,6 +74,8 @@ spec:
                           type: string
                         podResizePendingStrategy:
                           type: string
+                        duringRolloutInProgress:
+                          type: string
                         timeConstraints:
                           type: object
                           x-kubernetes-preserve-unknown-fields: true

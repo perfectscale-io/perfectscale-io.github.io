@@ -61,6 +61,8 @@ spec:
                           type: string
                         podResizePendingStrategy:
                           type: string
+                        duringRolloutInProgress:
+                          type: string
                         workloadLabelSelectors:
                           type: array
                           items:
@@ -238,6 +240,8 @@ spec:
                               automationStrategy:
                                 type: string
                               podResizePendingStrategy:
+                                type: string
+                              duringRolloutInProgress:
                                 type: string
                               workloadLabelSelectors:
                                 type: array
