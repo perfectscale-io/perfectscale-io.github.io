@@ -1,0 +1,81 @@
+# Azure billing integration example
+# Configure Azure billing export for cost calculation
+#
+# Setup Instructions:
+# 1. Configure Azure billing export in your subscription
+# 2. Create an Azure AD application and service principal
+# 3. Grant the application appropriate permissions to access billing data
+# 4. Generate a client secret for the application (if using client_secret auth)
+# 5. Copy the client ID, tenant ID, subscription ID, and client secret below
+#
+# Fields Description:
+# azure_subscription_id: The unique identifier for your Azure subscription
+# azure_tenant_id: The unique identifier for your Azure Active Directory (AAD) tenant
+# azure_client_id: The application (client) ID assigned to your application when it was registered in Azure Active Directory
+# azure_auth_type: The Azure authentication method (recommended: workload_identity, alternative: client_secret)
+# azure_client_secret: The client secret for authentication (when using client_secret auth type)
+# NOTE: We recommend using workload_identity for azure_auth_type. Alternatively, you can authenticate using client_secret.
+#
+# Documentation:
+# https://docs.perfectscale.io/cloud-billing-integration/connecting-azure-cost-management
+#
+apiVersion: perfectscale.io/v1
+kind: ClusterSettings
+metadata:
+  name: cluster-settings-main
+  namespace: perfectscale
+spec:
+  profiles:
+    pricing:
+      - type: azure_billing
+        name: azure-billing-export
+        assigned: true
+        value:
+          global_discount:
+            percentage: 6
+            start_date: 2025-01-05
+          azure_auth_type: workload_identity
+          azure_client_id: "your-azure-client-id-here"
+          azure_subscription_id: "your-azure-subscription-id-here"
+          azure_tenant_id: "your-azure-tenant-id-here"
+
+---
+# Alternative: Using client_secret authentication (not recommended)
+# If you need to use client_secret authentication instead of workload_identity,
+# uncomment the azure_client_secret_from section below and create the secret:
+#
+#apiVersion: perfectscale.io/v1
+#kind: ClusterSettings
+#metadata:
+#  name: cluster-settings-main
+#  namespace: perfectscale
+#spec:
+#  profiles:
+#    pricing:
+#      - type: azure_billing
+#        name: azure-billing-export
+#        assigned: true
+#        value:
+#          global_discount:
+#            percentage: 6
+#            start_date: 2025-01-05
+#          azure_auth_type: client_secret
+#          azure_client_id: "your-azure-client-id-here"
+#          azure_client_secret_from:
+#            secretKeyRef:
+#              name: azure-credentials
+#              key: client-secret
+#          azure_subscription_id: "your-azure-subscription-id-here"
+#          azure_tenant_id: "your-azure-tenant-id-here"
+#
+#---
+# Azure Client Secret (only needed for client_secret auth)
+#apiVersion: v1
+#kind: Secret
+#metadata:
+#  name: azure-credentials
+#  namespace: perfectscale
+#type: Opaque
+#stringData:
+#  client-secret: "your-azure-client-secret-here"
+

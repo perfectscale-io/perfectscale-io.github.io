@@ -1,0 +1,57 @@
+# Slack integration example
+# Configure Slack integration for alerts
+#
+# Setup Instructions:
+# 1. Create an app at https://api.slack.com/apps
+# 2. Go to the OAuth & Permissions tab and specify the scope:
+#    - chat:write.public
+#    - chat:write
+#    - channels:read
+#    - conversations.list
+# 3. Click the Install to Workspace button
+# 4. Copy the Bot User OAuth Token to the secret below
+#
+# Fields Description:
+# slack_token: A mandatory field used to permit PerfectScale to interact with your Slack
+# channel: Slack channel name that indicates where to receive PerfectScale alerts
+# routings: Optional field allows alerts to be sent to different Slack channels for different workloads in a cluster
+#
+# Documentation:
+# https://docs.perfectscale.io/customize-workflow/communication-and-messaging/slack-integration
+#
+apiVersion: perfectscale.io/v1
+kind: ClusterSettings
+metadata:
+  name: cluster-settings-main
+  namespace: perfectscale
+spec:
+  profiles:
+    integrations:
+      - type: slack
+        name: team-slack-alerts
+        assigned: true
+        value:
+          # Slack channel name where PerfectScale alerts will be sent
+          channel: "perfectscale-alerts"
+          slack_token_from:
+            secretKeyRef:
+              name: slack-credentials
+              key: bot-token
+          # Optional: Advanced alert routing to send alerts to different Slack channels
+          # for different workloads within a cluster (configured via labels)
+          # See documentation for routing configuration details
+          routings:
+            - label_alert
+            - resiliency_alert
+
+---
+# Secret containing Slack bot token (apply this first)
+apiVersion: v1
+kind: Secret
+metadata:
+  name: slack-credentials
+  namespace: perfectscale
+type: Opaque
+stringData:
+  bot-token: "xoxb-your-slack-bot-token-here"
+

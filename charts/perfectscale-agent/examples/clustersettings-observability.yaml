@@ -1,0 +1,30 @@
+# Custom observability platform example
+# Configure custom observability platform integration
+#
+# Setup Instructions:
+# 1. Go to https://github.com/perfectscale-io/observability
+# 2. Download either the Grafana or DataDog dashboard
+# 3. Import the dashboard into your Grafana or Datadog instances
+# 4. Copy the link to the dashboard and add it to the url field below
+#
+# Fields Description:
+# url: URL to your observability dashboard (Grafana or DataDog)
+#
+# Documentation:
+# https://docs.perfectscale.io/customize-workflow/observability
+#
+apiVersion: perfectscale.io/v1
+kind: ClusterSettings
+metadata:
+  name: cluster-settings-main
+  namespace: perfectscale
+spec:
+  profiles:
+    integrations:
+      - type: observability
+        name: custom-observability-platform
+        assigned: true
+        value:
+          # URL to your observability dashboard (Grafana or DataDog)
+          url: "https://observability.mycompany.com/dashboard"
+

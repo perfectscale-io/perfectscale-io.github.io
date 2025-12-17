@@ -1,0 +1,27 @@
+{{- if .Values.settings.deployCrManager }}
+{{- $fullName := printf "%s-cr-manager" (include "helm.fullname" .) -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $fullName }}
+  labels:
+    {{- include "helm.labels" . | nindent 4 }}
+    app.kubernetes.io/component: psc-exporter-cr-manager
+    {{- if .Values.additionalLabels }}
+    {{- toYaml .Values.additionalLabels | nindent 4 }}
+    {{- end }}
+  {{- with .Values.crManager.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.crManager.service.type | default "ClusterIP" }}
+  ports:
+    - port: {{ .Values.crManager.service.port | default 8443 }}
+      targetPort: https
+      protocol: TCP
+      name: https
+  selector:
+    app.kubernetes.io/name: {{ include "helm.name" . }}-cr-manager
+    app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}

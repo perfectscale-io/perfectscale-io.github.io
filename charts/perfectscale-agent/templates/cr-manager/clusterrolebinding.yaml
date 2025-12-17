@@ -1,0 +1,22 @@
+{{- if and .Values.settings.deployCrManager .Values.rbac.create }}
+{{- $fullName := printf "%s-cr-manager" (include "helm.fullname" .) -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ $fullName }}
+  labels:
+    {{- include "helm.labels" . | nindent 4 }}
+    app.kubernetes.io/component: psc-exporter-cr-manager
+    {{- if .Values.additionalLabels }}
+    {{- toYaml .Values.additionalLabels | nindent 4 }}
+    {{- end }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ $fullName }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "helm.serviceAccountName" . }}
+    namespace: {{ .Release.Namespace }}
+{{- end }}
+

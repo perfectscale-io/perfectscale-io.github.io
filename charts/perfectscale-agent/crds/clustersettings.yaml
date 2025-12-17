@@ -1,0 +1,518 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  # name must match the spec fields below, and be in the form: <plural>.<group>
+  name: clustersettings.perfectscale.io
+  annotations:
+    description: |
+      ClusterSettings CRD for PerfectScale cluster configuration and profile management.
+      
+      VALIDATION RULES:
+      - Only ONE ClusterSettings resource allowed per cluster (in perfectscale namespace)
+      - Only ONE profile of each type can be assigned to a cluster
+      - For inline profiles: only ONE can have assigned=true per type (validation fails if multiple inline profiles have assigned=true)
+      - For refByID profiles: only ONE can be specified per type (validation fails if multiple refByID specified)
+      - IMPORTANT: You CANNOT have BOTH a refByID AND an inline profile with assigned=true for the same type
+        * If refByID exists for a type, ALL inline profiles of that type MUST have assigned=false (or unset)
+        * Having both will fail validation
+        * Valid: refByID + inline profiles with assigned=false
+        * Invalid: refByID + any inline profile with assigned=true
+      
+      PROFILE REFERENCE RULES (refByID) - RECOMMENDED APPROACH:
+      - RECOMMENDED: Use refByID rather than inline profiles for better management
+      - Can ONLY reference profiles created via UI (not CRD-created profiles)
+      - CRD-created profiles are cluster-specific and cannot be referenced by other clusters
+      - Profile IDs are shown in UI in format {type|class}-N (e.g., jira-1, slack-2, custom-3)
+      - IMPORTANT: Underscores in type/class names are converted to hyphens in IDs:
+        * Class "resiliency_alerts" → ID "resiliency-alerts-1"
+        * Class "podfit_labels" → ID "podfit-labels-1"
+        * Type "aws_cur" → ID "aws-cur-1"
+        * Type "gcp_billing" → ID "gcp-billing-1"
+        * Type "azure_billing" → ID "azure-billing-1"
+      - Type field must match the referenced profile's type
+      - refByID profiles are ALWAYS considered assigned (assigned field is NOT required and ignored if present)
+      - If referenced profile doesn't exist: validation passes but nothing happens (noop - no error, no check during validation)
+      
+      INLINE PROFILE RULES:
+      - Profiles created inline will be named: {name}-{type|class}-{cluster_uid} in UI
+      - if type doesn't exist for class, class will be used. Otherwise, type is used
+      - Example: demoprice-custom-112d8faf-e44d-42e1-a0c4-e7327738e2b1
+      - Inline profiles can have assigned=false (default) to make them visible in UI for testing
+      - Only ONE inline profile per type can have assigned=true
+      - Once tested in UI, change assigned to true in CR to activate the profile
+      
+      RECOMMENDED WORKFLOW:
+      1. Create and test profiles in UI first
+      2. Reference tested profiles via refByID in CR (preferred method)
+      3. OR create inline profiles with assigned=false for testing in UI
+      4. Once tested, update CR to set assigned=true for inline profiles
+      
+      ASSIGNMENT PRIORITY:
+      - CRD profiles (both refByID and inline) ALWAYS WIN over UI-assigned profiles
+      - If cluster was already assigned to a profile via UI, CRD assignment will override it
+      - Profiles assigned via CRD (refByID or inline with assigned=true) cannot be deleted via UI
+      - Profiles assigned via CRD cannot be changed via UI dropdown
+      
+      SECRET REFERENCES:
+      - Fields that contain secrets can reference secrets using the "_from" suffix
+      - Example: slack_token_from, azure_client_secret_from
+      - Secrets must exist in the same namespace as the exporter (perfectscale namespace)
+      
+      UI BEHAVIOR:
+      - CRD-created profiles show "CRD" label in UI
+      - CRD-assigned profiles cannot be changed via UI dropdown (disabled)
+      - "Set as default" is disabled for CRD profiles
+      - Inline profiles with assigned=false are visible in UI and can be tested
+      - Deletion is blocked for CRD-assigned profiles (must be done via CRD)
+      
+      EXAMPLES:
+      See helm/examples/ directory for comprehensive configuration examples
+spec:
+  # Namespaced - resources must be in the perfectscale namespace
+  scope: Namespaced
+  # group name to use for REST API: /apis/<group>/<version>
+  group: perfectscale.io
+  names:
+    # plural name to be used in the URL: /apis/<group>/<version>/<plural>
+    plural: clustersettings
+    # singular name to be used as an alias on the CLI and for display
+    singular: clustersetting
+    # kind is normally the CamelCased singular type. Your resource manifests use this.
+    kind: ClusterSettings
+    # shortNames allow shorter string to match your resource on the CLI
+    shortNames:
+      - csettings
+  # list of versions supported by this CustomResourceDefinition
+  versions:
+    - name: v1
+      # Each version can be enabled/disabled by Served flag.
+      served: true
+      # One and only one version must be marked as the storage version.
+      storage: true
+      additionalPrinterColumns:
+        - name: Age
+          type: date
+          jsonPath: .metadata.creationTimestamp
+      schema:
+        openAPIV3Schema:
+          type: object
+          x-kubernetes-preserve-unknown-fields: true
+          properties:
+            spec:
+              type: object
+              x-kubernetes-preserve-unknown-fields: true
+              properties:
+                clusterLabels:
+                  type: object
+                  description: "Cluster-scoped labels (tags) for classification and governance. Not used by exporter yet; included to establish future structure. Keys are free-form strings, values are strings. Example keys might include 'env', 'owner', etc."
+                  additionalProperties:
+                    type: string
+                profiles:
+                  type: object
+                  x-kubernetes-preserve-unknown-fields: true
+                  properties:
+                    pricing:
+                      type: array
+                      items:
+                        type: object
+                        x-kubernetes-preserve-unknown-fields: true
+                        properties:
+                          type:
+                            type: string
+                            description: "Type of pricing (e.g., custom, aws_cur, gcp_billing, azure_billing)"
+                          name:
+                            type: string
+                            description: "Name of the pricing profile (required for inline profiles)"
+                          assigned:
+                            type: boolean
+                            description: "Whether this profile is assigned to the cluster"
+                          refByID:
+                            type: string
+                            description: "Reference to an existing UI-created profile by ID (e.g., custom-1, aws-cur-2)"
+                          value:
+                            type: object
+                            x-kubernetes-preserve-unknown-fields: true
+                            description: "Pricing configuration for inline profiles"
+                            properties:
+                              global_discount:
+                                type: object
+                                description: "Optional global discount applied to any pricing profile type for on-demand resource prices (not applied to DoiT pricing profiles)."
+                                properties:
+                                  percentage:
+                                    description: "Discount percent (0-100) applied to on-demand resource prices only."
+                                    type: number
+                                    format: double
+                                    minimum: 0
+                                    maximum: 100
+                                  start_date:
+                                    description: "ISO date (yyyy-mm-dd) when the discount starts; if start_date is missing or invalid, the discount is not applied. Changing this date does not automatically update past reports. Please contact support if you need historical data recalculated."
+                                    type: string
+                                    format: date
+                              nodeTypes:
+                                type: array
+                                description: "Node type pricing configuration (for custom pricing)"
+                                items:
+                                  type: object
+                                  x-kubernetes-preserve-unknown-fields: true
+                                  properties:
+                                    instanceType:
+                                      type: string
+                                      description: "The name of the instance that is given by the provider (e.g., c5.large, m5.xlarge)"
+                                    pricing:
+                                      type: object
+                                      x-kubernetes-preserve-unknown-fields: true
+                                      properties:
+                                        cpuCoreHourPrice:
+                                          type: number
+                                          format: double
+                                          description: "Indicates the price ($) of 1 core per hour"
+                                        memGBHourPrice:
+                                          type: number
+                                          format: double
+                                          description: "Indicates the price ($) of 1 GB of memory per hour"
+                                        nodeHourPrice:
+                                          type: number
+                                          format: double
+                                          description: "Indicates the price ($) of a node per hour"
+                              # AWS CUR Authentication - Method 1: IAM Role (recommended)
+                              role_arn:
+                                type: string
+                                description: "The Amazon Resource Name (ARN) associated with the role possessing the necessary credentials to execute calls on your behalf. Learn more: https://docs.perfectscale.io/cloud-billing-integration/connecting-aws-cur"
+                              aws_external_id:
+                                type: string
+                                description: "The ID for cross-account access in AWS Identity and Access Management (IAM). A unique, user-defined string that ensures only trusted third-party entities can assume a specific role"
+                              # AWS CUR Authentication - Method 2: IAM User (alternative)
+                              access_key_id:
+                                type: string
+                                description: "AWS access key ID (for AWS CUR pricing using IAM user authentication). Alternative to role_arn authentication method"
+                              secret_access_key_from:
+                                type: object
+                                x-kubernetes-preserve-unknown-fields: true
+                                description: "Reference to secret containing AWS secret access key (for IAM user authentication)"
+                                properties:
+                                  secretKeyRef:
+                                    type: object
+                                    properties:
+                                      name:
+                                        type: string
+                                        description: "Name of the secret"
+                                      key:
+                                        type: string
+                                        description: "Key within the secret"
+                              # AWS CUR Configuration
+                              athena_database:
+                                type: string
+                                description: "Name of the database that was created during the Athena setup"
+                              athena_region:
+                                type: string
+                                description: "AWS region where Athena is running"
+                              athena_result_bucket:
+                                type: string
+                                description: "S3 bucket where Athena stores query results"
+                              athena_table:
+                                type: string
+                                description: "Name of the table that was created on the Athena setup"
+                              aws_account_id:
+                                type: string
+                                description: "AWS account where cluster is running (NOT the AWS billing account ID)"
+                              # GCP Billing integration fields
+                              gcp_billing_account:
+                                type: string
+                                description: "GCP billing account ID (for GCP billing integration)"
+                              gcp_dataset_id:
+                                type: string
+                                description: "GCP BigQuery dataset ID (for GCP billing integration)"
+                              gcp_project_id:
+                                type: string
+                                description: "GCP project ID (for GCP billing integration)"
+                              gcp_service_account:
+                                type: string
+                                description: "GCP service account email (for GCP billing integration)"
+                              # Azure Billing integration fields
+                              azure_auth_type:
+                                type: string
+                                description: "Azure authentication type. Recommended: workload_identity. Alternative: client_secret (for Azure billing integration)"
+                              azure_client_id:
+                                type: string
+                                description: "Azure client ID (for Azure billing integration)"
+                              azure_client_secret_from:
+                                type: object
+                                x-kubernetes-preserve-unknown-fields: true
+                                description: "Reference to secret containing Azure client secret"
+                                properties:
+                                  secretKeyRef:
+                                    type: object
+                                    properties:
+                                      name:
+                                        type: string
+                                        description: "Name of the secret"
+                                      key:
+                                        type: string
+                                        description: "Key within the secret"
+                              azure_subscription_id:
+                                type: string
+                                description: "Azure subscription ID (for Azure billing integration)"
+                              azure_tenant_id:
+                                type: string
+                                description: "Azure tenant ID (for Azure billing integration)"
+                    integrations:
+                      type: array
+                      items:
+                        type: object
+                        x-kubernetes-preserve-unknown-fields: true
+                        properties:
+                          type:
+                            type: string
+                            description: "Type of integration (e.g., slack, teams, jira, datadog, observability)"
+                          assigned:
+                            type: boolean
+                            description: "Whether this profile is assigned to the cluster"
+                          refByID:
+                            type: string
+                            description: "Reference to an existing UI-created profile by ID (e.g., jira-1, slack-2)"
+                          name:
+                            type: string
+                            description: "Name of the inline profile being created"
+                          value:
+                            type: object
+                            x-kubernetes-preserve-unknown-fields: true
+                            description: "Configuration value for inline profiles. Fields vary by integration type."
+                            properties:
+                              # Slack integration fields
+                              channel:
+                                type: string
+                                description: "Slack channel name that indicates where to receive PerfectScale alerts"
+                              routings:
+                                type: array
+                                items:
+                                  type: string
+                                description: "Optional field allows alerts to be sent to different Slack channels for different workloads in a cluster"
+                              slack_token_from:
+                                type: object
+                                x-kubernetes-preserve-unknown-fields: true
+                                description: "Reference to secret containing Slack token. A mandatory field used to permit PerfectScale to interact with your Slack. Required scopes: chat:write.public, chat:write, channels:read, conversations.list"
+                                properties:
+                                  secretKeyRef:
+                                    type: object
+                                    properties:
+                                      name:
+                                        type: string
+                                        description: "Name of the secret"
+                                      key:
+                                        type: string
+                                        description: "Key within the secret"
+                              # Teams integration fields
+                              teams_webhook_from:
+                                type: object
+                                x-kubernetes-preserve-unknown-fields: true
+                                description: "Reference to secret containing Teams webhook URL. A mandatory field used to permit PerfectScale to interact with your Teams. Connect your Webhook to a specific channel via Incoming Webhook app at https://teams.microsoft.com/"
+                                properties:
+                                  secretKeyRef:
+                                    type: object
+                                    properties:
+                                      name:
+                                        type: string
+                                        description: "Name of the secret"
+                                      key:
+                                        type: string
+                                        description: "Key within the secret"
+                              # Jira integration fields
+                              jira_url:
+                                type: string
+                                description: "Corporate Jira URL. Example: https://xxx.atlassian.net"
+                              jira_user:
+                                type: string
+                                description: "Email address of the user creating the profile. We recommend creating a separate JIRA user for PerfectScale"
+                              jira_secret_from:
+                                type: object
+                                x-kubernetes-preserve-unknown-fields: true
+                                description: "Reference to secret containing Jira API token to authenticate with an Atlassian cloud product. Generate token at https://id.atlassian.com/manage-profile/security/api-tokens"
+                                properties:
+                                  secretKeyRef:
+                                    type: object
+                                    properties:
+                                      name:
+                                        type: string
+                                        description: "Name of the secret"
+                                      key:
+                                        type: string
+                                        description: "Key within the secret"
+                              jira_project:
+                                type: string
+                                description: "Jira project where tickets will be created"
+                              jira_issue_type:
+                                type: string
+                                description: "The type of a Jira ticket"
+                              jira_summary:
+                                type: string
+                                description: "The summary of a Jira ticket"
+                              jira_assignee:
+                                type: string
+                                description: "The default assignee (member ID) of a Jira ticket"
+                              jira_resolution:
+                                type: boolean
+                                description: "(Optional) Set true to assign the resolution reason when closing a ticket in the specified jira_project"
+                              jira_custom_fields:
+                                type: object
+                                x-kubernetes-preserve-unknown-fields: true
+                                description: "(Optional) Specify the ID of the required Jira ticket field that is not included in the default setup. Learn how to get a field ID: https://docs.perfectscale.io/customizations/ticketing-and-bug-tracking#how-to-get-jira-custom-field-id"
+                              # Datadog integration fields
+                              datadog_api_key_from:
+                                type: object
+                                x-kubernetes-preserve-unknown-fields: true
+                                description: "Reference to secret containing Datadog API key. Log in to your Datadog profile -> navigate to the Organization Settings -> API Keys"
+                                properties:
+                                  secretKeyRef:
+                                    type: object
+                                    properties:
+                                      name:
+                                        type: string
+                                        description: "Name of the secret"
+                                      key:
+                                        type: string
+                                        description: "Key within the secret"
+                              datadog_site_region:
+                                type: string
+                                description: "Specifies the Datadog regional domain where your data is sent and managed (e.g., datadoghq.com, datadoghq.eu)"
+                              # Observability integration fields
+                              url:
+                                type: string
+                                description: "Observability dashboard URL. Download Grafana or DataDog dashboard from https://github.com/perfectscale-io/observability, import into your instance, and copy the dashboard link here"
+                    resiliency_alerts:
+                      type: array
+                      items:
+                        type: object
+                        x-kubernetes-preserve-unknown-fields: true
+                        properties:
+                          name:
+                            type: string
+                            description: "Name of the resiliency alerts profile"
+                          assigned:
+                            type: boolean
+                            description: "Whether this profile is assigned to the cluster"
+                          refByID:
+                            type: string
+                            description: "Reference to an existing UI-created profile by ID (e.g., resiliency-alerts-1)"
+                          value:
+                            type: object
+                            x-kubernetes-preserve-unknown-fields: true
+                            description: "Resiliency alerts configuration for inline profiles"
+                            properties:
+                              min_risk_level:
+                                type: string
+                                description: "Minimum risk level (e.g., high, medium, low)"
+                              ignore_workload:
+                                type: string
+                                description: "Pattern for workloads to ignore"
+                              ignore_namespace:
+                                type: string
+                                description: "Pattern for namespaces to ignore"
+                              ignore_container:
+                                type: string
+                                description: "Pattern for containers to ignore"
+                              ignore_indicator:
+                                type: string
+                                description: "Pattern for indicators to ignore. Available indicators: OOM, CpuThrottling, CpuRequestNotSet, MemRequestNotSet, MemLimitNotSet, UnderProvisionedMemRequest, UnderProvisionedCpuRequest, UnderProvisionedMemLimit, UnderProvisionedCpuLimit, OverProvisionedCpuRequest, OverProvisionedMemRequest, RestartsObserved, EvictionsObserved, HPAAtMaxReplicasObserved"
+                              active_notification_resend:
+                                type: string
+                                description: "Configures the interval for re-sending notifications of active alerts. Set to 'off' (default) to disable re-sends, or specify an interval using #h (hours) or #d (days) to ensure critical alerts are not missed. Examples: '5h', '1d'"
+                    podfit_labels:
+                      type: array
+                      items:
+                        type: object
+                        x-kubernetes-preserve-unknown-fields: true
+                        properties:
+                          name:
+                            type: string
+                            description: "Name of the podfit labels profile"
+                          assigned:
+                            type: boolean
+                            description: "Whether this profile is assigned to the cluster"
+                          refByID:
+                            type: string
+                            description: "Reference to an existing UI-created profile by ID (e.g., podfit-labels-1)"
+                          value:
+                            type: object
+                            x-kubernetes-preserve-unknown-fields: true
+                            description: "Podfit labels configuration for inline profiles"
+                            properties:
+                              configured_label_view:
+                                type: array
+                                items:
+                                  type: string
+                                description: "List of labels to display in podfit view"
+                    customization:
+                      type: array
+                      items:
+                        type: object
+                        x-kubernetes-preserve-unknown-fields: true
+                        properties:
+                          name:
+                            type: string
+                            description: "Name of the customization profile"
+                          assigned:
+                            type: boolean
+                            description: "Whether this profile is assigned to the cluster"
+                          refByID:
+                            type: string
+                            description: "Reference to an existing UI-created profile by ID (e.g., customization-1)"
+                          value:
+                            type: object
+                            x-kubernetes-preserve-unknown-fields: true
+                            description: "Customization configuration for inline profiles"
+                            properties:
+                              workload_labels:
+                                type: array
+                                items:
+                                  type: string
+                                description: "Defines labels that can be applied to Kubernetes resources (pods, deployments, or stateful sets) to identify and manage workloads within a cluster"
+                              node:
+                                type: object
+                                x-kubernetes-preserve-unknown-fields: true
+                                description: "Node-related label configurations"
+                                properties:
+                                  spot_labels:
+                                    type: object
+                                    x-kubernetes-preserve-unknown-fields: true
+                                    description: "Identifies spot nodes (key-value pairs)"
+                                  node_group_labels:
+                                    type: array
+                                    items:
+                                      type: string
+                                    description: "Identifies the nodes group in a cluster"
+                                  architecture_labels:
+                                    type: array
+                                    items:
+                                      type: string
+                                    description: "Specifies the architecture of the node (x86_64, arm64, etc.)"
+                                  os_labels:
+                                    type: array
+                                    items:
+                                      type: string
+                                    description: "Specifies the operating system running on a node within the Kubernetes cluster"
+                                  instance_type_labels:
+                                    type: array
+                                    items:
+                                      type: string
+                                    description: "Specifies the type or configuration of VMs (instances) within a cloud infrastructure"
+                                  region_labels:
+                                    type: array
+                                    items:
+                                      type: string
+                                    description: "Specifies the geographical region where a particular resource is located"
+                                  availability_zone_labels:
+                                    type: array
+                                    items:
+                                      type: string
+                                    description: "Specify the availability zone where a particular resource is located"
+                              ignored_pod_labels:
+                                type: array
+                                items:
+                                  type: string
+                                description: "Defines labels that Kubernetes components should disregard when making pod decisions"
+                              ignored_node_labels:
+                                type: array
+                                items:
+                                  type: string
+                                description: "Defines labels that Kubernetes components should disregard when making node decisions"
+

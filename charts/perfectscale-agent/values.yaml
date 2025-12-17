@@ -3,7 +3,7 @@ revisionHistoryLimit: 10
 image:
   repository: public.ecr.aws/perfectscale-io/psc-exporter
   pullPolicy: Always
-  tag: "v1.0.78"
+  tag: "v1.0.79"
 initContainer:
   image:
     repository: public.ecr.aws/perfectscale-io/alpine
@@ -12,6 +12,7 @@ initContainer:
 webAppUrl: "http://app.perfectscale.io/"
 settings:
   deployKubeStateMetrics: true
+  deployCrManager: true
   serviceId: "psc-exporter"
   env: "prod"
   logLevel: "INFO"
@@ -20,10 +21,13 @@ settings:
   uploadPolicyUrl: "https://api.app.perfectscale.io/psc-presigned-policy"
   telemetryUrl: "https://api.app.perfectscale.io/psc-telemetry"
   aggregatorUrl: "https://api.app.perfectscale.io/psc-aggregator"
+  settingsUrl: "https://api.app.perfectscale.io/psc-settings"
   pushTelemetryFrequency: "1m"
   scrapingInterval: "30s"
   ksmTimeout: "30s"
   kubeAPITimeoutSec: "15"
+  # Take snapshot every N settings refresh cycles (default: 12 cycles × 10 min = 2 hours)
+  snapshotIntervalCycles: "12"
   cAdvisorNumWorkers: "30"
   k8sClientBurst: "150"
   k8sClientQPS: "100"
@@ -55,6 +59,7 @@ settings:
   corootNodeAgent:
     enabled: false
     numWorkers: "30"
+    port: 8080
   deployWindowsExporter: false
   # windowsExporterNamespace: "perfectscale"
   # windowsExporterPort: "9182"
@@ -105,6 +110,75 @@ serviceAccount:
 ##
 rbac:
   create: true
+crManager:
+  # Service configuration
+  service:
+    type: ClusterIP
+    port: 8443
+  # Log level (inherits from settings.logLevel if not set)
+  # logLevel: "INFO"
+
+  # Kubernetes client settings (lower than exporter since profile CR has less load)
+  k8sClientBurst: 50
+  k8sClientQPS: 30
+  # Remote log configuration (for feature flag support)
+  remoteLog:
+    batchSize: 0 # 0 means use default
+    batchInterval: 0 # 0 means use default
+  # Resources for profile CR (lightweight compared to exporter)
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    # No limits set - following PerfectScale best practices (limits not recommended)
+  # Pod annotations specific to profile CR
+  podAnnotations: {}
+  # Pod labels specific to profile CR
+  podLabels: {}
+  # Annotations for the profile CR deployment
+  annotations: {}
+  # Security context for profile CR pod (inherits from main if not set)
+  # securityContext: {}
+
+  # Container security context for profile CR (inherits from main if not set)
+  # containerSecurityContext: {}
+
+  # Tolerations (inherits from main if not set)
+  # tolerations: {}
+
+  # Node selector (inherits from main if not set)
+  # nodeSelector: {}
+
+  # Affinity (inherits from main if not set)
+  # affinity: {}
+
+  ## Admission Webhook Configuration
+  admission:
+    # Ref: https://kubernetes.io/docs/reference/access-authn-authz/extensible-admission-controllers/#timeouts
+    # Timeout for webhook
+    timeout: 15
+    failurePolicy: "Fail"
+    # Annotations to add to the admission webhook
+    annotations: {}
+    # Static certificates configuration
+    # Admission Enforcer on AKS excludes kube-system and AKS internal namespaces from being processed by the webhook.
+    # To disable this behavior, provide the following annotation:
+    # admissions.enforcer/disabled: "true"
+
+    staticCerts:
+      enabled: false
+      tlsCert: "" # Base64 encoded TLS certificate
+      tlsKey: "" # Base64 encoded TLS private key
+      caCert: "" # Base64 encoded CA certificate
+    certManager:
+      enabled: false
+    # If you have a Kubernetes secret containing the certificates for the webhook created outside of the Helm chart,
+    # set enabled: true under externalCertSecret, specify the secret name in the tlsName field,
+    # and provide the actual base64 encoded CA bundle in the caCert field.
+    externalCertSecret:
+      enabled: false
+      tlsName: "somename"
+      caCert: "someCAbundle"
 # Pod security context.
 # Ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 securityContext:

@@ -1,0 +1,73 @@
+# Jira integration example with custom fields
+# Configure Jira ticketing with custom field mappings
+#
+# Setup Instructions:
+# 1. Navigate to your Jira instance (e.g., https://mycompany.atlassian.net)
+# 2. Create a bot user or use an existing user account (we recommend creating a separate JIRA user for PerfectScale)
+# 3. Generate an API token for the user at https://id.atlassian.com/manage-profile/security/api-tokens
+# 4. Copy the API token to the secret below
+# 5. Identify your custom field IDs: https://docs.perfectscale.io/customizations/ticketing-and-bug-tracking#how-to-get-jira-custom-field-id
+# 6. Configure the custom fields in the jira_custom_fields section below
+#
+# Fields Description:
+# jira_user: Email address of the user creating the profile
+# jira_secret: API token to authenticate with an Atlassian cloud product
+# jira_url: Corporate Jira URL. Example: https://xxx.atlassian.net
+# jira_project: Jira project where tickets will be created
+# jira_issue_type: The type of a Jira ticket
+# jira_summary: The summary of a Jira ticket
+# jira_assignee: The default assignee (member ID) of a Jira ticket
+# jira_resolution: Set true to assign the resolution reason when closing a ticket in the specified jira_project
+# jira_custom_fields: Specify the ID and value of required Jira ticket fields not included in the default setup
+#
+# Documentation:
+# https://docs.perfectscale.io/customizations/ticketing-and-bug-tracking
+#
+# NOTE: For basic Jira integration without custom fields,
+# see clustersettings-jira.yaml for a simpler example.
+#
+apiVersion: perfectscale.io/v1
+kind: ClusterSettings
+metadata:
+  name: cluster-settings-main
+  namespace: perfectscale
+spec:
+  profiles:
+    integrations:
+      - type: jira
+        name: infrastructure-tickets-with-custom-fields
+        assigned: true
+        value:
+          jira_url: "https://mycompany.atlassian.net"
+          jira_user: "perfectscale-bot@mycompany.com"
+          jira_secret_from:
+            secretKeyRef:
+              name: jira-credentials
+              key: api-token
+          jira_project: "INFRA"
+          jira_issue_type: "Bug"
+          jira_summary: "PerfectScale discovered issue(s) with workload"
+          jira_assignee: ""
+          jira_resolution: true
+          # Custom fields configuration
+          # Replace customfield_XXXXX with your actual custom field IDs
+          # Values can be strings, numbers, or arrays depending on field type
+          jira_custom_fields:
+            customfield_10001: "DevOps Team"
+            customfield_10002: "Resource anomaly fix"
+            customfield_10003: "High"
+            customfield_10004:
+              - "kubernetes"
+              - "cost-optimization"
+
+---
+# Jira API Token Secret (apply this first)
+apiVersion: v1
+kind: Secret
+metadata:
+  name: jira-credentials
+  namespace: perfectscale
+type: Opaque
+stringData:
+  api-token: "your-jira-api-token-here"
+

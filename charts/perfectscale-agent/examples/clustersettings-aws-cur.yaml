@@ -1,0 +1,55 @@
+# AWS CUR integration example
+# Configure AWS Cost and Usage Report integration for cost calculation
+#
+# Setup Instructions:
+# 1. Enable AWS Cost and Usage Report in your AWS account
+# 2. Configure the report to export to S3 and integrate with AWS Athena
+# 3. Create an IAM role for cross-account access (recommended) OR create an IAM user with appropriate permissions
+# 4. Configure the authentication method below
+#
+# Fields Description:
+# athena_database: Name of the database that was created during the Athena setup
+# athena_region: AWS region where Athena is running
+# athena_result_bucket: S3 bucket where Athena stores query results
+# athena_table: Name of the table that was created on the Athena setup
+# aws_account_id: AWS account where cluster is running
+# aws_external_id: The ID for cross-account access in AWS Identity and Access Management (IAM)
+# role_arn: The Amazon Resource Name associated with the role possessing the necessary credentials to execute calls on your behalf
+# NOTE: Alternatively, you can authenticate using credentials (access_key_id and secret_access_key)
+#
+# Documentation:
+# https://docs.perfectscale.io/cloud-billing-integration/connecting-aws-cur
+#
+apiVersion: perfectscale.io/v1
+kind: ClusterSettings
+metadata:
+  name: cluster-settings-main
+  namespace: perfectscale
+spec:
+  profiles:
+    pricing:
+      # Example using IAM Role authentication (recommended)
+      - type: aws_cur
+        name: aws-cur-integration
+        assigned: true
+        value:
+          global_discount:
+            percentage: 7.5
+            start_date: 2025-01-10
+
+          # Authentication - IAM Role (recommended)
+          role_arn: "arn:aws:iam::your-account-id:role/your-role-name"
+          aws_external_id: "your-unique-external-id-here"
+
+          # Athena Configuration
+          athena_database: athenacurcfn_perfectscale_cur_report
+          athena_region: us-east-1
+          athena_result_bucket: s3://perfectscale-cur-results/
+          athena_table: perfectscale_cur_report_hourly
+
+          # AWS Account ID (where cluster is running, NOT billing account)
+          aws_account_id: "your-aws-account-id-here"
+
+# NOTE: If you prefer IAM User authentication over IAM Role,
+# see clustersettings-aws-cur-iam-user.yaml for a ready-to-use example.
+

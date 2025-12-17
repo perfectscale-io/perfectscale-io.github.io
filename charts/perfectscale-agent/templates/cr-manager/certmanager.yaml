@@ -1,0 +1,69 @@
+{{- if and .Values.settings.deployCrManager .Values.crManager.admission.certManager.enabled }}
+{{- $fullName := printf "%s-cr-manager" (include "helm.fullname" .) -}}
+{{- $namespace := .Release.Namespace -}}
+{{- $altNames := list (printf "%s.%s" $fullName $namespace) (printf "%s.%s.svc" $fullName $namespace) -}}
+{{- $commonName := printf "%s.%s" $fullName $namespace -}}
+{{- $labels := include "helm.labels" . }}
+
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: {{ $fullName }}-selfsigned
+  namespace: {{ $namespace }}
+spec:
+  selfSigned: {}
+
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ $fullName }}-ca
+  namespace: {{ $namespace }}
+spec:
+  isCA: true
+  commonName: ca.{{ $fullName }}.psc.local
+  secretName: {{ $fullName }}-ca-keypair
+  duration: 87600h # 10 years
+  renewBefore: 720h
+  issuerRef:
+    name: {{ $fullName }}-selfsigned
+    kind: Issuer
+    group: cert-manager.io
+
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: {{ $fullName }}-ca-issuer
+  namespace: {{ $namespace }}
+spec:
+  ca:
+    secretName: {{ $fullName }}-ca-keypair
+
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ $fullName }}-tls
+  namespace: {{ $namespace }}
+  labels:
+    {{- $labels | nindent 4 }}
+    app.kubernetes.io/component: psc-exporter-cr-manager
+spec:
+  secretName: {{ $fullName }}-tls
+  duration: 2160h # 90 days
+  renewBefore: 360h # 15 days
+  subject:
+    organizations:
+      - psc-exporter-cr-manager
+  commonName: {{ $commonName }}
+  dnsNames:
+    {{- range $altNames }}
+    - {{ . }}
+    {{- end }}
+  issuerRef:
+    name: {{ $fullName }}-ca-issuer
+    kind: Issuer
+    group: cert-manager.io
+{{- end }}

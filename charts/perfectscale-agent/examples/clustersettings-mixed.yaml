@@ -1,0 +1,156 @@
+# Mixed example - Combining inline and referenced profiles
+# Demonstrate how to mix different profile types, inline profiles, and profile references
+#
+# Setup Instructions:
+# 1. This example shows various approaches to configuring profiles
+# 2. You can create inline profiles (with value field) - these are cluster-specific
+e # 3. You can reference existing UI-created profiles (with refByID field)
+# 4. You can control which profiles are active (with assigned field)
+#
+# Usage:
+# - Use inline profiles when you want to define configuration in this resource
+#   Note: Inline profiles are cluster-specific and cannot be referenced by other clusters
+# - Use refByID when referencing profiles created via the PerfectScale UI (RECOMMENDED)
+#   Note: refByID CANNOT reference profiles created via CRD (inline profiles)
+#   Profile IDs are shown in UI in format {type|class}-N (e.g., jira-1, slack-2, custom-3)
+# - Set assigned: false to create profiles without activating them immediately
+# - Only ONE profile per type can have assigned: true
+#
+# IMPORTANT VALIDATION RULES:
+# - You CANNOT have BOTH refByID AND an inline profile with assigned=true for the same type
+# - Valid: refByID + inline profiles with assigned=false (for testing)
+# - Invalid: refByID + inline profile with assigned=true
+#
+# We prefer users to use refByID rather than inline profiles.
+# Users can create profile in UI, test it and then assign it via refByID.
+# Inline profiles have assigned = false so they are visible in UI and can be tested.
+# Once tested, assigned can be changed to true using CR.
+#
+apiVersion: perfectscale.io/v1
+kind: ClusterSettings
+metadata:
+  name: cluster-settings-main
+  namespace: perfectscale
+spec:
+  profiles:
+    # Pricing: Create inline custom pricing profile and assign it
+    pricing:
+      - type: custom
+        name: production-pricing
+        assigned: true
+        value:
+          global_discount:
+            percentage: 6.5
+            start_date: 2025-01-08
+          nodeTypes:
+            - instanceType: c5.large
+              pricing:
+                cpuCoreHourPrice: 0.085
+                memGBHourPrice: 0.0095
+            - instanceType: c5.xlarge
+              pricing:
+                cpuCoreHourPrice: 0.085
+                memGBHourPrice: 0.0095
+            - instanceType: m5.large
+              pricing:
+                cpuCoreHourPrice: 0.096
+                memGBHourPrice: 0.0096
+
+      # Create AWS CUR profile but don't assign it yet (for testing)
+      - type: aws_cur
+        name: aws-cur-backup
+        assigned: false
+        value:
+          global_discount:
+            percentage: 6.5
+            start_date: 2025-01-08
+          role_arn: "arn:aws:iam::your-account-id:role/your-role-name"
+          aws_external_id: "your-unique-external-id-here"
+          athena_database: athenacurcfn_perfectscale_cur
+          athena_region: us-east-1
+          athena_result_bucket: s3://perfectscale-cur-results/
+          athena_table: perfectscale_cur_hourly
+          aws_account_id: "your-aws-account-id-here"
+
+    # Integrations: Mix inline Slack and referenced Jira
+    integrations:
+      # Create and assign inline Slack integration
+      - type: slack
+        name: team-alerts
+        assigned: true
+        value:
+          channel: "perfectscale-production"
+          routings:
+            - label_alert
+            - cost_waste_alert
+          slack_token_from:
+            secretKeyRef:
+              name: slack-credentials
+              key: bot-token
+
+      # Reference existing Jira integration (created in UI)
+      # Profile ID format: jira-N (e.g., jira-1, jira-2)
+      - type: jira
+        refByID: "jira-1"
+
+    # Resiliency Alerts: Create inline profile
+    resiliency_alerts:
+      - name: production-alerts
+        assigned: true
+        value:
+          min_risk_level: high
+          ignore_workload: "^(test-.*|dev-.*)"
+          ignore_namespace: "^(kube-system|kube-public)$"
+          ignore_container: "^(istio-proxy|envoy)$"
+          ignore_indicator: ""
+
+    # PodFit Labels: Reference existing profile
+    # Profile ID format: podfit-labels-N (e.g., podfit-labels-1)
+    podfit_labels:
+      - refByID: "podfit-labels-1"
+
+    # Customization: Create inline profile
+    customization:
+      - name: app-labels
+        assigned: true
+        value:
+          workload_labels:
+            - app.kubernetes.io/name
+            - app.kubernetes.io/component
+            - team
+            - cost-center
+          node:
+            spot_labels:
+              label_cloud_google_com_gke_nodepool: pool-2
+              label_spotinst_io_node_lifecycle: spot
+            node_group_labels:
+              - eks.amazonaws.com/nodegroup
+              - kops.k8s.io/instancegroup
+            architecture_labels:
+              - kubernetes.io/arch
+            os_labels:
+              - kubernetes.io/os
+            instance_type_labels:
+              - node.kubernetes.io/instance-type
+            region_labels:
+              - topology.kubernetes.io/region
+            availability_zone_labels:
+              - topology.kubernetes.io/zone
+          ignored_pod_labels:
+            - uid
+            - namespace
+          ignored_node_labels:
+            - uid
+
+---
+# Required secrets (apply these first)
+# Note: AWS CUR uses IAM Role authentication in this example, so no AWS credentials secret is needed
+apiVersion: v1
+kind: Secret
+metadata:
+  name: slack-credentials
+  namespace: perfectscale
+type: Opaque
+stringData:
+  bot-token: "xoxb-your-slack-bot-token-here"
+

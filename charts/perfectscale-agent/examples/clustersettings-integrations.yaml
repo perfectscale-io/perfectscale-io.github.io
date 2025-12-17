@@ -1,0 +1,122 @@
+# Advanced integrations example
+# Configure multiple integrations: Teams, Jira, Datadog, and Observability
+#
+# Setup Instructions:
+#
+# Teams:
+# 1. Go to the Apps at https://teams.microsoft.com/
+# 2. Go to Incoming Webhook and click Add to connect your Webhook to a specific channel
+# 3. Provide the channel name where PerfectScale alerts should be received
+# 4. Name your webhook and click the Create button
+# 5. Copy the webhook URL to the secret below
+#
+# Jira:
+# 1. Navigate to your Jira instance (e.g., https://mycompany.atlassian.net)
+# 2. Create a bot user or use an existing user account (we recommend creating a separate JIRA user for PerfectScale)
+# 3. Generate an API token at https://id.atlassian.com/manage-profile/security/api-tokens
+# 4. Copy the API token to the secret below
+#
+# Datadog:
+# 1. Log in to your Datadog account
+# 2. Navigate to Organization Settings > API Keys
+# 3. Create or copy an API key
+# 4. Copy the key to the secret below
+#
+# Observability:
+# 1. Go to https://github.com/perfectscale-io/observability
+# 2. Download either the Grafana or DataDog dashboard
+# 3. Import the dashboard into your Grafana or Datadog instances
+# 4. Copy the link to the dashboard and add it to the url field
+#
+# Documentation:
+# - Teams: https://docs.perfectscale.io/customize-workflow/communication-and-messaging/ms-teams-integration
+# - Jira: https://docs.perfectscale.io/customizations/ticketing-and-bug-tracking
+# - Datadog: https://docs.perfectscale.io/customize-workflow/communication-and-messaging/datadog-alerts-integration
+# - Observability: https://docs.perfectscale.io/customize-workflow/observability
+#
+apiVersion: perfectscale.io/v1
+kind: ClusterSettings
+metadata:
+  name: cluster-settings-main
+  namespace: perfectscale
+spec:
+  profiles:
+    integrations:
+      # Microsoft Teams Integration
+      - type: teams
+        name: ops-team-notifications
+        assigned: true
+        value:
+          teams_webhook_from:
+            secretKeyRef:
+              name: teams-credentials
+              key: webhook-url
+
+      # Jira Integration
+      - type: jira
+        name: infrastructure-tickets
+        assigned: true
+        value:
+          jira_url: "https://mycompany.atlassian.net"
+          jira_user: "perfectscale-bot@mycompany.com"
+          jira_secret_from:
+            secretKeyRef:
+              name: jira-credentials
+              key: api-token
+          jira_project: "INFRA"
+          jira_issue_type: "Bug"
+          jira_summary: "PerfectScale discovered issue(s) with workload"
+          jira_assignee: ""
+          jira_resolution: false
+
+      # Datadog Integration
+      - type: datadog
+        name: production-monitoring
+        assigned: true
+        value:
+          datadog_api_key_from:
+            secretKeyRef:
+              name: datadog-credentials
+              key: api-key
+          datadog_site_region: "datadoghq.com"
+
+      # Custom Observability Platform
+      - type: observability
+        name: custom-observability-platform
+        assigned: false
+        value:
+          url: "https://observability.mycompany.com/dashboard"
+
+---
+# Teams Webhook Secret
+apiVersion: v1
+kind: Secret
+metadata:
+  name: teams-credentials
+  namespace: perfectscale
+type: Opaque
+stringData:
+  webhook-url: "https://outlook.office.com/webhook/your-webhook-url-here"
+
+---
+# Jira API Token Secret
+apiVersion: v1
+kind: Secret
+metadata:
+  name: jira-credentials
+  namespace: perfectscale
+type: Opaque
+stringData:
+  api-token: "your-jira-api-token-here"
+
+---
+# Datadog API Key Secret
+apiVersion: v1
+kind: Secret
+metadata:
+  name: datadog-credentials
+  namespace: perfectscale
+type: Opaque
+stringData:
+  api-key: "your-datadog-api-key-here"
+

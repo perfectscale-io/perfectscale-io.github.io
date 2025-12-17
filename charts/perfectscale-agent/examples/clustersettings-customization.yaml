@@ -1,0 +1,71 @@
+# Workload customization example
+# Configure custom workload labels and node identification
+#
+# Setup Instructions:
+# 1. Identify the labels used in your Kubernetes cluster for workload identification
+# 2. Identify the labels used for node properties (spot, node group, architecture, etc.)
+# 3. Configure the labels below to match your cluster's label structure
+# 4. Labels should follow Prometheus conventions
+#
+# Fields Description:
+# workload_labels: Defines labels that can be applied to Kubernetes resources (pods, deployments, or stateful sets) to identify and manage workloads within a cluster
+# spot_labels: Identifies spot nodes (key-value pairs)
+# node_group_labels: Identifies the nodes group in a cluster
+# architecture_labels: Specifies the architecture of the node (x86_64, arm64, etc.)
+# os_labels: Specifies the operating system running on a node within the Kubernetes cluster
+# instance_type_labels: Specifies the type or configuration of VMs (instances) within a cloud infrastructure
+# region_labels: Specifies the geographical region where a particular resource is located
+# availability_zone_labels: Specify the availability zone where a particular resource is located
+# ignored_pod_labels: Defines labels that Kubernetes components should disregard when making pod decisions
+# ignored_node_labels: Defines labels that Kubernetes components should disregard when making node decisions
+# NOTE: Labels should follow Prometheus conventions. Learn more about the format at: https://prometheus.io/docs/concepts/data_model/#metric-names-and-labels
+#
+# Documentation:
+# https://docs.perfectscale.io/customizations/label-customizations
+#
+apiVersion: perfectscale.io/v1
+kind: ClusterSettings
+metadata:
+  name: cluster-settings-main
+  namespace: perfectscale
+spec:
+  profiles:
+    customization:
+      - name: custom-workload-labels
+        assigned: true
+        value:
+          workload_labels:
+            - io.codefresh.pipelineName
+            - app.kubernetes.io/name
+            - app.kubernetes.io/component
+            - app.kubernetes.io/version
+            - app.kubernetes.io/part-of
+          node:
+            spot_labels:
+              label_cloud_google_com_gke_nodepool: pool-2
+              label_spotinst_io_node_lifecycle: spot
+            node_group_labels:
+              - eks.amazonaws.com/nodegroup
+              - kops.k8s.io/instancegroup
+            architecture_labels:
+              - kubernetes.io/arch
+              - beta.kubernetes.io/arch
+            os_labels:
+              - kubernetes.io/os
+              - beta.kubernetes.io/os
+            instance_type_labels:
+              - node.kubernetes.io/instance-type
+              - beta.kubernetes.io/instance-type
+            region_labels:
+              - topology.kubernetes.io/region
+              - failure-domain.beta.kubernetes.io/region
+            availability_zone_labels:
+              - topology.kubernetes.io/zone
+              - failure-domain.beta.kubernetes.io/zone
+          ignored_pod_labels:
+            - uid
+            - namespace
+            - pod
+          ignored_node_labels:
+            - uid
+

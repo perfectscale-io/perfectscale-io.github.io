@@ -1,0 +1,38 @@
+# GCP billing integration example
+# Configure GCP BigQuery billing export for cost calculation
+#
+# Setup Instructions:
+# 1. Enable BigQuery billing export in your GCP project
+# 2. Create a service account with BigQuery Data Viewer permissions
+# 3. Generate a JSON key for the service account
+# 4. Copy the service account details and billing configuration below
+#
+# Fields description
+# gcp_project_id: The unique identifier for your GCP project used to interact with it across services and APIs.
+# gcp_billing_account: The unique identifier for your GCP billing account to manage billing across projects.
+# gcp_service_account: The service account key used to authenticate and securely interact with Google Cloud APIs on your behalf.
+# gcp_dataset_id: The unique identifier assigned to a BigQuery dataset within a specific Google Cloud project.
+#
+# Documentation:
+# https://docs.perfectscale.io/customize-workflow/pricing/gcp-cloud-billing-configuration
+#
+apiVersion: perfectscale.io/v1
+kind: ClusterSettings
+metadata:
+  name: cluster-settings-main
+  namespace: perfectscale
+spec:
+  profiles:
+    pricing:
+      - type: gcp_billing
+        name: gcp-billing-export
+        assigned: true
+        value:
+          global_discount:
+            percentage: 5.5
+            start_date: 2025-01-03
+          gcp_billing_account: "your-gcp-billing-account-id-here"
+          gcp_dataset_id: "billing_export_dataset"
+          gcp_project_id: "your-gcp-project-id-here"
+          gcp_service_account: "your-service-account@your-project.iam.gserviceaccount.com"
+

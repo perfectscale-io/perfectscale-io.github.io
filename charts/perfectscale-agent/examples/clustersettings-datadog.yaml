@@ -1,0 +1,53 @@
+# Datadog integration example
+# Configure Datadog monitoring integration
+#
+# Setup Instructions:
+# 1. Log in to your Datadog account
+# 2. Navigate to Organization Settings > API Keys
+# 3. Create or copy an API key
+# 4. Copy the API key to the secret below
+#
+# Fields Description:
+# datadog_api_key: Datadog API Key
+# datadog_site_region: Specifies the Datadog regional domain where your data is sent and managed
+#
+# Available datadog_site_region values:
+# - US1: datadoghq.com
+# - US3: us3.datadoghq.com
+# - US5: us5.datadoghq.com
+# - EU: datadoghq.eu
+# - AP1: ap1.datadoghq.com
+# - US1-FED: ddog-gov.com
+#
+# Documentation:
+# https://docs.perfectscale.io/customize-workflow/communication-and-messaging/datadog-alerts-integration
+#
+apiVersion: perfectscale.io/v1
+kind: ClusterSettings
+metadata:
+  name: cluster-settings-main
+  namespace: perfectscale
+spec:
+  profiles:
+    integrations:
+      - type: datadog
+        name: production-monitoring
+        assigned: true
+        value:
+          datadog_api_key_from:
+            secretKeyRef:
+              name: datadog-credentials
+              key: api-key
+          datadog_site_region: "datadoghq.com"
+
+---
+# Datadog API Key Secret (apply this first)
+apiVersion: v1
+kind: Secret
+metadata:
+  name: datadog-credentials
+  namespace: perfectscale
+type: Opaque
+stringData:
+  api-key: "your-datadog-api-key-here"
+

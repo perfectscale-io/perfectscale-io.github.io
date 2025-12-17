@@ -1,0 +1,96 @@
+{{- define "crManager.admission.secret" -}}
+{{- $fullName := printf "%s-cr-manager" (include "helm.fullname" .) -}}
+{{- $altNames := list ( printf "%s.%s" $fullName .Release.Namespace ) ( printf "%s.%s.svc" $fullName .Release.Namespace ) -}}
+{{- $ca := genCA "psc-exporter-cr-manager-ca" 1825 -}}
+{{- $cert := genSignedCert $fullName nil $altNames 1825 $ca -}}
+{{- if .Values.crManager.admission.staticCerts.enabled }}
+{{- .Values.crManager.admission.staticCerts.tlsCert }}{{ .Values.crManager.admission.staticCerts.tlsKey }}
+{{- else }}
+{{- $cert.Cert }}{{ $cert.Key }}
+{{- end }}
+{{- end -}}
+{{- if .Values.settings.deployCrManager }}
+{{- $fullName := printf "%s-cr-manager" (include "helm.fullname" .) -}}
+{{- $altNames := list ( printf "%s.%s" $fullName .Release.Namespace ) ( printf "%s.%s.svc" $fullName .Release.Namespace ) -}}
+{{- $ca := genCA "psc-exporter-cr-manager-ca" 1825 -}}
+{{- $cert := genSignedCert $fullName nil $altNames 1825 $ca -}}
+---
+{{- if not .Values.crManager.admission.certManager.enabled }}
+apiVersion: v1
+kind: Secret
+type: kubernetes.io/tls
+metadata:
+  name: {{ $fullName }}-tls
+  labels:
+    {{- include "helm.labels" . | nindent 4 }}
+    app.kubernetes.io/component: psc-exporter-cr-manager
+    {{- if .Values.additionalLabels }}
+    {{- toYaml .Values.additionalLabels | nindent 4 }}
+    {{- end }}
+  {{- with .Values.crManager.admission.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+data:
+{{- if .Values.crManager.admission.staticCerts.enabled }}
+  tls.crt: {{ .Values.crManager.admission.staticCerts.tlsCert }}
+  tls.key: {{ .Values.crManager.admission.staticCerts.tlsKey }}
+{{- else }}
+  tls.crt: {{ $cert.Cert | b64enc }}
+  tls.key: {{ $cert.Key | b64enc }}
+{{- end }}
+{{- end }}
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: {{ $fullName }}
+  labels:
+    {{- include "helm.labels" . | nindent 4 }}
+    app.kubernetes.io/component: psc-exporter-cr-manager
+    {{- if .Values.additionalLabels }}
+    {{- toYaml .Values.additionalLabels | nindent 4 }}
+    {{- end }}
+{{- $hasAnnotations := .Values.crManager.admission.annotations }}
+{{- if or $hasAnnotations .Values.crManager.admission.certManager.enabled }}
+  annotations:
+    {{- with $hasAnnotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+    {{- if .Values.crManager.admission.certManager.enabled }}
+    cert-manager.io/inject-ca-from: {{ .Release.Namespace }}/{{ $fullName }}-ca
+    {{- end }}
+{{- end }}
+webhooks:
+  - name: clustersettings.perfectscale.io
+    rules:
+      - apiGroups: ["perfectscale.io"]
+        apiVersions: ["v1"]
+        operations: ["CREATE", "UPDATE"]
+        resources: ["clustersettings"]
+        scope: "Namespaced"
+    namespaceSelector:
+      matchLabels:
+        # Match the namespace where the exporter agent is deployed (same as release namespace).
+        # This ensures ClusterSettings CRs are created in the same namespace as the agent.
+        kubernetes.io/metadata.name: {{ .Release.Namespace }}
+    clientConfig:
+      {{- if not .Values.crManager.admission.certManager.enabled }}
+        {{- if .Values.crManager.admission.externalCertSecret.enabled }}
+      caBundle: {{ .Values.crManager.admission.externalCertSecret.caCert }}
+        {{- else if .Values.crManager.admission.staticCerts.enabled }}
+      caBundle: {{ .Values.crManager.admission.staticCerts.caCert }}
+        {{- else }}
+      caBundle: {{ $ca.Cert | b64enc }}
+        {{- end }}
+      {{- end }}
+      service:
+        namespace: {{ .Release.Namespace }}
+        name: {{ $fullName }}
+        path: /validate/clustersettings
+        port: {{ .Values.crManager.service.port | default 8443 }}
+    admissionReviewVersions: ["v1"]
+    sideEffects: None
+    timeoutSeconds: {{ .Values.crManager.admission.timeout | default 15 }}
+    failurePolicy: {{ .Values.crManager.admission.failurePolicy | default "Fail" }}
+{{- end }}

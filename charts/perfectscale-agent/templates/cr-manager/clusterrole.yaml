@@ -1,0 +1,28 @@
+{{- if and .Values.settings.deployCrManager .Values.rbac.create }}
+{{- $fullName := printf "%s-cr-manager" (include "helm.fullname" .) -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ $fullName }}
+  labels:
+    {{- include "helm.labels" . | nindent 4 }}
+    app.kubernetes.io/component: psc-exporter-cr-manager
+    {{- if .Values.additionalLabels }}
+    {{- toYaml .Values.additionalLabels | nindent 4 }}
+    {{- end }}
+rules:
+  - apiGroups:
+      - "perfectscale.io"
+    resources:
+      - clustersettings
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+    verbs:
+      - get
+{{- end }}

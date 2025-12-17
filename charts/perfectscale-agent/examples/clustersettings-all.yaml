@@ -1,0 +1,502 @@
+# Complete example of ClusterSettings CRD
+# Demonstrate all available profile types and configurations
+#
+# This manifest MUST be applied to the 'perfectscale' namespace.
+#
+# Setup Instructions:
+# This is a comprehensive example showing all profile types.
+# You can use this as a reference for configuring your cluster.
+# Not all profiles need to be configured - select what you need.
+#
+# Profile Assignment Methods:
+# - Inline profiles: Define configuration directly in CRD with 'name' and 'value' fields
+# - Referenced profiles: Reference UI-created profiles using 'refByID' field (RECOMMENDED)
+#   Note: refByID can ONLY reference UI-created profiles, not CRD inline profiles
+#   Profile IDs are shown in UI in format {type|class}-N (e.g., jira-1, slack-2, custom-3)
+#
+# IMPORTANT VALIDATION RULES:
+# You CANNOT have BOTH refByID AND an inline profile with assigned=true for the same type.
+# Valid combinations:
+#   ✅ refByID only
+#   ✅ refByID + inline profiles with assigned=false (for testing)
+#   ✅ Inline profiles where only ONE has assigned=true (no refByID)
+# Invalid combinations:
+#   ❌ refByID + inline profile with assigned=true
+#
+# We suggest to use refByID rather than inline profiles.
+# You can create profile in UI, test it and then assign it via refByID.
+# Inline profiles have assigned = false so they are visible in UI and can be tested.
+# Once tested, assigned can be changed to true using CR.
+#
+# Profile Types Overview:
+#
+# 1. Pricing Profiles:
+#    - custom: Define custom pricing for instance types
+#    - aws_cur: AWS Cost and Usage Report integration
+#    - gcp_billing: GCP BigQuery billing export integration
+#    - azure_billing: Azure billing export integration
+#
+# 2. Integration Profiles:
+#    - slack: Slack workspace integration for alerts
+#    - teams: Microsoft Teams integration for alerts
+#    - jira: Jira ticketing integration for infrastructure issues
+#    - datadog: Datadog monitoring integration
+#    - observability: Custom observability dashboard integration
+#
+# 3. Resiliency Alerts:
+#    Configure workload health alert thresholds and filters
+#
+# 4. PodFit Labels:
+#    Configure which labels are displayed in the PodFit view
+#
+# 5. Customization:
+#    Configure workload and node labels for resource identification
+#
+# Documentation:
+# - Pricing: https://docs.perfectscale.io/customize-workflow/pricing/custom-pricing-configuration
+# - AWS CUR: https://docs.perfectscale.io/cloud-billing-integration/connecting-aws-cur
+# - GCP Billing: https://docs.perfectscale.io/customize-workflow/pricing/gcp-cloud-billing-configuration
+# - Azure Billing: https://docs.perfectscale.io/cloud-billing-integration/connecting-azure-cost-management
+# - Slack: https://docs.perfectscale.io/customize-workflow/communication-and-messaging/slack-integration
+# - Teams: https://docs.perfectscale.io/customize-workflow/communication-and-messaging/ms-teams-integration
+# - Jira: https://docs.perfectscale.io/customizations/ticketing-and-bug-tracking
+# - Datadog: https://docs.perfectscale.io/customize-workflow/communication-and-messaging/datadog-alerts-integration
+# - Observability: https://docs.perfectscale.io/customize-workflow/observability
+# - Resiliency Alerts: https://docs.perfectscale.io/customize-workflow/alerting/resiliency-alerts
+# - PodFit Labels: https://docs.perfectscale.io/customize-workflow/podfit-labels
+# - Customization: https://docs.perfectscale.io/customizations/label-customizations
+#
+apiVersion: perfectscale.io/v1
+kind: ClusterSettings
+metadata:
+  name: cluster-settings-all
+  namespace: perfectscale
+  annotations:
+    description: "Complete example showing all possible ClusterSettings configurations"
+spec:
+  profiles:
+    # ============================================================================
+    # PRICING PROFILES
+    # ============================================================================
+    # Pricing profiles - cost calculation configuration
+    pricing:
+      # Example 1: Custom pricing with multiple node types (inline profile)
+      - type: custom
+        name: custom-pricing-profile
+        assigned: true
+        value:
+          global_discount:
+            percentage: 8.5
+            start_date: 2025-01-01
+          nodeTypes:
+            - instanceType: c5.large
+              pricing:
+                cpuCoreHourPrice: 0.042
+                memGBHourPrice: 0.0105
+                nodeHourPrice: 0.085
+            - instanceType: c5.xlarge
+              pricing:
+                cpuCoreHourPrice: 0.048
+                memGBHourPrice: 0.012
+                nodeHourPrice: 0.192
+            - instanceType: m5.xlarge
+              pricing:
+                cpuCoreHourPrice: 0.048
+                memGBHourPrice: 0.012
+                nodeHourPrice: 0.192
+            - instanceType: r5.2xlarge
+              pricing:
+                cpuCoreHourPrice: 0.032
+                memGBHourPrice: 0.016
+                nodeHourPrice: 0.504
+
+      # Example 2: AWS CUR with IAM Role (recommended method)
+      - type: aws_cur
+        name: aws-cur-iam-role
+        assigned: false
+        value:
+          # IAM Role authentication
+          role_arn: "arn:aws:iam::123456789012:role/PerfectScaleCURRole"
+          aws_external_id: "unique-external-id-12345"
+          # AWS CUR configuration
+          athena_database: "perfectscale_cur_database"
+          athena_region: "us-east-1"
+          athena_result_bucket: "s3://my-athena-results-bucket"
+          athena_table: "cur_table"
+          aws_account_id: "123456789012"
+
+      # Example 3: AWS CUR with IAM User (alternative method)
+      - type: aws_cur
+        name: aws-cur-iam-user
+        assigned: false
+        value:
+          # IAM User authentication
+          access_key_id: "AKIAIOSFODNN7EXAMPLE"
+          secret_access_key_from:
+            secretKeyRef:
+              name: aws-credentials-secret
+              key: secret-access-key
+          # AWS CUR configuration
+          athena_database: "perfectscale_cur_database"
+          athena_region: "us-west-2"
+          athena_result_bucket: "s3://my-athena-results-bucket"
+          athena_table: "cur_table"
+          aws_account_id: "123456789012"
+
+      # Example 4: GCP Billing integration
+      - type: gcp_billing
+        name: gcp-billing-profile
+        assigned: false
+        value:
+          gcp_billing_account: "012345-6789AB-CDEF01"
+          gcp_dataset_id: "billing_export_dataset"
+          gcp_project_id: "my-gcp-project-id"
+          gcp_service_account: "perfectscale-billing@my-project.iam.gserviceaccount.com"
+
+      # Example 5: Azure Billing integration (using recommended workload_identity)
+      - type: azure_billing
+        name: azure-billing-profile
+        assigned: false
+        value:
+          azure_auth_type: "workload_identity"
+          azure_client_id: "12345678-1234-1234-1234-123456789012"
+          azure_subscription_id: "87654321-4321-4321-4321-210987654321"
+          azure_tenant_id: "abcdef12-3456-7890-abcd-ef1234567890"
+
+      # NOTE: For Azure Billing with client_secret authentication (not recommended),
+      # see clustersettings-azure-billing-client-secret.yaml for a ready-to-use example.
+
+
+    # ============================================================================
+    # INTEGRATION PROFILES
+    # ============================================================================
+    # Integration profiles - external system integrations
+    integrations:
+      # Example 1: Slack integration with routing rules (inline profile)
+      - type: slack
+        name: slack-main-alerts
+        assigned: true
+        value:
+          channel: "perfectscale-alerts"
+          routings:
+            - "label_alert"
+            - "cost_alert"
+          slack_token_from:
+            secretKeyRef:
+              name: slack-credentials
+              key: token
+
+      # Example 2: Slack integration (simple inline profile)
+      - type: slack
+        name: dev-team-slack
+        assigned: false
+        value:
+          channel: "dev-cost-alerts"
+          routings:
+            - "label_alert"
+            - "cost_alert"
+          slack_token_from:
+            secretKeyRef:
+              name: slack-credentials
+              key: bot-token
+
+      # Example 3: Microsoft Teams integration
+      - type: teams
+        name: teams-notifications
+        assigned: false
+        value:
+          teams_webhook_from:
+            secretKeyRef:
+              name: teams-credentials
+              key: webhook-url
+
+      # Example 4: Jira integration (full configuration with custom fields)
+      - type: jira
+        name: jira-ticketing-full
+        assigned: false
+        value:
+          jira_url: "https://mycompany.atlassian.net"
+          jira_user: "perfectscale@mycompany.com"
+          jira_secret_from:
+            secretKeyRef:
+              name: jira-credentials
+              key: api-token
+          jira_project: "PS"
+          jira_issue_type: "Task"
+          jira_summary: "PerfectScale Alert: {workload} in {namespace}"
+          jira_assignee: "john.doe@mycompany.com"
+          jira_resolution: true
+          jira_custom_fields:
+            customfield_10001: "High Priority"
+            customfield_10002: "Infrastructure"
+            customfield_10003:
+              - "kubernetes"
+              - "cost-optimization"
+
+      # Example 5: Jira integration (simple configuration)
+      - type: jira
+        name: engineering-jira
+        assigned: false
+        value:
+          jira_url: "https://mycompany.atlassian.net"
+          jira_user: "perfectscale-bot@mycompany.com"
+          jira_secret_from:
+            secretKeyRef:
+              name: jira-credentials
+              key: api-token
+          jira_project: "INFRA"
+          jira_issue_type: "Bug"
+          jira_summary: "PerfectScale discovered issue(s) with workload"
+          jira_assignee: ""
+          jira_resolution: false
+
+      # Example 6: Datadog integration
+      - type: datadog
+        name: datadog-monitoring
+        assigned: false
+        value:
+          datadog_api_key_from:
+            secretKeyRef:
+              name: datadog-credentials
+              key: api-key
+          datadog_site_region: "datadoghq.com"
+
+      # Example 7: Observability integration
+      - type: observability
+        name: grafana-dashboard
+        assigned: false
+        value:
+          url: "https://grafana.mycompany.com/d/perfectscale-dashboard/perfectscale-overview"
+
+    # ============================================================================
+    # RESILIENCY ALERTS PROFILES
+    # ============================================================================
+    # Resiliency alerts profiles - workload health alert configuration
+    resiliency_alerts:
+      # Example 1: High-severity alerts only with 5h resend (inline profile)
+      - name: high-severity-only
+        assigned: true
+        value:
+          min_risk_level: "high"
+          ignore_workload: "test-*,dev-*"
+          ignore_namespace: "kube-system,kube-public,default"
+          ignore_container: "istio-proxy,linkerd-proxy"
+          ignore_indicator: "CpuRequestNotSet,MemRequestNotSet"
+          active_notification_resend: "5h"
+
+      # Example 2: Medium-severity with daily resends
+      - name: comprehensive-monitoring
+        assigned: false
+        value:
+          min_risk_level: "medium"
+          ignore_workload: "sandbox-*"
+          ignore_namespace: "ephemeral-*"
+          ignore_container: "sidecar-*"
+          ignore_indicator: "OverProvisionedCpuRequest"
+          active_notification_resend: "1d"
+
+      # Example 3: Critical alerts with no resend
+      - name: critical-no-resend
+        assigned: false
+        value:
+          min_risk_level: "high"
+          ignore_workload: ""
+          ignore_namespace: "kube-system"
+          ignore_container: ""
+          ignore_indicator: "CpuRequestNotSet,MemRequestNotSet,OverProvisionedCpuRequest,OverProvisionedMemRequest"
+          active_notification_resend: "off"
+
+      # Example 4: Custom resiliency alerts with regex patterns
+      - name: custom-resiliency-alerts
+        assigned: false
+        value:
+          min_risk_level: "high"
+          ignore_workload: "^test-.*"
+          ignore_namespace: "^(kube-system|kube-public)$"
+          ignore_container: "^sidecar-.*"
+          ignore_indicator: "^cpu_throttling$"
+          active_notification_resend: "5h"
+
+    # ============================================================================
+    # PODFIT LABELS PROFILES
+    # ============================================================================
+    # Podfit labels profiles - label visibility configuration
+    podfit_labels:
+      # Example 1: Common Kubernetes application labels (inline profile)
+      - name: app-labels
+        assigned: true
+        value:
+          configured_label_view:
+            - "app"
+            - "app.kubernetes.io/name"
+            - "app.kubernetes.io/component"
+            - "app.kubernetes.io/instance"
+            - "app.kubernetes.io/version"
+            - "app.kubernetes.io/part-of"
+            - "app.kubernetes.io/managed-by"
+
+      # Example 2: Extended labels with custom organizational fields
+      - name: extended-labels
+        assigned: false
+        value:
+          configured_label_view:
+            - "app"
+            - "environment"
+            - "team"
+            - "cost-center"
+            - "cost_center"
+            - "version"
+            - "release"
+            - "tier"
+            - "service"
+            - "owner"
+
+    # ============================================================================
+    # CUSTOMIZATION PROFILES
+    # ============================================================================
+    # Customization profiles - workload and node label configuration
+    customization:
+      # Example 1: Comprehensive customization (inline profile)
+      - name: full-customization
+        assigned: true
+        value:
+          workload_labels:
+            - "app"
+            - "service"
+            - "team"
+            - "environment"
+            - "version"
+            - "io.codefresh.pipelineName"
+            - "app.kubernetes.io/name"
+            - "app.kubernetes.io/component"
+            - "app.kubernetes.io/version"
+          node:
+            spot_labels:
+              "node.kubernetes.io/instance-type": "spot"
+              "karpenter.sh/capacity-type": "spot"
+              "eks.amazonaws.com/capacityType": "SPOT"
+              "label_cloud_google_com_gke_nodepool": "pool-2"
+              "label_spotinst_io_node_lifecycle": "spot"
+            node_group_labels:
+              - "eks.amazonaws.com/nodegroup"
+              - "kops.k8s.io/instancegroup"
+              - "node.kubernetes.io/node-group"
+              - "agentpool"
+            architecture_labels:
+              - "kubernetes.io/arch"
+              - "beta.kubernetes.io/arch"
+            os_labels:
+              - "kubernetes.io/os"
+              - "beta.kubernetes.io/os"
+            instance_type_labels:
+              - "node.kubernetes.io/instance-type"
+              - "beta.kubernetes.io/instance-type"
+            region_labels:
+              - "topology.kubernetes.io/region"
+              - "failure-domain.beta.kubernetes.io/region"
+            availability_zone_labels:
+              - "topology.kubernetes.io/zone"
+              - "failure-domain.beta.kubernetes.io/zone"
+          ignored_pod_labels:
+            - "pod-template-hash"
+            - "controller-revision-hash"
+            - "statefulset.kubernetes.io/pod-name"
+            - "uid"
+            - "namespace"
+            - "pod"
+          ignored_node_labels:
+            - "node.kubernetes.io/exclude-from-external-load-balancers"
+            - "node-role.kubernetes.io/control-plane"
+            - "uid"
+
+      # Example 2: Minimal customization
+      - name: minimal-customization
+        assigned: false
+        value:
+          workload_labels:
+            - "app"
+          node:
+            spot_labels:
+              "node.kubernetes.io/instance-type": "spot"
+            node_group_labels:
+              - "eks.amazonaws.com/nodegroup"
+            architecture_labels:
+              - "kubernetes.io/arch"
+            os_labels:
+              - "kubernetes.io/os"
+            instance_type_labels:
+              - "node.kubernetes.io/instance-type"
+            region_labels:
+              - "topology.kubernetes.io/region"
+            availability_zone_labels:
+              - "topology.kubernetes.io/zone"
+          ignored_pod_labels:
+            - "pod-template-hash"
+          ignored_node_labels:
+            - "node-role.kubernetes.io/control-plane"
+
+
+---
+# ============================================================================
+# REQUIRED SECRETS FOR THIS COMPREHENSIVE EXAMPLE
+# ============================================================================
+# These secrets need to be created in the perfectscale namespace
+# for the above ClusterSettings to work properly
+# ============================================================================
+
+# AWS Credentials Secret
+apiVersion: v1
+kind: Secret
+metadata:
+  name: aws-credentials-secret
+  namespace: perfectscale
+type: Opaque
+stringData:
+  secret-access-key: "your-aws-secret-access-key-here"
+
+
+---
+# Slack Credentials Secret (supports both 'token' and 'bot-token' keys)
+apiVersion: v1
+kind: Secret
+metadata:
+  name: slack-credentials
+  namespace: perfectscale
+type: Opaque
+stringData:
+  token: "xoxb-your-slack-bot-token-here"
+  bot-token: "xoxb-your-slack-bot-token-here"
+
+---
+# Teams Credentials Secret
+apiVersion: v1
+kind: Secret
+metadata:
+  name: teams-credentials
+  namespace: perfectscale
+type: Opaque
+stringData:
+  webhook-url: "https://outlook.office.com/webhook/your-webhook-url-here"
+
+---
+# Jira Credentials Secret
+apiVersion: v1
+kind: Secret
+metadata:
+  name: jira-credentials
+  namespace: perfectscale
+type: Opaque
+stringData:
+  api-token: "your-jira-api-token-here"
+
+---
+# Datadog Credentials Secret
+apiVersion: v1
+kind: Secret
+metadata:
+  name: datadog-credentials
+  namespace: perfectscale
+type: Opaque
+stringData:
+  api-key: "your-datadog-api-key-here"
+

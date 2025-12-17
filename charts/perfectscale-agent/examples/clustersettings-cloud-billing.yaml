@@ -1,0 +1,59 @@
+# Multi-cloud billing integration example
+# Configure GCP and Azure billing integrations
+#
+# Setup Instructions:
+#
+# GCP Billing:
+# 1. Enable BigQuery billing export in your GCP project
+# 2. Create a service account with BigQuery Data Viewer permissions
+# 3. Generate a JSON key for the service account
+# 4. Copy the service account details and billing configuration below
+#
+# Azure Billing:
+# 1. Configure Azure billing export in your subscription
+# 2. Create an Azure AD application and service principal
+# 3. Grant the application appropriate permissions to access billing data
+# 4. Generate a client secret for the application (if using client_secret auth)
+# 5. Copy the client ID, tenant ID, subscription ID, and client secret below
+#
+# Documentation:
+# - GCP: https://docs.perfectscale.io/customize-workflow/pricing/gcp-cloud-billing-configuration
+# - Azure: https://docs.perfectscale.io/cloud-billing-integration/connecting-azure-cost-management
+#
+apiVersion: perfectscale.io/v1
+kind: ClusterSettings
+metadata:
+  name: cluster-settings-main
+  namespace: perfectscale
+spec:
+  profiles:
+    pricing:
+      # GCP Billing Export Integration
+      - type: gcp_billing
+        name: gcp-billing-export
+        assigned: true
+        value:
+          global_discount:
+            percentage: 4
+            start_date: 2025-01-02
+          gcp_billing_account: "your-gcp-billing-account-id"
+          gcp_dataset_id: "billing_export_dataset"
+          gcp_project_id: "my-gcp-project"
+          gcp_service_account: "your-billing@my-project.iam.gserviceaccount.com"
+
+      # Azure Billing Integration (using recommended workload_identity)
+      - type: azure_billing
+        name: azure-billing-export
+        assigned: false
+        value:
+          global_discount:
+            percentage: 4
+            start_date: 2025-01-02
+          azure_auth_type: workload_identity
+          azure_client_id: "your-azure-client-id-here"
+          azure_subscription_id: "your-azure-subscription-id-here"
+          azure_tenant_id: "your-azure-tenant-id-here"
+
+# NOTE: If you need to use client_secret authentication instead of workload_identity,
+# see clustersettings-azure-billing-client-secret.yaml for a ready-to-use example.
+

@@ -37,9 +37,23 @@ spec:
         - name: coroot-node-agent
           image: "{{ .Values.coroot.image.repository }}:{{ .Values.coroot.image.tag }}"
           imagePullPolicy: {{ .Values.coroot.image.pullPolicy }}
-          args: ["--cgroupfs-root", "/host/sys/fs/cgroup"]
+          env:
+            - name: CGROUPFS_ROOT
+              value: "/host/sys/fs/cgroup"
+            - name: DISABLE_LOG_PARSING
+              value: "true"
+            - name: COROOT_EBPF_PROFILING
+              value: "disabled"
+            - name: COROOT_LOG_MONITORING
+              value: "disabled"
+            - name: COROOT_EBPF_TRACES
+              value: "disabled"
+            - name: DISABLE_L7_TRACING
+              value: "true"
+            - name: LISTEN
+              value: "0.0.0.0:8080"
           ports:
-            - containerPort: 80
+            - containerPort: 8080
               name: http
           resources:
             {{- toYaml .Values.coroot.resources | nindent 12 }}

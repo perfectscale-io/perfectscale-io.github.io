@@ -1,0 +1,29 @@
+# PodFit labels configuration example
+# Configure which labels are displayed in the PodFit view
+#
+# Setup Instructions:
+# 1. Identify up to 3 labels that you want to personalize in your Label View
+# 2. These labels should exist on your workloads (pods, deployments, or stateful sets)
+# 3. Add them to the configured_label_view list below
+#
+# Field Description:
+# configured_label_view: Labels set (up to 3 labels) that allows you to personalize your Label View
+#
+# Documentation:
+# https://docs.perfectscale.io/customize-workflow/podfit-labels
+#
+apiVersion: perfectscale.io/v1
+kind: ClusterSettings
+metadata:
+  name: cluster-settings-main
+  namespace: perfectscale
+spec:
+  profiles:
+    podfit_labels:
+      - name: production-labels
+        assigned: true
+        value:
+          configured_label_view:
+            - app
+            - environment
+            - team

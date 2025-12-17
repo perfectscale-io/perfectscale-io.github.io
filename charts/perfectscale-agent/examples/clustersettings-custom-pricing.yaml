@@ -1,0 +1,55 @@
+# Custom pricing configuration example
+# Configure custom pricing for instance types not covered by cloud providers
+#
+# Setup Instructions:
+# 1. Identify the instance types you want to configure pricing for
+# 2. Determine the pricing for CPU, memory, and node per hour
+# 3. Add the instance types with their pricing configuration below
+#
+# Fields Description:
+# instanceType: The name of the instance that is given by the provider
+# memGBHourPrice: Indicates the price ($) of 1 GB of memory per hour
+# cpuCoreHourPrice: Indicates the price ($) of 1 core per hour
+# nodeHourPrice: Indicates the price ($) of a node per hour
+#
+# Documentation:
+# https://docs.perfectscale.io/customize-workflow/pricing/custom-pricing-configuration
+#
+apiVersion: perfectscale.io/v1
+kind: ClusterSettings
+metadata:
+  name: cluster-settings-main
+  namespace: perfectscale
+spec:
+  profiles:
+    pricing:
+      # Create and assign a custom pricing profile inline
+      - type: custom
+        name: my-custom-pricing
+        assigned: true
+        value:
+          global_discount:
+            percentage: 5
+            start_date: 2025-02-01
+          nodeTypes:
+            - instanceType: c5.large
+              pricing:
+                cpuCoreHourPrice: 0.085
+                memGBHourPrice: 0.0095
+                nodeHourPrice: 0.0
+            - instanceType: c5.xlarge
+              pricing:
+                cpuCoreHourPrice: 0.085
+                memGBHourPrice: 0.0095
+                nodeHourPrice: 0.0
+            - instanceType: m5.large
+              pricing:
+                cpuCoreHourPrice: 0.096
+                memGBHourPrice: 0.0096
+                nodeHourPrice: 0.0
+            - instanceType: m5.xlarge
+              pricing:
+                cpuCoreHourPrice: 0.096
+                memGBHourPrice: 0.0096
+                nodeHourPrice: 0.0
+

@@ -1,0 +1,54 @@
+# Resiliency alerts configuration example
+# Configure resiliency (health) alerts
+#
+# Setup Instructions:
+# 1. Determine the minimum risk level for alerts (high, medium, or low)
+# 2. Define regex patterns for workloads, namespaces, or containers to ignore
+# 3. Optionally configure notification resend intervals
+#
+# Fields Description:
+# min_risk_level: Specify the minimum risk level that will generate alerts for this profile. Available options: high, medium, low
+# ignore_entities: Add the specific namespaces, workloads, or containers you do not want to generate alerts for in the corresponding rows
+# ignore_indicator: Define specific resiliency issues you would like to not generate alerts for
+# active_notification_resend: Configures the interval for re-sending notifications of active alerts. Set to off (default) to disable re-sends, or specify an interval using #h (hours) or #d (days)
+# NOTE: If ignoring multiple names per row, separate them with commas
+#
+# Available ignore indicators:
+# OOM, CpuThrottling, CpuRequestNotSet, MemRequestNotSet, MemLimitNotSet,
+# UnderProvisionedMemRequest, UnderProvisionedCpuRequest, UnderProvisionedMemLimit,
+# UnderProvisionedCpuLimit, OverProvisionedCpuRequest, OverProvisionedMemRequest,
+# RestartsObserved, EvictionsObserved, HPAAtMaxReplicasObserved
+#
+# Documentation:
+# https://docs.perfectscale.io/customize-workflow/alerting/resiliency-alerts
+#
+apiVersion: perfectscale.io/v1
+kind: ClusterSettings
+metadata:
+  name: cluster-settings-main
+  namespace: perfectscale
+spec:
+  profiles:
+    resiliency_alerts:
+      - name: production-alerts
+        assigned: true
+        value:
+          # Only alert on high-risk issues (options: high, medium, low)
+          min_risk_level: high
+
+          # Ignore test workloads (regex pattern)
+          ignore_workload: "^(test-.*|dev-.*)"
+
+          # Ignore system namespaces (regex pattern)
+          ignore_namespace: "^(kube-system|kube-public|kube-node-lease)$"
+
+          # Ignore sidecar containers (regex pattern)
+          ignore_container: "^(istio-proxy|envoy|linkerd-proxy)$"
+
+          # Ignore specific indicators (empty = don't ignore any)
+          ignore_indicator: "CpuThrottling, CpuRequestNotSet"
+
+          # Resend active notifications (options: 'off', '5h', '1d', etc.)
+          # Set to 'off' to disable, or specify interval using #h (hours) or #d (days)
+          active_notification_resend: 'off'
+

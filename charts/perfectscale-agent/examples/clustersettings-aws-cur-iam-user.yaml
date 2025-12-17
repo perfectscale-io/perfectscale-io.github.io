@@ -1,0 +1,68 @@
+# AWS CUR integration example with IAM User authentication
+# Configure AWS Cost and Usage Report integration using IAM User credentials
+#
+# Setup Instructions:
+# 1. Enable AWS Cost and Usage Report in your AWS account
+# 2. Configure the report to export to S3 and integrate with AWS Athena
+# 3. Create an IAM user with appropriate permissions to access Athena and S3
+# 4. Generate access key and secret access key for the IAM user
+# 5. Store the secret access key in the Kubernetes secret below
+#
+# Fields Description:
+# access_key_id: AWS access key ID for the IAM user
+# secret_access_key: AWS secret access key (stored in Kubernetes secret)
+# athena_database: Name of the database that was created during the Athena setup
+# athena_region: AWS region where Athena is running
+# athena_result_bucket: S3 bucket where Athena stores query results
+# athena_table: Name of the table that was created on the Athena setup
+# aws_account_id: AWS account where cluster is running
+#
+# Documentation:
+# https://docs.perfectscale.io/cloud-billing-integration/connecting-aws-cur
+#
+# NOTE: IAM Role authentication is the recommended method.
+# See clustersettings-aws-cur.yaml for the IAM Role example.
+#
+apiVersion: perfectscale.io/v1
+kind: ClusterSettings
+metadata:
+  name: cluster-settings-main
+  namespace: perfectscale
+spec:
+  profiles:
+    pricing:
+      - type: aws_cur
+        name: aws-cur-integration-user
+        assigned: true
+        value:
+          global_discount:
+            percentage: 7.5
+            start_date: 2025-01-10
+
+          # Authentication - IAM User
+          access_key_id: "your-aws-access-key-id-here"
+          secret_access_key_from:
+            secretKeyRef:
+              name: aws-credentials
+              key: secret-access-key
+
+          # Athena Configuration
+          athena_database: athenacurcfn_perfectscale_cur_report
+          athena_region: us-east-1
+          athena_result_bucket: s3://perfectscale-cur-results/
+          athena_table: perfectscale_cur_report_hourly
+
+          # AWS Account ID (where cluster is running, NOT billing account)
+          aws_account_id: "your-aws-account-id-here"
+
+---
+# Secret for IAM User authentication
+apiVersion: v1
+kind: Secret
+metadata:
+  name: aws-credentials
+  namespace: perfectscale
+type: Opaque
+stringData:
+  secret-access-key: "your-aws-secret-access-key-here"
+

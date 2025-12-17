@@ -1,0 +1,171 @@
+{{- if .Values.settings.deployCrManager }}
+{{- $fullName := printf "%s-cr-manager" (include "helm.fullname" .) -}}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $fullName }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "helm.labels" . | nindent 4 }}
+    app.kubernetes.io/component: psc-exporter-cr-manager
+    {{- if .Values.additionalLabels }}
+    {{- toYaml .Values.additionalLabels | nindent 4 }}
+    {{- end }}
+  {{- with .Values.crManager.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit | default 10 }}
+  replicas: 1  # Singleton - always 1 replica for CR Manager
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "helm.name" . }}-cr-manager
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "helm.name" . }}-cr-manager
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/component: psc-exporter-cr-manager
+        {{- if .Values.crManager.podLabels }}
+        {{- toYaml .Values.crManager.podLabels | nindent 8 }}
+        {{- end }}
+      annotations:
+        checksum/secret: {{ include "crManager.admission.secret" . | sha256sum }}
+        {{- with .Values.crManager.podAnnotations }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
+        {{- if not .Values.crManager.admission.staticCerts.enabled }}
+        {{- /* it requires to reload the latest re-generated certs for mtls after helm upgrade*/}}
+        rolloutme: {{ randAlphaNum 5 | quote }}
+        {{- end }}
+    spec:
+      {{- if ne .Values.priorityClass.enabled false }}
+      priorityClassName: {{ .Values.priorityClass.name | default "perfectscale-exporter" }}
+      {{- end }}
+      serviceAccountName: {{ include "helm.serviceAccountName" . }}
+      automountServiceAccountToken: true
+      {{- with .Values.crManager.securityContext | default .Values.securityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: cr-manager
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["/bin/sh", "-c"]
+          args: ["./app cr-manager"]
+          env:
+          - name: ENV
+            value: "{{ .Values.settings.env }}"
+          - name: LOG_LEVEL
+            value: "{{ .Values.crManager.logLevel | default .Values.settings.logLevel }}"
+          - name: COMMIT
+            value: "{{ .Values.image.tag | default .Chart.AppVersion }}"
+          - name: HTTPS_PORT
+            value: "{{ printf ":%d" (int (.Values.crManager.service.port | default 8443)) }}"
+          - name: KUBE_API_TIMEOUT
+            value: "{{ .Values.settings.kubeAPITimeoutSec }}"
+          {{- if .Values.settings.kubeConfigPath }}
+          - name: KUBE_CONFIG_PATH
+            value: "{{ .Values.settings.kubeConfigPath }}"
+          {{- end }}
+          - name: TENANT_MANAGER_URL
+            value: "{{ .Values.settings.psUrl }}"
+          - name: SETTINGS_URL
+            value: "{{ .Values.settings.settingsUrl }}"
+          - name: TELEMETRY_URL
+            value: "{{ .Values.settings.telemetryUrl }}"
+          - name: REMOTE_LOG_BATCH_SIZE
+            value: "{{ .Values.crManager.remoteLog.batchSize | default 0 }}"
+          - name: REMOTE_LOG_BATCH_INTERVAL
+            value: "{{ .Values.crManager.remoteLog.batchInterval | default "0s" }}"
+          - name: CLUSTER_UID
+            value: "{{ include "helm.exporter.clusterUID" . }}"
+          - name: CLUSTER_NAME
+            value: "{{ .Values.settings.clusterName }}"
+          - name: CR_MANAGER_NAMESPACE
+            value: "{{ .Release.Namespace }}"
+          - name: "KUBERNETES_CLIENT_BURST"
+            value: "{{ .Values.crManager.k8sClientBurst | default 50 }}"
+          - name: "KUBERNETES_CLIENT_QPS"
+            value: "{{ .Values.crManager.k8sClientQPS | default 30 }}"
+          - name: CLIENT_ID
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.secret.name | default (include "helm.fullname" .) }}
+                key: "clientId"
+                optional: false
+          - name: CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.secret.name | default (include "helm.fullname" .) }}
+                key: "clientSecret"
+                optional: false
+          {{- if .Values.settings.httpProxyEnabled | default false }}
+          - name: HTTP_PROXY
+            value: "{{ .Values.settings.httpProxy }}"
+          - name: HTTPS_PROXY
+            value: "{{ .Values.settings.httpsProxy }}"
+          - name: NO_PROXY
+            value: "{{ .Values.settings.noProxy }}"
+          {{- end }}
+          - name: TLS_CERT_FILE
+            value: "/opt/tls/tls.crt"
+          - name: TLS_KEY_FILE
+            value: "/opt/tls/tls.key"
+          ports:
+            - name: https
+              containerPort: {{ .Values.crManager.service.port | default 8443 }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: https
+              scheme: HTTPS
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: https
+              scheme: HTTPS
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            {{- toYaml (.Values.crManager.resources | default (dict "requests" (dict "cpu" "50m" "memory" "64Mi"))) | nindent 12 }}
+          volumeMounts:
+            - name: tls
+              mountPath: /opt/tls
+              readOnly: true
+          {{- with .Values.crManager.containerSecurityContext | default .Values.containerSecurityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+{{- end }}
+      {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+      - name: {{ .Values.imagePullSecrets.secretName }}
+      {{- end }}
+      {{- with .Values.crManager.tolerations | default .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.crManager.nodeSelector | default .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.crManager.affinity | default .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+        - name: tls
+          secret:
+            {{- if .Values.crManager.admission.externalCertSecret.enabled }}
+            secretName: {{ .Values.crManager.admission.externalCertSecret.tlsName }}
+            {{- else }}
+            secretName: {{ $fullName }}-tls
+            {{- end }}
+        {{- end }}

@@ -1,0 +1,89 @@
+# Assigning existing profiles to cluster (RECOMMENDED APPROACH)
+# Reference UI-created profiles using refByID
+#
+# WHY USE THIS APPROACH:
+# - Reuse tested profiles across multiple clusters
+# - Manage configuration centrally via UI
+# - Easier to update profiles in one place
+# - Better GitOps workflow
+# - No need for assigned field (refByID is always assigned)
+#
+# Setup Instructions:
+# 1. Create and test profiles in UI first
+# 2. Copy the profile ID from UI (format: {type|class}-N, e.g., jira-1, slack-2, custom-3)
+#    NOTE: Underscores in type/class names are converted to hyphens in IDs
+#    (e.g., resiliency_alerts → resiliency-alerts-1, podfit_labels → podfit-labels-1)
+# 3. Use refByID to reference the profile by its ID
+# 4. No assigned field needed - refByID profiles are always assigned
+# 5. Ensure the profile type matches the existing profile's type
+#
+# Important Rules:
+# - You can ONLY reference profiles created via UI (not inline CRD profiles from other clusters)
+# - CRD-created profiles are cluster-specific and cannot be referenced by other clusters
+# - Only ONE refByID per type allowed (validation fails if multiple)
+# - You CANNOT have BOTH refByID AND an inline profile with assigned=true for the same type
+# - Valid: refByID + inline profiles with assigned=false (for testing)
+# - Invalid: refByID + inline profile with assigned=true
+# - Only ONE ClusterSettings resource is allowed per cluster (in perfectscale namespace)
+# - Profile IDs are shown in UI in format {type|class}-N (e.g., jira-1, slack-2, custom-3)
+# - Underscores are converted to hyphens: resiliency_alerts → resiliency-alerts-1
+# - The type field must match the referenced profile's type
+# - If referenced profile doesn't exist: validation passes, but nothing happens (noop)
+# - CRD profiles ALWAYS override UI-assigned profiles
+#
+# Usage:
+# This is the PREFERRED method for profile management. Create profiles via UI,
+# test them thoroughly, then reference them by ID in your GitOps workflow.
+#
+apiVersion: perfectscale.io/v1
+kind: ClusterSettings
+metadata:
+  name: cluster-settings-main
+  namespace: perfectscale
+spec:
+  profiles:
+    pricing:
+      # Reference an existing pricing profile by ID
+      # No assigned field needed - refByID is always assigned
+      # ID format: {type}-N (e.g., custom-1, aws-cur-2)
+      - type: custom
+        refByID: "custom-1"
+
+      # Optional: Inline pricing profile example with global discount (use only one assigned profile per type)
+      # - type: custom
+      #   name: inline-pricing-with-discount
+      #   assigned: true
+      #   value:
+      #     global_discount:
+      #       percentage: 5
+      #       start_date: 2025-01-04
+
+    integrations:
+      # Reference an existing Slack integration profile
+      # ID format: {type}-N (e.g., slack-1, slack-2)
+      - type: slack
+        refByID: "slack-1"
+
+      # You can have multiple integration profiles of different types
+      # but only one refByID per type allowed
+      - type: jira
+        refByID: "jira-1"
+
+      - type: datadog
+        refByID: "datadog-1"
+
+    resiliency_alerts:
+      # Reference an existing resiliency alerts profile
+      # ID format: {class}-N (e.g., resiliency-alerts-1)
+      - refByID: "resiliency-alerts-1"
+
+    podfit_labels:
+      # Reference an existing podfit labels profile
+      # ID format: {class}-N (e.g., podfit-labels-1)
+      - refByID: "podfit-labels-1"
+
+    customization:
+      # Reference an existing customization profile
+      # ID format: {class}-N (e.g., customization-1)
+      - refByID: "customization-1"
+

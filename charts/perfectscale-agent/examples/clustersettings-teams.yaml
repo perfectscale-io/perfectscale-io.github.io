@@ -1,0 +1,44 @@
+# Microsoft Teams integration example
+# Configure Teams notifications for alerts
+#
+# Setup Instructions:
+# 1. Go to the Apps at https://teams.microsoft.com/
+# 2. Go to Incoming Webhook and click Add to connect your Webhook to a specific channel
+# 3. Provide the channel name where PerfectScale alerts should be received
+# 4. Name your webhook and click the Create button
+# 5. Copy the webhook URL to the secret below
+#
+# Fields Description:
+# teams_webhook: A mandatory field used to permit PerfectScale to interact with your Teams
+#
+# Documentation:
+# https://docs.perfectscale.io/customize-workflow/communication-and-messaging/ms-teams-integration
+#
+apiVersion: perfectscale.io/v1
+kind: ClusterSettings
+metadata:
+  name: cluster-settings-main
+  namespace: perfectscale
+spec:
+  profiles:
+    integrations:
+      - type: teams
+        name: ops-team-notifications
+        assigned: true
+        value:
+          teams_webhook_from:
+            secretKeyRef:
+              name: teams-credentials
+              key: webhook-url
+
+---
+# Teams Webhook Secret (apply this first)
+apiVersion: v1
+kind: Secret
+metadata:
+  name: teams-credentials
+  namespace: perfectscale
+type: Opaque
+stringData:
+  webhook-url: "https://outlook.office.com/webhook/your-webhook-url-here"
+
