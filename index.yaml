@@ -5,7 +5,29 @@ entries:
       charts.openshift.io/name: exporter
     apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.270580524Z"
+    created: "2025-12-19T14:58:28.695572924Z"
+    dependencies:
+    - condition: settings.deployKubeStateMetrics
+      name: kube-state-metrics
+      repository: https://prometheus-community.github.io/helm-charts
+      version: 5.27.0
+    - condition: settings.deployWindowsExporter
+      name: prometheus-windows-exporter
+      repository: https://prometheus-community.github.io/helm-charts
+      version: 0.9.0
+    description: PerfectScale data exporter
+    digest: beac66348e1a18b1e9af46ad8c4057c439509538b859759f7ce20f23aed86131
+    kubeVersion: '>=1.21.0-0'
+    name: exporter
+    type: application
+    urls:
+    - exporter-v1.0.80.tgz
+    version: v1.0.80
+  - annotations:
+      charts.openshift.io/name: exporter
+    apiVersion: v2
+    appVersion: 1.0.0
+    created: "2025-12-19T14:58:28.68665623Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -27,7 +49,7 @@ entries:
       charts.openshift.io/name: exporter
     apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.265916829Z"
+    created: "2025-12-19T14:58:28.683325551Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -49,7 +71,7 @@ entries:
       charts.openshift.io/name: exporter
     apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.263229528Z"
+    created: "2025-12-19T14:58:28.679150991Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -71,7 +93,7 @@ entries:
       charts.openshift.io/name: exporter
     apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.260531637Z"
+    created: "2025-12-19T14:58:28.676476616Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -93,7 +115,7 @@ entries:
       charts.openshift.io/name: exporter
     apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.256497936Z"
+    created: "2025-12-19T14:58:28.67385005Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -115,7 +137,7 @@ entries:
       charts.openshift.io/name: exporter
     apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.253793233Z"
+    created: "2025-12-19T14:58:28.669381099Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -137,7 +159,7 @@ entries:
       charts.openshift.io/name: exporter
     apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.251124357Z"
+    created: "2025-12-19T14:58:28.666658293Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -159,7 +181,7 @@ entries:
       charts.openshift.io/name: exporter
     apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.246928759Z"
+    created: "2025-12-19T14:58:28.66223105Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -181,7 +203,7 @@ entries:
       charts.openshift.io/name: exporter
     apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.244122996Z"
+    created: "2025-12-19T14:58:28.656515476Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -203,7 +225,7 @@ entries:
       charts.openshift.io/name: exporter
     apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.238463181Z"
+    created: "2025-12-19T14:58:28.652461468Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -225,7 +247,7 @@ entries:
       charts.openshift.io/name: exporter
     apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.235835282Z"
+    created: "2025-12-19T14:58:28.648324124Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -247,7 +269,7 @@ entries:
       charts.openshift.io/name: exporter
     apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.23301939Z"
+    created: "2025-12-19T14:58:28.645696415Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -269,7 +291,7 @@ entries:
       charts.openshift.io/name: exporter
     apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.228867775Z"
+    created: "2025-12-19T14:58:28.643084597Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -291,7 +313,7 @@ entries:
       charts.openshift.io/name: exporter
     apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.226231571Z"
+    created: "2025-12-19T14:58:28.638982991Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -313,7 +335,7 @@ entries:
       charts.openshift.io/name: exporter
     apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.223392244Z"
+    created: "2025-12-19T14:58:28.636356354Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -335,7 +357,7 @@ entries:
       charts.openshift.io/name: exporter
     apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.219137791Z"
+    created: "2025-12-19T14:58:28.633729498Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -357,7 +379,7 @@ entries:
       charts.openshift.io/name: exporter
     apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.216463585Z"
+    created: "2025-12-19T14:58:28.629516224Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -379,7 +401,7 @@ entries:
       charts.openshift.io/name: exporter
     apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.213706413Z"
+    created: "2025-12-19T14:58:28.626901018Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -401,7 +423,7 @@ entries:
       charts.openshift.io/name: exporter
     apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.20998Z"
+    created: "2025-12-19T14:58:28.624150792Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -423,7 +445,7 @@ entries:
       charts.openshift.io/name: exporter
     apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.203543711Z"
+    created: "2025-12-19T14:58:28.618468419Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -445,7 +467,7 @@ entries:
       charts.openshift.io/name: exporter
     apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.198258277Z"
+    created: "2025-12-19T14:58:28.61555574Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -467,7 +489,7 @@ entries:
       charts.openshift.io/name: exporter
     apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.19087442Z"
+    created: "2025-12-19T14:58:28.611428135Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -489,7 +511,7 @@ entries:
       charts.openshift.io/name: exporter
     apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.184501763Z"
+    created: "2025-12-19T14:58:28.608884974Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -511,7 +533,7 @@ entries:
       charts.openshift.io/name: exporter
     apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.17949374Z"
+    created: "2025-12-19T14:58:28.606279848Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -533,7 +555,7 @@ entries:
       charts.openshift.io/name: exporter
     apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.173875221Z"
+    created: "2025-12-19T14:58:28.601647956Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -555,7 +577,7 @@ entries:
       charts.openshift.io/name: exporter
     apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.169151763Z"
+    created: "2025-12-19T14:58:28.599035816Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -577,7 +599,7 @@ entries:
       charts.openshift.io/name: exporter
     apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.166597022Z"
+    created: "2025-12-19T14:58:28.596525336Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -599,7 +621,7 @@ entries:
       charts.openshift.io/name: exporter
     apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.163441692Z"
+    created: "2025-12-19T14:58:28.593878743Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -621,7 +643,7 @@ entries:
       charts.openshift.io/name: exporter
     apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.15978419Z"
+    created: "2025-12-19T14:58:28.588681815Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -643,7 +665,7 @@ entries:
       charts.openshift.io/name: exporter
     apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.155845458Z"
+    created: "2025-12-19T14:58:28.575277788Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -661,7 +683,7 @@ entries:
       charts.openshift.io/name: exporter
     apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.15296407Z"
+    created: "2025-12-19T14:58:28.57181326Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -679,7 +701,7 @@ entries:
       charts.openshift.io/name: exporter
     apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.150529737Z"
+    created: "2025-12-19T14:58:28.568401159Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -697,7 +719,7 @@ entries:
       charts.openshift.io/name: exporter
     apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.148915924Z"
+    created: "2025-12-19T14:58:28.565104664Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -713,7 +735,7 @@ entries:
     version: v1.0.46
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.147260533Z"
+    created: "2025-12-19T14:58:28.561358511Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -728,7 +750,7 @@ entries:
     version: v1.0.45
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.145120562Z"
+    created: "2025-12-19T14:58:28.557655899Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -743,7 +765,7 @@ entries:
     version: v1.0.44
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.142347066Z"
+    created: "2025-12-19T14:58:28.556097784Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -758,7 +780,7 @@ entries:
     version: v1.0.43
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.140763139Z"
+    created: "2025-12-19T14:58:28.554499515Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -773,7 +795,7 @@ entries:
     version: v1.0.42
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.139174914Z"
+    created: "2025-12-19T14:58:28.552885957Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -788,7 +810,7 @@ entries:
     version: v1.0.41
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.137510647Z"
+    created: "2025-12-19T14:58:28.549768516Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -803,7 +825,7 @@ entries:
     version: v1.0.40
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.13288875Z"
+    created: "2025-12-19T14:58:28.546791766Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -818,7 +840,7 @@ entries:
     version: v1.0.39
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.131268595Z"
+    created: "2025-12-19T14:58:28.545181515Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -833,7 +855,7 @@ entries:
     version: v1.0.38
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.129799324Z"
+    created: "2025-12-19T14:58:28.543636595Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -848,7 +870,7 @@ entries:
     version: v1.0.37
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.128292522Z"
+    created: "2025-12-19T14:58:28.540957048Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -863,7 +885,7 @@ entries:
     version: v1.0.36
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.125196125Z"
+    created: "2025-12-19T14:58:28.538730289Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -878,7 +900,7 @@ entries:
     version: v1.0.34
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.12375703Z"
+    created: "2025-12-19T14:58:28.537308499Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -893,7 +915,7 @@ entries:
     version: v1.0.33
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.122188873Z"
+    created: "2025-12-19T14:58:28.535829051Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -908,7 +930,7 @@ entries:
     version: v1.0.32
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.120684766Z"
+    created: "2025-12-19T14:58:28.534404475Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -923,7 +945,7 @@ entries:
     version: v1.0.31
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.119222498Z"
+    created: "2025-12-19T14:58:28.532897977Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -938,7 +960,7 @@ entries:
     version: v1.0.30
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.114757614Z"
+    created: "2025-12-19T14:58:28.52839332Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -953,7 +975,7 @@ entries:
     version: v1.0.29
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.113278364Z"
+    created: "2025-12-19T14:58:28.526992318Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -968,7 +990,7 @@ entries:
     version: v1.0.28
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.111841123Z"
+    created: "2025-12-19T14:58:28.525565278Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -983,7 +1005,7 @@ entries:
     version: v1.0.27
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.110380057Z"
+    created: "2025-12-19T14:58:28.524106669Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -998,7 +1020,7 @@ entries:
     version: v1.0.26
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.107887983Z"
+    created: "2025-12-19T14:58:28.521005778Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -1013,7 +1035,7 @@ entries:
     version: v1.0.25
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.106010747Z"
+    created: "2025-12-19T14:58:28.519576073Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -1028,7 +1050,7 @@ entries:
     version: v1.0.24
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.104386946Z"
+    created: "2025-12-19T14:58:28.518169611Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -1043,7 +1065,7 @@ entries:
     version: v1.0.23
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.102875555Z"
+    created: "2025-12-19T14:58:28.516681147Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -1058,7 +1080,7 @@ entries:
     version: v1.0.22
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.101394983Z"
+    created: "2025-12-19T14:58:28.51521864Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -1073,7 +1095,7 @@ entries:
     version: v1.0.21
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.099702679Z"
+    created: "2025-12-19T14:58:28.512163816Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -1088,7 +1110,7 @@ entries:
     version: v1.0.20
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.095448724Z"
+    created: "2025-12-19T14:58:28.509372282Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -1103,7 +1125,7 @@ entries:
     version: v1.0.19
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.094000462Z"
+    created: "2025-12-19T14:58:28.507923461Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -1118,7 +1140,7 @@ entries:
     version: v1.0.18
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.092478372Z"
+    created: "2025-12-19T14:58:28.506460504Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -1133,7 +1155,7 @@ entries:
     version: v1.0.16
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.090965759Z"
+    created: "2025-12-19T14:58:28.50341154Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -1148,7 +1170,7 @@ entries:
     version: v1.0.15
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.087897605Z"
+    created: "2025-12-19T14:58:28.501986945Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -1163,7 +1185,7 @@ entries:
     version: v1.0.14
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.086393008Z"
+    created: "2025-12-19T14:58:28.500550497Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -1178,7 +1200,7 @@ entries:
     version: v1.0.13
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.084977668Z"
+    created: "2025-12-19T14:58:28.499137813Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -1193,7 +1215,7 @@ entries:
     version: v1.0.12
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.083461808Z"
+    created: "2025-12-19T14:58:28.497677742Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -1208,7 +1230,7 @@ entries:
     version: v1.0.11
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.081959134Z"
+    created: "2025-12-19T14:58:28.494666629Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -1223,7 +1245,7 @@ entries:
     version: v1.0.10
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.273587004Z"
+    created: "2025-12-19T14:58:28.697183306Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -1238,7 +1260,7 @@ entries:
     version: v1.0.9
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.272157598Z"
+    created: "2025-12-19T14:58:28.688573003Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -1253,7 +1275,7 @@ entries:
     version: v1.0.8
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.241415517Z"
+    created: "2025-12-19T14:58:28.653917513Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -1268,7 +1290,7 @@ entries:
     version: v1.0.7
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.206438591Z"
+    created: "2025-12-19T14:58:28.619886793Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -1283,7 +1305,7 @@ entries:
     version: v1.0.6
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.157274774Z"
+    created: "2025-12-19T14:58:28.581463569Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -1298,7 +1320,7 @@ entries:
     version: v1.0.5
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.134347391Z"
+    created: "2025-12-19T14:58:28.548172511Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -1313,7 +1335,7 @@ entries:
     version: v1.0.4
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.116145553Z"
+    created: "2025-12-19T14:58:28.529795503Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -1328,7 +1350,7 @@ entries:
     version: v1.0.3
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.096841983Z"
+    created: "2025-12-19T14:58:28.510770168Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -1343,7 +1365,7 @@ entries:
     version: v1.0.2
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.078967279Z"
+    created: "2025-12-19T14:58:28.493238567Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -1358,7 +1380,7 @@ entries:
     version: v1.0.1
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.077762905Z"
+    created: "2025-12-19T14:58:28.492100615Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -1373,7 +1395,7 @@ entries:
     version: v1.0.0
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.069384449Z"
+    created: "2025-12-19T14:58:28.483897534Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -1388,7 +1410,7 @@ entries:
     version: v0.0.45
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.068275765Z"
+    created: "2025-12-19T14:58:28.482831156Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -1403,7 +1425,7 @@ entries:
     version: v0.0.44
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.067175998Z"
+    created: "2025-12-19T14:58:28.481723311Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -1418,7 +1440,7 @@ entries:
     version: v0.0.43
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.066083595Z"
+    created: "2025-12-19T14:58:28.480611758Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -1433,7 +1455,7 @@ entries:
     version: v0.0.42
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.064987976Z"
+    created: "2025-12-19T14:58:28.47859039Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -1448,7 +1470,7 @@ entries:
     version: v0.0.41
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.063789824Z"
+    created: "2025-12-19T14:58:28.477000565Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -1463,7 +1485,7 @@ entries:
     version: v0.0.40
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.060112826Z"
+    created: "2025-12-19T14:58:28.474988795Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -1478,7 +1500,7 @@ entries:
     version: v0.0.39
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.058961342Z"
+    created: "2025-12-19T14:58:28.473932546Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -1493,7 +1515,7 @@ entries:
     version: v0.0.38
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.057905107Z"
+    created: "2025-12-19T14:58:28.472786469Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -1508,7 +1530,7 @@ entries:
     version: v0.0.37
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.056836138Z"
+    created: "2025-12-19T14:58:28.471629763Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -1523,7 +1545,7 @@ entries:
     version: v0.0.36
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.055752711Z"
+    created: "2025-12-19T14:58:28.469056356Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -1538,7 +1560,7 @@ entries:
     version: v0.0.35
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.054581941Z"
+    created: "2025-12-19T14:58:28.467988976Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -1553,7 +1575,7 @@ entries:
     version: v0.0.34
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.052161379Z"
+    created: "2025-12-19T14:58:28.466948066Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -1568,7 +1590,7 @@ entries:
     version: v0.0.33
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.050836239Z"
+    created: "2025-12-19T14:58:28.465870377Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -1583,7 +1605,7 @@ entries:
     version: v0.0.32
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.049781116Z"
+    created: "2025-12-19T14:58:28.464829066Z"
     dependencies:
     - condition: settings.deployKubeStateMetrics
       name: kube-state-metrics
@@ -1598,7 +1620,7 @@ entries:
     version: v0.0.30
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.047730542Z"
+    created: "2025-12-19T14:58:28.462538696Z"
     dependencies:
     - condition: kube-state-metrics.enabled
       name: kube-state-metrics
@@ -1613,7 +1635,7 @@ entries:
     version: v0.0.29
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.046625926Z"
+    created: "2025-12-19T14:58:28.459791667Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -1627,7 +1649,7 @@ entries:
     version: v0.0.28
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.045428555Z"
+    created: "2025-12-19T14:58:28.458640922Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -1641,7 +1663,7 @@ entries:
     version: v0.0.27
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.042833889Z"
+    created: "2025-12-19T14:58:28.457612204Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -1655,7 +1677,7 @@ entries:
     version: v0.0.26
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.041713193Z"
+    created: "2025-12-19T14:58:28.456563249Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -1669,7 +1691,7 @@ entries:
     version: v0.0.25
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.040638793Z"
+    created: "2025-12-19T14:58:28.455532999Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -1683,7 +1705,7 @@ entries:
     version: v0.0.24
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.039596164Z"
+    created: "2025-12-19T14:58:28.454431165Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -1697,7 +1719,7 @@ entries:
     version: v0.0.23
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.038571949Z"
+    created: "2025-12-19T14:58:28.453279077Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -1711,7 +1733,7 @@ entries:
     version: v0.0.22
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.037487731Z"
+    created: "2025-12-19T14:58:28.451230178Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -1725,7 +1747,7 @@ entries:
     version: v0.0.21
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.036418582Z"
+    created: "2025-12-19T14:58:28.448319862Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -1739,7 +1761,7 @@ entries:
     version: v0.0.20
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.032881985Z"
+    created: "2025-12-19T14:58:28.446340753Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -1753,7 +1775,7 @@ entries:
     version: v0.0.19
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.031626045Z"
+    created: "2025-12-19T14:58:28.445287079Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -1767,7 +1789,7 @@ entries:
     version: v0.0.18
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.030519365Z"
+    created: "2025-12-19T14:58:28.444243874Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -1781,7 +1803,7 @@ entries:
     version: v0.0.17
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.029451528Z"
+    created: "2025-12-19T14:58:28.443241245Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -1795,7 +1817,7 @@ entries:
     version: v0.0.16
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.028363663Z"
+    created: "2025-12-19T14:58:28.442013475Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -1809,7 +1831,7 @@ entries:
     version: v0.0.15
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.0273511Z"
+    created: "2025-12-19T14:58:28.439457931Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -1823,7 +1845,7 @@ entries:
     version: v0.0.14
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.024606933Z"
+    created: "2025-12-19T14:58:28.438487802Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -1837,7 +1859,7 @@ entries:
     version: v0.0.13
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.023604819Z"
+    created: "2025-12-19T14:58:28.437452292Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -1851,7 +1873,7 @@ entries:
     version: v0.0.12
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.022585123Z"
+    created: "2025-12-19T14:58:28.436466183Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -1865,7 +1887,7 @@ entries:
     version: v0.0.10
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.076656436Z"
+    created: "2025-12-19T14:58:28.491027154Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -1879,7 +1901,7 @@ entries:
     version: v0.0.9
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.075732459Z"
+    created: "2025-12-19T14:58:28.490094045Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -1893,7 +1915,7 @@ entries:
     version: v0.0.8
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.07480684Z"
+    created: "2025-12-19T14:58:28.489111413Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -1907,7 +1929,7 @@ entries:
     version: v0.0.7
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.073852907Z"
+    created: "2025-12-19T14:58:28.486673769Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -1921,7 +1943,7 @@ entries:
     version: v0.0.7-rc2
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.072857746Z"
+    created: "2025-12-19T14:58:28.485769092Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -1935,7 +1957,7 @@ entries:
     version: v0.0.7-rc1
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.070503953Z"
+    created: "2025-12-19T14:58:28.484827257Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -1949,7 +1971,7 @@ entries:
     version: v0.0.6
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.061059485Z"
+    created: "2025-12-19T14:58:28.475929759Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -1963,7 +1985,7 @@ entries:
     version: v0.0.4
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.048683593Z"
+    created: "2025-12-19T14:58:28.463723865Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -1977,7 +1999,7 @@ entries:
     version: v0.0.3
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.033846538Z"
+    created: "2025-12-19T14:58:28.447293188Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -1991,7 +2013,7 @@ entries:
     version: v0.0.2
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.021494273Z"
+    created: "2025-12-19T14:58:28.435433589Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts
@@ -2005,7 +2027,7 @@ entries:
     version: v0.0.1
   perfectscale-argocd-helpers:
   - apiVersion: v2
-    created: "2025-12-17T09:55:15.274291718Z"
+    created: "2025-12-19T14:58:28.697917644Z"
     description: Helpers to enable GitOps Automation
     digest: 4f294a5a294d067b63e54195b1331b30ae7f796d9ca98102db8b0f64f51521d8
     name: perfectscale-argocd-helpers
@@ -2013,7 +2035,7 @@ entries:
     - perfectscale-argocd-helpers-v0.0.15.tgz
     version: v0.0.15
   - apiVersion: v2
-    created: "2025-12-17T09:55:15.274129223Z"
+    created: "2025-12-19T14:58:28.697774768Z"
     description: Helpers to enable GitOps Automation
     digest: 70dc67cf93f6b5530afa598c9ae88e8d7415f92274073d581d0fd537ab413302
     name: perfectscale-argocd-helpers
@@ -2021,7 +2043,7 @@ entries:
     - perfectscale-argocd-helpers-v0.0.14.tgz
     version: v0.0.14
   - apiVersion: v2
-    created: "2025-12-17T09:55:15.274004138Z"
+    created: "2025-12-19T14:58:28.697624558Z"
     description: Helpers to enable GitOps Automation
     digest: e03cfd98a009d5d723696fa51b99ce3ff8b306812523b11d3b0b8bba3c48507c
     name: perfectscale-argocd-helpers
@@ -2029,7 +2051,7 @@ entries:
     - perfectscale-argocd-helpers-v0.0.13.tgz
     version: v0.0.13
   - apiVersion: v2
-    created: "2025-12-17T09:55:15.273875847Z"
+    created: "2025-12-19T14:58:28.697497171Z"
     description: Helpers to enable GitOps Automation
     digest: 1c9b71397236ad0930345c7fe6817f760c17e2ae439655e2fe7d055a25b6dcb3
     name: perfectscale-argocd-helpers
@@ -2037,7 +2059,7 @@ entries:
     - perfectscale-argocd-helpers-v0.0.12.tgz
     version: v0.0.12
   - apiVersion: v2
-    created: "2025-12-17T09:55:15.273742076Z"
+    created: "2025-12-19T14:58:28.697354695Z"
     description: Helpers to enable GitOps Automation
     digest: 3dbfa3974580351df7213f260ab3f96892bf90e5e9caa4cae670ebcc3c025de0
     name: perfectscale-argocd-helpers
@@ -2047,7 +2069,7 @@ entries:
   psc-autoscaler:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.32147301Z"
+    created: "2025-12-19T14:58:28.745839395Z"
     description: A Helm chart for Kubernetes
     digest: 854346e581cec94e66683253af571138a2e3bdba34b9111fd50add0890ed437c
     name: psc-autoscaler
@@ -2057,7 +2079,7 @@ entries:
     version: v1.0.32
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.320677134Z"
+    created: "2025-12-19T14:58:28.744310527Z"
     description: A Helm chart for Kubernetes
     digest: 6ab7e1bd5c9783154067f14a617e1fb332948289df01a406480aceef47b5a57c
     name: psc-autoscaler
@@ -2067,7 +2089,7 @@ entries:
     version: v1.0.31
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.319896907Z"
+    created: "2025-12-19T14:58:28.742711284Z"
     description: A Helm chart for Kubernetes
     digest: df97231bd0d1d12573797f34f5c71e2b0f1c4e9642f0bdd7a168dc68467a7b4a
     name: psc-autoscaler
@@ -2077,7 +2099,7 @@ entries:
     version: v1.0.30
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.316830196Z"
+    created: "2025-12-19T14:58:28.741274776Z"
     description: A Helm chart for Kubernetes
     digest: 2f34bbf556f8028119fe6a5a8122fc690f83487afc77f0ce0f584a3ed9a09a4a
     name: psc-autoscaler
@@ -2087,7 +2109,7 @@ entries:
     version: v1.0.29
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.316066791Z"
+    created: "2025-12-19T14:58:28.740494431Z"
     description: A Helm chart for Kubernetes
     digest: 264691aadf2a30c41a179348595fcabd2de27cf7364620bd8edacc2b95dfefa8
     name: psc-autoscaler
@@ -2097,7 +2119,7 @@ entries:
     version: v1.0.28
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.315271186Z"
+    created: "2025-12-19T14:58:28.739713896Z"
     description: A Helm chart for Kubernetes
     digest: 5bb24dbf4268398feb331839acd901d165909193fe6044cdd954fa74c5c32a2c
     name: psc-autoscaler
@@ -2107,7 +2129,7 @@ entries:
     version: v1.0.27
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.314497041Z"
+    created: "2025-12-19T14:58:28.738793079Z"
     description: A Helm chart for Kubernetes
     digest: fc08a1baefe549e5d8f0ce0a9b08e08d1d4304789a4a64413451faddf81d3754
     name: psc-autoscaler
@@ -2117,7 +2139,7 @@ entries:
     version: v1.0.26
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.31368741Z"
+    created: "2025-12-19T14:58:28.737266364Z"
     description: A Helm chart for Kubernetes
     digest: cb046028ed2451515c69eeff83da9903348a7c06057c63f67f7f1280ff612a74
     name: psc-autoscaler
@@ -2127,7 +2149,7 @@ entries:
     version: v1.0.25
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.312437528Z"
+    created: "2025-12-19T14:58:28.735661602Z"
     description: A Helm chart for Kubernetes
     digest: b1a784070d3f53f8f37c6d72612ab1e857ec5dfed1698fafc5a88e164b103061
     name: psc-autoscaler
@@ -2137,7 +2159,7 @@ entries:
     version: v1.0.24
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.310888109Z"
+    created: "2025-12-19T14:58:28.734937763Z"
     description: A Helm chart for Kubernetes
     digest: 9b8e30943a930f303957d1ec4a48acfdda3c8c0d7cc526c25d8b11c6f66bf0e1
     name: psc-autoscaler
@@ -2147,7 +2169,7 @@ entries:
     version: v1.0.23
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.309998346Z"
+    created: "2025-12-19T14:58:28.734199797Z"
     description: A Helm chart for Kubernetes
     digest: 162b2778a1e28ebfcd0a23d4d2da8d3fa2ac4bd2ad4619b883f81f129d5f9af4
     name: psc-autoscaler
@@ -2157,7 +2179,7 @@ entries:
     version: v1.0.22
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.309289374Z"
+    created: "2025-12-19T14:58:28.733495935Z"
     description: A Helm chart for Kubernetes
     digest: a32155337d530038cd56d3223411000bc7430184ecce1b7978f447605f16b474
     name: psc-autoscaler
@@ -2167,7 +2189,7 @@ entries:
     version: v1.0.21
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.308539936Z"
+    created: "2025-12-19T14:58:28.732800128Z"
     description: A Helm chart for Kubernetes
     digest: 1f4042045ced1b4135432b190370bc93a88db710ce2b3170d40951429423a557
     name: psc-autoscaler
@@ -2177,7 +2199,7 @@ entries:
     version: v1.0.20
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.307111841Z"
+    created: "2025-12-19T14:58:28.730510572Z"
     description: A Helm chart for Kubernetes
     digest: dbb72f56625f198274a81a5c905b20429164899def6a166a29c3abef6f07378f
     name: psc-autoscaler
@@ -2187,7 +2209,7 @@ entries:
     version: v1.0.19
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.305944337Z"
+    created: "2025-12-19T14:58:28.729094019Z"
     description: A Helm chart for Kubernetes
     digest: 05a8b8508c70ce02b53454a87153e814d5eae57bfcdd054a50ad35c03cd6a5b7
     name: psc-autoscaler
@@ -2197,7 +2219,7 @@ entries:
     version: v1.0.18
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.304275601Z"
+    created: "2025-12-19T14:58:28.728394515Z"
     description: A Helm chart for Kubernetes
     digest: 7b90c20fa911b8b07405b96c31a27c81941244f1e5cc44f063529ed59064acdf
     name: psc-autoscaler
@@ -2207,7 +2229,7 @@ entries:
     version: v1.0.17
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.303358708Z"
+    created: "2025-12-19T14:58:28.727689952Z"
     description: A Helm chart for Kubernetes
     digest: c1f48b663f286b57244f76f02403480b703865cd0c166e3d00e75f8532c2d55d
     name: psc-autoscaler
@@ -2217,7 +2239,7 @@ entries:
     version: v1.0.16
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.30263121Z"
+    created: "2025-12-19T14:58:28.72696489Z"
     description: A Helm chart for Kubernetes
     digest: 5725eda0b41d269e370e7628a165e4b5bf5b6a29b0fe9da6e7a9e3c31cc7658c
     name: psc-autoscaler
@@ -2227,7 +2249,7 @@ entries:
     version: v1.0.15
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.301952445Z"
+    created: "2025-12-19T14:58:28.726243666Z"
     description: A Helm chart for Kubernetes
     digest: 2c1803d9e46fffc418e40f8d199ddfa67d951fd2b89c100f4a0883ef6fe79495
     name: psc-autoscaler
@@ -2237,7 +2259,7 @@ entries:
     version: v1.0.14
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.301270894Z"
+    created: "2025-12-19T14:58:28.725472619Z"
     description: A Helm chart for Kubernetes
     digest: 7944ddcff322e24a9e7a8f74ecbe8e86fad75a151d9ec8963d92384a7800f127
     name: psc-autoscaler
@@ -2247,7 +2269,7 @@ entries:
     version: v1.0.13
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.300557583Z"
+    created: "2025-12-19T14:58:28.72395418Z"
     description: A Helm chart for Kubernetes
     digest: 517d33cc2a5eaf273e9473763cc2224e9ffb9ff8269fbdf15b0b148f524f5b97
     name: psc-autoscaler
@@ -2257,7 +2279,7 @@ entries:
     version: v1.0.12
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.299888946Z"
+    created: "2025-12-19T14:58:28.722564417Z"
     description: A Helm chart for Kubernetes
     digest: 4b6c01bac4b0514eb64377d2e39a73dde37fb2a11a84143e117851c565262152
     name: psc-autoscaler
@@ -2267,7 +2289,7 @@ entries:
     version: v1.0.11
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.298479718Z"
+    created: "2025-12-19T14:58:28.721920196Z"
     description: A Helm chart for Kubernetes
     digest: aa5d6013056233373ae0c31543ba59453e0f2e891f2f0c8bc328b371868f5fe0
     name: psc-autoscaler
@@ -2277,7 +2299,7 @@ entries:
     version: v1.0.10
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.326769304Z"
+    created: "2025-12-19T14:58:28.750098026Z"
     description: A Helm chart for Kubernetes
     digest: 4cb3aa722b6a6d50caa2a6b9227999d44190e676f8bed60c062f15beb5f6805e
     name: psc-autoscaler
@@ -2287,7 +2309,7 @@ entries:
     version: v1.0.9
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.325325853Z"
+    created: "2025-12-19T14:58:28.748906803Z"
     description: A Helm chart for Kubernetes
     digest: fe437fc6e1649109d809a2b69a0078aa0e0cbbc74cfba09d620bc94c662c3000
     name: psc-autoscaler
@@ -2297,7 +2319,7 @@ entries:
     version: v1.0.8
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.323954834Z"
+    created: "2025-12-19T14:58:28.748269945Z"
     description: A Helm chart for Kubernetes
     digest: d69371536fc1b656add8dd97d2d6e2a0265028bac6db710e79cbfb1a15cbb29c
     name: psc-autoscaler
@@ -2307,7 +2329,7 @@ entries:
     version: v1.0.7
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.323329398Z"
+    created: "2025-12-19T14:58:28.74763913Z"
     description: A Helm chart for Kubernetes
     digest: 2559f64ce6970220acbfe310e81292c84b6b52ba4624dca807d7f24874efea67
     name: psc-autoscaler
@@ -2317,7 +2339,7 @@ entries:
     version: v1.0.6
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.322709914Z"
+    created: "2025-12-19T14:58:28.747058788Z"
     description: A Helm chart for Kubernetes
     digest: e9317d4de584fe057710835f04c8418607ac335582e6a468611d0fe9a5bf5d3b
     name: psc-autoscaler
@@ -2327,7 +2349,7 @@ entries:
     version: v1.0.5
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.322101791Z"
+    created: "2025-12-19T14:58:28.746446497Z"
     description: A Helm chart for Kubernetes
     digest: fffa319b57133902315c730dd7fdb7f5773cba5b43ea33cfcb7afb2950b7a3ce
     name: psc-autoscaler
@@ -2337,7 +2359,7 @@ entries:
     version: v1.0.4
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.318361692Z"
+    created: "2025-12-19T14:58:28.741957148Z"
     description: A Helm chart for Kubernetes
     digest: 5274950178ecb5d7631b045fb02f0a611b1eeaef82f9106f888b0970a6fc4ae3
     name: psc-autoscaler
@@ -2347,7 +2369,7 @@ entries:
     version: v1.0.3
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.307844769Z"
+    created: "2025-12-19T14:58:28.732067051Z"
     description: A Helm chart for Kubernetes
     digest: 715ed3c074a43922c1952038d013b300289e6fe240bf584291127004c236aa4d
     name: psc-autoscaler
@@ -2357,7 +2379,7 @@ entries:
     version: v1.0.2
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.296998802Z"
+    created: "2025-12-19T14:58:28.721236061Z"
     description: A Helm chart for Kubernetes
     digest: 342071f3807a580080106296de579f1d7047608db3190b521a6e75ae88fec108
     name: psc-autoscaler
@@ -2367,7 +2389,7 @@ entries:
     version: v1.0.1
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.29629537Z"
+    created: "2025-12-19T14:58:28.720546365Z"
     description: A Helm chart for Kubernetes
     digest: 66f92ae80a1adb2f0c079bf76630c20e3f89084860f0ace100d7fd2e673ea37f
     name: psc-autoscaler
@@ -2377,7 +2399,7 @@ entries:
     version: v1.0.0
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.29340625Z"
+    created: "2025-12-19T14:58:28.715513463Z"
     description: A Helm chart for Kubernetes
     digest: d9abde6918819e8708f62ed7b0ee67cbac2eea1488514a01a1e8d898f9d645dd
     name: psc-autoscaler
@@ -2387,7 +2409,7 @@ entries:
     version: v0.1.30
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.291917705Z"
+    created: "2025-12-19T14:58:28.714662918Z"
     description: A Helm chart for Kubernetes
     digest: 2919114805017387b9d4fb14c639b1c2b76c8354fa924682335a2e9ee5dcdbbe
     name: psc-autoscaler
@@ -2397,7 +2419,7 @@ entries:
     version: v0.1.29
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.290820573Z"
+    created: "2025-12-19T14:58:28.71419739Z"
     description: A Helm chart for Kubernetes
     digest: 455b391b73107275a848227f10ebbaffd8783123cd64492b639b3c41720d8acc
     name: psc-autoscaler
@@ -2407,7 +2429,7 @@ entries:
     version: v0.1.28
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.290021709Z"
+    created: "2025-12-19T14:58:28.713683282Z"
     description: A Helm chart for Kubernetes
     digest: f0f6372b0e46a7852c4d5af71ae7b6c03f702bfc8aac77e82119a110607921b7
     name: psc-autoscaler
@@ -2417,7 +2439,7 @@ entries:
     version: v0.1.27
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.289537279Z"
+    created: "2025-12-19T14:58:28.713211122Z"
     description: A Helm chart for Kubernetes
     digest: 2f2e27f028f57a93373d99a487eeb0f3594c944305060d6fc6b8157354d60f75
     name: psc-autoscaler
@@ -2427,7 +2449,7 @@ entries:
     version: v0.1.26
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.289067195Z"
+    created: "2025-12-19T14:58:28.712639718Z"
     description: A Helm chart for Kubernetes
     digest: 19f49428a7c0b745df9e9b6d67e71af2aa1727e9ecbfd96a905f4daf051b8986
     name: psc-autoscaler
@@ -2437,7 +2459,7 @@ entries:
     version: v0.1.25
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.288559772Z"
+    created: "2025-12-19T14:58:28.712171676Z"
     description: A Helm chart for Kubernetes
     digest: 199365e0bddcfc911975fa080c9732ce9a97a5599c8fb47aa51ff848c0f72d79
     name: psc-autoscaler
@@ -2447,7 +2469,7 @@ entries:
     version: v0.1.24
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.288095319Z"
+    created: "2025-12-19T14:58:28.711692913Z"
     description: A Helm chart for Kubernetes
     digest: e2d7168cca342a967a8343292f7f1c92f8569ab4c9a56b199f07911ea81f5d7b
     name: psc-autoscaler
@@ -2457,7 +2479,7 @@ entries:
     version: v0.1.23
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.287521911Z"
+    created: "2025-12-19T14:58:28.711228618Z"
     description: A Helm chart for Kubernetes
     digest: d54a53c3a2255d4fe8a6f1bd48857b5415d579a2b860aff78f32c30f52a694f3
     name: psc-autoscaler
@@ -2467,7 +2489,7 @@ entries:
     version: v0.1.22
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.287081914Z"
+    created: "2025-12-19T14:58:28.710793898Z"
     description: A Helm chart for Kubernetes
     digest: 62aeb363a8f600150f994446d9929f3f84597aadf0bf72ca86da3877234f1203
     name: psc-autoscaler
@@ -2477,7 +2499,7 @@ entries:
     version: v0.1.21
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.286631377Z"
+    created: "2025-12-19T14:58:28.709815742Z"
     description: A Helm chart for Kubernetes
     digest: 7ab7a1a41f076ae712c8ecb167aefdced94d075b0d747c3bdec9ef6b2cd3339d
     name: psc-autoscaler
@@ -2487,7 +2509,7 @@ entries:
     version: v0.1.20
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.285836263Z"
+    created: "2025-12-19T14:58:28.707950597Z"
     description: A Helm chart for Kubernetes
     digest: 3bcc22de1102da09469c2be59f543c2ad0b1a93b30b19f1ede3f3583314858ea
     name: psc-autoscaler
@@ -2497,7 +2519,7 @@ entries:
     version: v0.1.19
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.28540384Z"
+    created: "2025-12-19T14:58:28.707553156Z"
     description: A Helm chart for Kubernetes
     digest: 953133fa56857b762c2f3f464c1a06d6b0fc92a7a1378ab84080455396b70acc
     name: psc-autoscaler
@@ -2507,7 +2529,7 @@ entries:
     version: v0.1.18
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.284923417Z"
+    created: "2025-12-19T14:58:28.707165995Z"
     description: A Helm chart for Kubernetes
     digest: 6493274c8a9f7a9e8a1eff3fc4e6677c21a6a0ec3e2841ec469ff9a06c4a0979
     name: psc-autoscaler
@@ -2517,7 +2539,7 @@ entries:
     version: v0.1.17
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.283705381Z"
+    created: "2025-12-19T14:58:28.706689266Z"
     description: A Helm chart for Kubernetes
     digest: e06242741ee9b791cca2f0b03504c8ae670797a0be857b33e82b06c6e115c69c
     name: psc-autoscaler
@@ -2527,7 +2549,7 @@ entries:
     version: v0.1.16
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.282822589Z"
+    created: "2025-12-19T14:58:28.706320248Z"
     description: A Helm chart for Kubernetes
     digest: 578cf30b07a1ca6f9597025d21cafa1b0c7f9ea2ea18c989a6e24761a81f90b9
     name: psc-autoscaler
@@ -2537,7 +2559,7 @@ entries:
     version: v0.1.15
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.282268528Z"
+    created: "2025-12-19T14:58:28.70595089Z"
     description: A Helm chart for Kubernetes
     digest: dac29e567fe4dac48795df45bcc7e5ea578e35ea46a6709dda366a59bc16fbcf
     name: psc-autoscaler
@@ -2547,7 +2569,7 @@ entries:
     version: v0.1.14
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.281900686Z"
+    created: "2025-12-19T14:58:28.705562295Z"
     description: A Helm chart for Kubernetes
     digest: 7499dadf2bc5c98629bbaf7ba336f6e9d82b1ccb13892e093298fbe15dcb3e3b
     name: psc-autoscaler
@@ -2557,7 +2579,7 @@ entries:
     version: v0.1.13
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.281476048Z"
+    created: "2025-12-19T14:58:28.705198247Z"
     description: A Helm chart for Kubernetes
     digest: 1f1f95e06345feec5b57292a2a2f940c96e1dff3026f475c720c3a779d48acb8
     name: psc-autoscaler
@@ -2567,7 +2589,7 @@ entries:
     version: v0.1.12
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.281089261Z"
+    created: "2025-12-19T14:58:28.704827616Z"
     description: A Helm chart for Kubernetes
     digest: 0d973811f7f8e65f5a9a9706f3d5ca9660bad84176640cc995881f389ecfc060
     name: psc-autoscaler
@@ -2577,7 +2599,7 @@ entries:
     version: v0.1.11
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.280698547Z"
+    created: "2025-12-19T14:58:28.704409125Z"
     description: A Helm chart for Kubernetes
     digest: fe16c6a97c183a237bcd868c47990c53cf42b63c1f71c54bb623c1494fedaa69
     name: psc-autoscaler
@@ -2587,7 +2609,7 @@ entries:
     version: v0.1.10
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.295625772Z"
+    created: "2025-12-19T14:58:28.719727749Z"
     description: A Helm chart for Kubernetes
     digest: d8f76e0df35b31bbe2f86c5b2c5a10352b3534830f1dcda56df3297a52b3ada9
     name: psc-autoscaler
@@ -2597,7 +2619,7 @@ entries:
     version: v0.1.9
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.295267679Z"
+    created: "2025-12-19T14:58:28.719076746Z"
     description: A Helm chart for Kubernetes
     digest: f3692d84b193ea0ec7f54d2ad57d1336667de8e70f5d15233dc94741e0b5013b
     name: psc-autoscaler
@@ -2607,7 +2629,7 @@ entries:
     version: v0.1.8
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.294907051Z"
+    created: "2025-12-19T14:58:28.718603494Z"
     description: A Helm chart for Kubernetes
     digest: b7dc285917d83b91f57e05018a69dadfd86b259002a16a078b0a9bb13f6b14b2
     name: psc-autoscaler
@@ -2617,7 +2639,7 @@ entries:
     version: v0.1.7
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.294524412Z"
+    created: "2025-12-19T14:58:28.718207255Z"
     description: A Helm chart for Kubernetes
     digest: 0944c414bc3da5db8a1ce8c4ced1dba6abc1efb7f09670faea67fd63bb0e237e
     name: psc-autoscaler
@@ -2627,7 +2649,7 @@ entries:
     version: v0.1.6
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.294158153Z"
+    created: "2025-12-19T14:58:28.71712535Z"
     description: A Helm chart for Kubernetes
     digest: c08fd6c4edcadc32ad91d806d17441b2e5d1054800bdd434a633f929e0c6a58b
     name: psc-autoscaler
@@ -2637,7 +2659,7 @@ entries:
     version: v0.1.5
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.293792206Z"
+    created: "2025-12-19T14:58:28.71630478Z"
     description: A Helm chart for Kubernetes
     digest: c3cc49bdc58d7af30319432eb3ffc65a08b2a694765afa4af3bfea6845a71f90
     name: psc-autoscaler
@@ -2647,7 +2669,7 @@ entries:
     version: v0.1.4
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.292909136Z"
+    created: "2025-12-19T14:58:28.715047294Z"
     description: A Helm chart for Kubernetes
     digest: 5d628be2446876ea5a071078fb4297fe6936ee212595f8d938269760550971db
     name: psc-autoscaler
@@ -2657,7 +2679,7 @@ entries:
     version: v0.1.3
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.286237637Z"
+    created: "2025-12-19T14:58:28.70887063Z"
     description: A Helm chart for Kubernetes
     digest: ecff71d6d2f4b647f4f411ec0192ece4ac68578379015b3ac0adb79ea112a11d
     name: psc-autoscaler
@@ -2667,7 +2689,7 @@ entries:
     version: v0.1.2
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.280305779Z"
+    created: "2025-12-19T14:58:28.704036321Z"
     description: A Helm chart for Kubernetes
     digest: 38968698f74c40159d1c69fcb01db1ec91fc9a440f03024e2e6fb7d6412656b5
     name: psc-autoscaler
@@ -2677,7 +2699,7 @@ entries:
     version: v0.1.1
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.279947085Z"
+    created: "2025-12-19T14:58:28.703625375Z"
     description: A Helm chart for Kubernetes
     digest: 60b6f2ee8a23a3a522e34213af72a40ee915d3287b18fcc9ac07c5e1405cb62b
     name: psc-autoscaler
@@ -2687,7 +2709,7 @@ entries:
     version: v0.1.0
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.277702015Z"
+    created: "2025-12-19T14:58:28.699798741Z"
     description: A Helm chart for Kubernetes
     digest: 6718de6e5fe9673cd2ea7a14839965fdecd2af7213ba7718ea06d3955ed48ace
     name: psc-autoscaler
@@ -2697,7 +2719,7 @@ entries:
     version: v0.0.14
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.276647203Z"
+    created: "2025-12-19T14:58:28.699400439Z"
     description: A Helm chart for Kubernetes
     digest: 01fb78429184cb5e54d213782737b32154952c67e2418228e2489871eadf3d4f
     name: psc-autoscaler
@@ -2707,7 +2729,7 @@ entries:
     version: v0.0.13
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.275870473Z"
+    created: "2025-12-19T14:58:28.699046088Z"
     description: A Helm chart for Kubernetes
     digest: 7fb8245d50459a76b155a0487b18faf2d610e0dd4d8ba5c79efddfe52bcc1647
     name: psc-autoscaler
@@ -2717,7 +2739,7 @@ entries:
     version: v0.0.12
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.275061746Z"
+    created: "2025-12-19T14:58:28.698663996Z"
     description: A Helm chart for Kubernetes
     digest: f96a57b374c799ab4ea267a6248548e9e912066b77f29af24b615f32b9eb24e8
     name: psc-autoscaler
@@ -2727,7 +2749,7 @@ entries:
     version: v0.0.11
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.27467021Z"
+    created: "2025-12-19T14:58:28.698292463Z"
     description: A Helm chart for Kubernetes
     digest: 247b602675078db3cfcbf84ec50d12b2c39fcdbe25d3df47c9328bf00f2f4044
     name: psc-autoscaler
@@ -2737,7 +2759,7 @@ entries:
     version: v0.0.10
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.279565698Z"
+    created: "2025-12-19T14:58:28.703211333Z"
     description: A Helm chart for Kubernetes
     digest: 50ef4de8db1b4b37922231494b11e62d84f9880fe5042b90faf1129bb93ff1db
     name: psc-autoscaler
@@ -2747,7 +2769,7 @@ entries:
     version: v0.0.9
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.279218886Z"
+    created: "2025-12-19T14:58:28.702079481Z"
     description: A Helm chart for Kubernetes
     digest: cee0f64a217798651b1a9e2ba9fdd26f004f55c6d06ed4975869457f56875199
     name: psc-autoscaler
@@ -2757,7 +2779,7 @@ entries:
     version: v0.0.8
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.278865512Z"
+    created: "2025-12-19T14:58:28.701238122Z"
     description: A Helm chart for Kubernetes
     digest: c52cac3a3f329ead0530ab581cb45c19f8fc91f4bbb087b7fb85a16af1cb232c
     name: psc-autoscaler
@@ -2767,7 +2789,7 @@ entries:
     version: v0.0.7
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.278483694Z"
+    created: "2025-12-19T14:58:28.700535795Z"
     description: A Helm chart for Kubernetes
     digest: 15ff19160d7d152bc615386dc560d6539f37f895469e1c5a7159e7ef424166df
     name: psc-autoscaler
@@ -2777,7 +2799,7 @@ entries:
     version: v0.0.6
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-12-17T09:55:15.278125211Z"
+    created: "2025-12-19T14:58:28.700167869Z"
     description: A Helm chart for Kubernetes
     digest: ba7529b1be84c616181e07606820de22023a989aa90533b6d70648378575b07a
     name: psc-autoscaler
@@ -2788,7 +2810,7 @@ entries:
   psc-prom-exporter:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.329834965Z"
+    created: "2025-12-19T14:58:28.754170405Z"
     description: PerfectScale Prometheus/DataDog Metrics Exporter
     digest: 85d1dec2e4bf5863112f501fd63abbf06542d5a198b334f471959184cb2f1628
     name: psc-prom-exporter
@@ -2798,7 +2820,7 @@ entries:
     version: v0.2.0
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.32903945Z"
+    created: "2025-12-19T14:58:28.75342738Z"
     description: PerfectScale Prometheus/DataDog Metrics Exporter
     digest: daa4cbb23411d13c361b11a302b1e684214f0dfc5ff83a5da83431cc105720a7
     name: psc-prom-exporter
@@ -2808,7 +2830,7 @@ entries:
     version: v0.1.1
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.328280654Z"
+    created: "2025-12-19T14:58:28.752631075Z"
     description: PerfectScale Prometheus/DataDog Metrics Exporter
     digest: cf85aa5d2dd7a7301f8f6d1a8e9195917fda8a07024a65641394bce8447762a2
     name: psc-prom-exporter
@@ -2818,7 +2840,7 @@ entries:
     version: v0.1.0
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-17T09:55:15.327470261Z"
+    created: "2025-12-19T14:58:28.751830543Z"
     description: PerfectScale Prometheus/DataDog Metrics Exporter
     digest: 03f92ffe25bf10d648728cdd21e8e40f8abd531f86bbdd21f70579be642fec53
     name: psc-prom-exporter
@@ -2826,4 +2848,4 @@ entries:
     urls:
     - psc-prom-exporter-v0.0.1-alpha1.tgz
     version: v0.0.1-alpha1
-generated: "2025-12-17T09:55:15.020281123Z"
+generated: "2025-12-19T14:58:28.434168511Z"
