@@ -153,6 +153,10 @@ spec:
             value: "{{ include "helm.exporter.remoteLogBatchSize" . }}"
           - name: REMOTE_LOG_BATCH_INTERVAL
             value: "{{ include "helm.exporter.remoteLogBatchInterval" . }}"
+          {{- if (.Values.settings).insecureSkipVerify }}
+          - name: INSECURE_SKIP_VERIFY
+            value: "{{ .Values.settings.insecureSkipVerify }}"
+          {{- end }}
           {{- if .Values.settings.httpProxyEnabled | default false }}
           - name: HTTP_PROXY
             value: "{{ .Values.settings.httpProxy }}"
