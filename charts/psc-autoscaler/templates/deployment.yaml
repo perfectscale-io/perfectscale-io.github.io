@@ -37,7 +37,7 @@ spec:
         {{- include "psc-autoscaler.selectorLabels" . | nindent 8 }}
         {{- if .Values.podLabels }}
         {{- toYaml .Values.podLabels | nindent 8 }}
-        {{- end }}        
+        {{- end }}
     spec:
       {{- if (.Values.hostNetwork).enabled }}
       hostNetwork: true
@@ -107,6 +107,10 @@ spec:
               value: "{{ .Values.settings.excludedNamespaces | join "," }}"
             - name: KUBE_API_QPS
               value: "{{ .Values.settings.kubeApiQPS | default "20" }}"
+            {{- if (.Values.settings).insecureSkipVerify }}
+            - name: INSECURE_SKIP_VERIFY
+              value: "{{ .Values.settings.insecureSkipVerify }}"
+            {{- end }}
           command:
             - "./app"
             - "serve"
@@ -252,6 +256,10 @@ spec:
               value: "{{ .Values.settings.kubeApiQPS | default "30" }}"
             - name: "AUTOMATED_REVISIONS_RETENTION_HOURS"
               value: "{{ .Values.settings.automatedRevisionsRetentionHours }}"
+            {{- if (.Values.settings).insecureSkipVerify }}
+            - name: INSECURE_SKIP_VERIFY
+              value: "{{ .Values.settings.insecureSkipVerify }}"
+            {{- end }}
           command:
             - "./app"
             - "sync"
@@ -377,6 +385,10 @@ spec:
               value: "{{ .Values.settings.excludedNamespaces | join "," }}"
             - name: KUBE_API_QPS
               value: "{{ .Values.settings.kubeApiQPS | default "20" }}"
+            {{- if (.Values.settings).insecureSkipVerify }}
+            - name: INSECURE_SKIP_VERIFY
+              value: "{{ .Values.settings.insecureSkipVerify }}"
+            {{- end }}
           command:
             - "./app"
             - "evict"
