@@ -4,6 +4,9 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: {{ include "helm.fullname" . }}
+  # Namespace logic: if ksmAddress is present, use scrapeNamespace (or default to Release.Namespace);
+  # otherwise, use Release.Namespace as default
+  namespace: {{ if .Values.settings.ksmAddress }}{{ .Values.settings.scraper.scrapeNamespace | default .Release.Namespace }}{{ else }}{{ .Release.Namespace }}{{ end }}
   labels:
     {{- include "helm.labels" . | nindent 4 }}
     {{- range $key, $value := .Values.serviceMonitor.labels }}
