@@ -6,6 +6,7 @@ apiVersion: scheduling.k8s.io/v1
 kind: PriorityClass
 metadata:
   name: {{ $priorityClassName }}
+  namespace: {{ .Release.Namespace }}
 value: {{ .Values.priorityClass.value | default "1000000" }}
 preemptionPolicy: {{ .Values.priorityClass.preemptionpolicy | default "PreemptLowerPriority" }}
 globalDefault: false
