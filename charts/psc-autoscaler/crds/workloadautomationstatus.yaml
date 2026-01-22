@@ -252,6 +252,8 @@ spec:
                               waste:
                                 type: number
                                 format: double
+                              initsObserved:
+                                type: boolean
                               indicators:
                                 type: object
                                 x-kubernetes-preserve-unknown-fields: true
@@ -495,6 +497,8 @@ spec:
                               waste:
                                 type: number
                                 format: double
+                              initsObserved:
+                                type: boolean
                               indicators:
                                 type: object
                                 x-kubernetes-preserve-unknown-fields: true
