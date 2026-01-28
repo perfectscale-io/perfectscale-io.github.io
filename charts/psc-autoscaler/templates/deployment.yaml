@@ -4,6 +4,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "psc-autoscaler.fullname" . }}-serve
+  namespace: {{ .Release.Namespace }}
   labels:
     {{- include "psc-autoscaler.labels" . | nindent 4 }}
     {{- if .Values.additionalLabels }}
@@ -160,6 +161,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "psc-autoscaler.fullname" . }}-sync
+  namespace: {{ .Release.Namespace }}
   labels:
     {{- include "psc-autoscaler.labels" . | nindent 4 }}
     {{- if .Values.additionalLabels }}
@@ -287,6 +289,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "psc-autoscaler.fullname" . }}-evict
+  namespace: {{ .Release.Namespace }}
   labels:
     {{- include "psc-autoscaler.labels" . | nindent 4 }}
     {{- if .Values.additionalLabels }}
