@@ -4,6 +4,7 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: {{ include "psc-autoscaler.fullname" . }}-int-tests-mutation-check
+  namespace: {{ .Release.Namespace }}
   labels: {{- include "psc-autoscaler.labels" . | nindent 4 }}
     {{- if .Values.additionalLabels }}
     {{- toYaml .Values.additionalLabels | nindent 4 }}

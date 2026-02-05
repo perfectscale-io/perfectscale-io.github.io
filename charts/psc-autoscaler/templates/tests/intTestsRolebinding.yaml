@@ -1,8 +1,9 @@
-{{- if .Values.rbac.enabled -}}
+{{- if .Values.integrationTests.rbac.enabled -}}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: {{ include "psc-autoscaler.fullname" . }}-int-tests
+  namespace: {{ .Release.Namespace }}
   labels: {{- include "psc-autoscaler.labels" . | nindent 4 }}
     {{- if .Values.additionalLabels }}
     {{- toYaml .Values.additionalLabels | nindent 4 }}
