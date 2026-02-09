@@ -1,0 +1,104 @@
+# Cluster labels configuration example
+# Configure cluster-scoped labels for classification and governance
+#
+# Setup Instructions:
+# 1. Identify the labels you want to apply to your cluster for classification
+# 2. Common use cases: environment, team ownership, cost center, business unit
+# 3. Labels are sent to PerfectScale for cluster organization and filtering
+#
+# Validation Rules:
+# - Keys and values must be 1-255 characters
+# - Keys and values must match pattern: ^[a-zA-Z0-9.\-_/]+$
+#   (alphanumeric, dots, hyphens, underscores, and slashes only)
+# - No spaces or special characters like @, :, =, #, etc.
+# - Empty keys or values are not allowed
+#
+# Common Label Examples:
+# - env: production, staging, development
+# - team: platform, backend, frontend
+# - cost-center: engineering, marketing, sales
+# - business-unit: core, growth, enterprise
+# - region: us-east, eu-west, ap-south
+#
+apiVersion: perfectscale.io/v1
+kind: ClusterSettings
+metadata:
+  name: cluster-settings-main
+  namespace: perfectscale
+spec:
+  clusterLabels:
+    # Environment classification
+    env: production
+
+    # Team ownership
+    team: platform
+
+    # Cost allocation
+    cost-center: engineering
+
+    # Business unit
+    business-unit: core
+
+    # Geographic region (for multi-cluster setups)
+    region: us-east-1
+
+    # Cluster purpose
+    purpose: customer-facing
+
+---
+# Example with Kubernetes-style labels
+apiVersion: perfectscale.io/v1
+kind: ClusterSettings
+metadata:
+  name: cluster-settings-k8s-style
+  namespace: perfectscale
+spec:
+  clusterLabels:
+    # Kubernetes-style hierarchical labels
+    app.kubernetes.io/managed-by: terraform
+    app.kubernetes.io/part-of: main-platform
+
+    # Cloud provider labels
+    cloud.provider/name: aws
+    cloud.provider/region: us-east-1
+    cloud.provider/account: production
+
+    # Organization labels
+    org.company.io/team: platform-engineering
+    org.company.io/cost-center: CC-1234
+
+---
+# Example combining cluster labels with profiles
+apiVersion: perfectscale.io/v1
+kind: ClusterSettings
+metadata:
+  name: cluster-settings-combined
+  namespace: perfectscale
+spec:
+  # Cluster classification labels
+  clusterLabels:
+    env: production
+    team: platform
+    cost-center: engineering
+
+  # Profile configurations
+  profiles:
+    # Custom pricing for this cluster
+    pricing:
+      - type: custom
+        name: production-pricing
+        assigned: true
+        value:
+          nodeTypes:
+            - instanceType: c5.large
+              pricing:
+                cpuCoreHourPrice: 0.085
+                memGBHourPrice: 0.0095
+
+    # Resiliency alerts
+    resiliency_alerts:
+      - name: production-alerts
+        assigned: true
+        value:
+          min_risk_level: high
+          ignore_namespace: "^(kube-system|kube-public)$"

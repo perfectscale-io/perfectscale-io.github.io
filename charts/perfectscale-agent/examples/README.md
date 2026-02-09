@@ -62,6 +62,7 @@ All other profiles are fully supported via CRD.
 - **`clustersettings-podfit-labels.yaml`** - Configure PodFit label visibility
 - **`clustersettings-customization.yaml`** - Configure workload labels
 - **`clustersettings-resiliency-alerts.yaml`** - Resiliency alerts configuration
+- **`clustersettings-cluster-labels.yaml`** - Configure cluster-scoped labels for classification
 
 ### Pricing Examples
 - **`clustersettings-aws-cur.yaml`** - AWS Cost and Usage Report integration
@@ -76,6 +77,35 @@ All other profiles are fully supported via CRD.
 - **`clustersettings-datadog.yaml`** - Datadog monitoring integration
 - **`clustersettings-observability.yaml`** - Custom observability platform
 - **`clustersettings-integrations.yaml`** - Multiple integrations (Teams + Jira + Datadog)
+
+## Cluster Labels
+
+Cluster labels allow you to tag your cluster with metadata for classification, governance, and organization purposes. Labels are defined at the `spec` level (not inside `profiles`).
+
+```yaml
+spec:
+  clusterLabels:
+    env: production
+    team: platform
+    cost-center: engineering
+```
+
+### Validation Rules
+- Keys and values must be **1-255 characters**
+- Keys and values must match pattern: `^[a-zA-Z0-9.\-_/]+$`
+  - Allowed: alphanumeric, dots (`.`), hyphens (`-`), underscores (`_`), slashes (`/`)
+  - Not allowed: spaces, `@`, `:`, `=`, `#`, or other special characters
+- Empty keys or values are not allowed
+
+### Common Use Cases
+- **Environment**: `env: production`, `env: staging`, `env: development`
+- **Team ownership**: `team: platform`, `team: backend`
+- **Cost allocation**: `cost-center: engineering`, `cost-center: CC-1234`
+- **Business unit**: `business-unit: core`, `business-unit: growth`
+- **Geographic region**: `region: us-east-1`, `region: eu-west-1`
+- **Kubernetes-style labels**: `app.kubernetes.io/managed-by: terraform`
+
+See `clustersettings-cluster-labels.yaml` for complete examples.
 
 ## Profile Types
 

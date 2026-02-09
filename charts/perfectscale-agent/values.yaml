@@ -3,7 +3,7 @@ revisionHistoryLimit: 10
 image:
   repository: public.ecr.aws/perfectscale-io/psc-exporter
   pullPolicy: Always
-  tag: "v1.0.89"
+  tag: "v1.0.90"
 initContainer:
   image:
     repository: public.ecr.aws/perfectscale-io/alpine
@@ -60,6 +60,7 @@ settings:
     enabled: false
     numWorkers: "30"
     port: 8080
+    accessType: "direct" # supported values: direct, proxy, ""
   deployWindowsExporter: false
   # windowsExporterNamespace: "perfectscale"
   # windowsExporterPort: "9182"

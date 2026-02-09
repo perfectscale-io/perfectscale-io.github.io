@@ -203,6 +203,8 @@ spec:
             value: "{{ .Values.settings.corootNodeAgent.port | default 8080 }}"
           - name: COROOT_NODE_AGENT_NUM_WORKERS
             value: "{{ .Values.settings.corootNodeAgent.numWorkers | default "30" }}"
+          - name: COROOT_NODE_AGENT_ACCESS_TYPE
+            value: "{{ .Values.settings.corootNodeAgent.accessType | default "direct" }}"
           - name: SNAPSHOT_INTERVAL_CYCLES
             value: "{{ .Values.settings.snapshotIntervalCycles | default "12" }}"
           ports:
