@@ -56,7 +56,7 @@ config:
 scrapers:
   serviceMonitor:
     # When set true then use a ServiceMonitor to configure scraping
-    ennbled: false
+    enabled: false
     # Set how frequently Prometheus should scrape
     interval: 5m
     # Set path to the metrics
