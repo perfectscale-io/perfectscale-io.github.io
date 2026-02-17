@@ -1,2 +1,22 @@
 Thank you for installing PerfectScale by DoiT.
 - Visit {{ .Values.webAppUrl | default "http://app.perfectscale.io/" }} to use the application.
+
+{{- $settings := .Values.settings | default dict -}}
+{{- $crl := (get $settings "clusterResilienceLevel") | default "" -}}
+{{- $cop := (get $settings "clusterOptimizationPolicy") | default "" -}}
+{{- $optw := (get $settings "optimizationPolicyTimeWindow") | default "" -}}
+
+{{- if or $crl $cop $optw }}
+
+DEPRECATION NOTICE:
+{{- if $crl }}
+- settings.clusterResilienceLevel is deprecated and will be removed in a future release.
+{{- end }}
+{{- if $cop }}
+- settings.clusterOptimizationPolicy is deprecated and will be removed in a future release.
+{{- end }}
+{{- if $optw }}
+- settings.optimizationPolicyTimeWindow is deprecated and will be removed in a future release.
+{{- end }}
+
+{{- end }}

@@ -85,6 +85,8 @@ spec:
             value: "{{ include "helm.exporter.ksmTimeout" . }}"
           - name: CADVISOR_NUM_WORKERS
             value: "{{ .Values.settings.cAdvisorNumWorkers }}"
+          - name: CADVISOR_SCRAPING_MODE
+            value: "{{ .Values.settings.cAdvisorScrapingMode | default "auto" }}"
           - name: PS_URL
             value: "{{ .Values.settings.psUrl }}"
           - name: UPLOAD_POLICY_URL

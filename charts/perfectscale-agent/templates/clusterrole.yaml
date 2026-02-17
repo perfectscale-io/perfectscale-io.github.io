@@ -15,7 +15,9 @@ rules:
       - pods
       - pods/proxy
       - nodes
+      {{- if ne (.Values.settings.cAdvisorScrapingMode | default "auto") "direct" }}
       - nodes/proxy
+      {{- end }}
       - replicationcontrollers
       - persistentvolumeclaims
       - persistentvolumes

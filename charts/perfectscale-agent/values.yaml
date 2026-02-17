@@ -3,7 +3,7 @@ revisionHistoryLimit: 10
 image:
   repository: public.ecr.aws/perfectscale-io/psc-exporter
   pullPolicy: Always
-  tag: "v1.0.90"
+  tag: "v1.0.91"
 initContainer:
   image:
     repository: public.ecr.aws/perfectscale-io/alpine
@@ -29,6 +29,8 @@ settings:
   # Take snapshot every N settings refresh cycles (default: 12 cycles × 10 min = 2 hours)
   snapshotIntervalCycles: "12"
   cAdvisorNumWorkers: "30"
+  # cAdvisorScrapingMode defines the way to communicate with cAdvisor. Options: auto, direct, nodeProxy
+  cAdvisorScrapingMode: "auto"
   k8sClientBurst: "150"
   k8sClientQPS: "100"
   enablePProf: false
@@ -37,10 +39,10 @@ settings:
   containerRegex: ""
   # supported resilience levels: low, medium, high, highest
   # deprecated field since we introduced the clusterOptimizationPolicy
-  clusterResilienceLevel: "medium"
+  clusterResilienceLevel: "" # deprecated
   # supported optimization policies: MaxSavings, Balanced, ExtraHeadroom, MaxHeadroom
-  clusterOptimizationPolicy: ""
-  optimizationPolicyTimeWindow: ""
+  clusterOptimizationPolicy: "" # deprecated
+  optimizationPolicyTimeWindow: "" # deprecated
   clusterName: ""
   collectorNumWorkers: "4"
   #  ksmAddress: "http://kube-state-metrics:8080"

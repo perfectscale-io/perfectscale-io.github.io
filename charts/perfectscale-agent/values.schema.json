@@ -15,6 +15,17 @@
         }
       },
       "required": ["repository", "tag"]
+    },
+    "settings": {
+      "type": "object",
+      "properties": {
+        "cAdvisorScrapingMode": {
+          "type": "string",
+          "enum": ["auto", "direct", "nodeProxy"],
+          "description": "cAdvisor scraping mode: auto (failover), direct (nodes only), nodeProxy (API proxy only)",
+          "default": "auto"
+        }
+      }
     }
   },
   "required": ["image"]
