@@ -1,0 +1,81 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  # name must match the spec fields below, and be in the form: <plural>.<group>
+  name: namespacerecommendationsconfigs.perfectscale.io
+  annotations:
+    description: |
+      NamespaceRecommendationsConfig CRD for namespace-level recommendations overrides.
+
+      VALIDATION RULES:
+      - Only ONE NamespaceRecommendationsConfig resource allowed per namespace
+      - Overrides cluster-wide defaults set by ClusterRecommendationsConfig
+      - Can be overridden at workload level (WorkloadRecommendationsConfig)
+
+      OVERRIDE HIERARCHY (highest to lowest priority):
+        WorkloadRecommendationsConfig > NamespaceRecommendationsConfig > ClusterRecommendationsConfig
+
+      POLICY FIELDS:
+      - workloadPolicy: General optimization policy for the workload
+      - cpuPolicy: CPU-specific optimization policy override
+      - memoryPolicy: Memory-specific optimization policy override
+      - customTimeWindowDays: Number of days of historical data to use for recommendations
+      - memoryRequestEqualsLimit: Whether memory request should equal limit
+
+      EXAMPLES:
+      See helm/examples/ directory for configuration examples
+spec:
+  # Namespaced - one per namespace
+  scope: Namespaced
+  # group name to use for REST API: /apis/<group>/<version>
+  group: perfectscale.io
+  names:
+    # plural name to be used in the URL: /apis/<group>/<version>/<plural>
+    plural: namespacerecommendationsconfigs
+    # singular name to be used as an alias on the CLI and for display
+    singular: namespacerecommendationsconfig
+    # kind is normally the CamelCased singular type. Your resource manifests use this.
+    kind: NamespaceRecommendationsConfig
+    # shortNames allow shorter string to match your resource on the CLI
+    shortNames:
+      - nrc
+  # list of versions supported by this CustomResourceDefinition
+  versions:
+    - name: v1
+      # Each version can be enabled/disabled by Served flag.
+      served: true
+      # One and only one version must be marked as the storage version.
+      storage: true
+      additionalPrinterColumns:
+        - name: WorkloadPolicy
+          type: string
+          jsonPath: .spec.policies.workloadPolicy
+        - name: CustomTimeWindowDays
+          type: integer
+          jsonPath: .spec.policies.customTimeWindowDays
+        - name: Age
+          type: date
+          jsonPath: .metadata.creationTimestamp
+      schema:
+        openAPIV3Schema:
+          type: object
+          x-kubernetes-preserve-unknown-fields: true
+          properties:
+            spec:
+              type: object
+              x-kubernetes-preserve-unknown-fields: true
+              properties:
+                policies:
+                  type: object
+                  x-kubernetes-preserve-unknown-fields: true
+                  properties:
+                    workloadPolicy:
+                      type: string
+                    cpuPolicy:
+                      type: string
+                    memoryPolicy:
+                      type: string
+                    customTimeWindowDays:
+                      type: integer
+                    memoryRequestEqualsLimit:
+                      type: boolean

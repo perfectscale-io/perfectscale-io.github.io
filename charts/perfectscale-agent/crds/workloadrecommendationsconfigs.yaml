@@ -1,0 +1,104 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  # name must match the spec fields below, and be in the form: <plural>.<group>
+  name: workloadrecommendationsconfigs.perfectscale.io
+  annotations:
+    description: |
+      WorkloadRecommendationsConfig CRD for per-workload recommendations overrides.
+
+      VALIDATION RULES:
+      - Each resource targets a specific workload via targetRef (kind + name)
+      - Multiple WorkloadRecommendationsConfig resources can exist in the same namespace (one per workload)
+      - Overrides both namespace-level and cluster-wide defaults
+
+      OVERRIDE HIERARCHY (highest to lowest priority):
+        WorkloadRecommendationsConfig > NamespaceRecommendationsConfig > ClusterRecommendationsConfig
+
+      TARGET REF:
+      - kind: Workload kind (e.g., Deployment, StatefulSet, DaemonSet, Rollout)
+      - name: Workload name (must be non-empty)
+
+      POLICY FIELDS:
+      - workloadPolicy: General optimization policy for the workload
+      - cpuPolicy: CPU-specific optimization policy override
+      - memoryPolicy: Memory-specific optimization policy override
+      - customTimeWindowDays: Number of days of historical data to use for recommendations
+      - memoryRequestEqualsLimit: Whether memory request should equal limit
+
+      EXAMPLES:
+      See helm/examples/ directory for configuration examples
+spec:
+  # Namespaced - targets workloads within the same namespace
+  scope: Namespaced
+  # group name to use for REST API: /apis/<group>/<version>
+  group: perfectscale.io
+  names:
+    # plural name to be used in the URL: /apis/<group>/<version>/<plural>
+    plural: workloadrecommendationsconfigs
+    # singular name to be used as an alias on the CLI and for display
+    singular: workloadrecommendationsconfig
+    # kind is normally the CamelCased singular type. Your resource manifests use this.
+    kind: WorkloadRecommendationsConfig
+    # shortNames allow shorter string to match your resource on the CLI
+    shortNames:
+      - wrc
+  # list of versions supported by this CustomResourceDefinition
+  versions:
+    - name: v1
+      # Each version can be enabled/disabled by Served flag.
+      served: true
+      # One and only one version must be marked as the storage version.
+      storage: true
+      additionalPrinterColumns:
+        - name: Target Kind
+          type: string
+          jsonPath: .spec.targetRef.kind
+        - name: Target Name
+          type: string
+          jsonPath: .spec.targetRef.name
+        - name: WorkloadPolicy
+          type: string
+          jsonPath: .spec.policies.workloadPolicy
+        - name: CustomTimeWindowDays
+          type: integer
+          jsonPath: .spec.policies.customTimeWindowDays
+        - name: Age
+          type: date
+          jsonPath: .metadata.creationTimestamp
+      schema:
+        openAPIV3Schema:
+          type: object
+          x-kubernetes-preserve-unknown-fields: true
+          properties:
+            spec:
+              type: object
+              x-kubernetes-preserve-unknown-fields: true
+              required:
+                - targetRef
+              properties:
+                targetRef:
+                  type: object
+                  required:
+                    - kind
+                    - name
+                  properties:
+                    kind:
+                      type: string
+                    name:
+                      type: string
+                      minLength: 1
+                policies:
+                  type: object
+                  x-kubernetes-preserve-unknown-fields: true
+                  properties:
+                    workloadPolicy:
+                      type: string
+                    cpuPolicy:
+                      type: string
+                    memoryPolicy:
+                      type: string
+                    customTimeWindowDays:
+                      type: integer
+                    memoryRequestEqualsLimit:
+                      type: boolean

@@ -1,0 +1,54 @@
+# WorkloadRecommendationsConfig — Per-workload recommendation policy overrides
+# Overrides both cluster-wide and namespace-level defaults for a specific workload.
+# This is the highest-priority level in the override hierarchy.
+#
+# Setup Instructions:
+# 1. First install the CRD: kubectl apply -f helm/crds/workloadrecommendationsconfigs.yaml
+# 2. Apply this example: kubectl apply -f helm/examples/workloadrecommendationsconfig.yaml
+#
+# Policy Hierarchy (highest to lowest priority):
+#   WorkloadRecommendationsConfig > NamespaceRecommendationsConfig > ClusterRecommendationsConfig
+#
+# Target Ref:
+# - kind: Workload kind (Deployment, StatefulSet, DaemonSet, Rollout, etc.)
+# - name: Name of the target workload
+#
+# Policy Fields:
+# - workloadPolicy: General optimization policy (e.g., Balanced, MaxSavings, MaxHeadroom, ExtraHeadroom)
+# - cpuPolicy: CPU-specific policy override (overrides workloadPolicy for CPU)
+# - memoryPolicy: Memory-specific policy override (overrides workloadPolicy for memory)
+# - customTimeWindowDays: Number of days of historical data to use for recommendations
+# - memoryRequestEqualsLimit: When true, memory request will be set equal to the limit
+#
+
+# Deployment — api-gateway with extra headroom and resource-specific overrides
+apiVersion: perfectscale.io/v1
+kind: WorkloadRecommendationsConfig
+metadata:
+  name: psc-aggregator-recommendations-config
+  namespace: apps
+spec:
+  targetRef:
+    kind: Deployment
+    name: psc-aggregator
+  policies:
+    workloadPolicy: ExtraHeadroom
+    cpuPolicy: MaxHeadroom
+    memoryPolicy: ExtraHeadroom
+    customTimeWindowDays: 30
+
+---
+# StatefulSet — postgres with conservative memory settings
+apiVersion: perfectscale.io/v1
+kind: WorkloadRecommendationsConfig
+metadata:
+  name: rabbitmq-recommendations-config
+  namespace: apps
+spec:
+  targetRef:
+    kind: StatefulSet
+    name: rabbitmq
+  policies:
+    workloadPolicy: MaxHeadroom
+    customTimeWindowDays: 60
+    memoryRequestEqualsLimit: true

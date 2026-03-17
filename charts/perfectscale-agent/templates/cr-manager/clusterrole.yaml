@@ -15,6 +15,9 @@ rules:
       - "perfectscale.io"
     resources:
       - clustersettings
+      - clusterrecommendationsconfigs
+      - namespacerecommendationsconfigs
+      - workloadrecommendationsconfigs
     verbs:
       - get
       - list

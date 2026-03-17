@@ -1,0 +1,44 @@
+# NamespaceRecommendationsConfig — Namespace-level recommendation policy overrides
+# Overrides cluster-wide defaults for all workloads in a specific namespace.
+# Can be further overridden at the workload level.
+#
+# Setup Instructions:
+# 1. First install the CRD: kubectl apply -f helm/crds/namespacerecommendationsconfigs.yaml
+# 2. Apply this example: kubectl apply -f helm/examples/namespacerecommendationsconfig.yaml
+#
+# Policy Hierarchy (highest to lowest priority):
+#   WorkloadRecommendationsConfig > NamespaceRecommendationsConfig > ClusterRecommendationsConfig
+#
+# Policy Fields:
+# - workloadPolicy: General optimization policy (e.g., Balanced, MaxSavings, MaxHeadroom, ExtraHeadroom)
+# - cpuPolicy: CPU-specific policy override (overrides workloadPolicy for CPU)
+# - memoryPolicy: Memory-specific policy override (overrides workloadPolicy for memory)
+# - customTimeWindowDays: Number of days of historical data to use for recommendations
+# - memoryRequestEqualsLimit: When true, memory request will be set equal to the limit
+#
+
+# Production namespace — conservative settings for stability
+apiVersion: perfectscale.io/v1
+kind: NamespaceRecommendationsConfig
+metadata:
+  name: apps-recommendations-config
+  namespace: apps
+spec:
+  policies:
+    workloadPolicy: MaxHeadroom
+    customTimeWindowDays: 45
+    memoryRequestEqualsLimit: true
+
+---
+# Development namespace — aggressive savings with shorter data window
+apiVersion: perfectscale.io/v1
+kind: NamespaceRecommendationsConfig
+metadata:
+  name: demo-recommendations-config
+  namespace: demo
+spec:
+  policies:
+    workloadPolicy: MaxSavings
+    cpuPolicy: MaxSavings
+    memoryPolicy: Balanced
+    customTimeWindowDays: 14

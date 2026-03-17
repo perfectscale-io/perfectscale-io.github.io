@@ -41,7 +41,7 @@ spec:
       securityContext:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- if .Values.settings.deployKubeStateMetrics }}
+      {{- if ne .Values.settings.deployKubeStateMetrics false }}
       initContainers:
         - name: depends-on
           image: "{{ .Values.initContainer.image.repository }}:{{ .Values.initContainer.image.tag }}"

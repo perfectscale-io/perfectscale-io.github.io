@@ -1,0 +1,38 @@
+# ClusterRecommendationsConfig — Cluster-wide recommendation policy defaults
+# Sets default recommendation policies for all workloads in the cluster.
+# These defaults can be overridden at the namespace or workload level.
+#
+# Setup Instructions:
+# 1. First install the CRD: kubectl apply -f helm/crds/clusterrecommendationsconfigs.yaml
+# 2. Apply this example: kubectl apply -f helm/examples/clusterrecommendationsconfig.yaml
+#
+# Policy Hierarchy (highest to lowest priority):
+#   WorkloadRecommendationsConfig > NamespaceRecommendationsConfig > ClusterRecommendationsConfig
+#
+# Policy Fields:
+# - workloadPolicy: General optimization policy (e.g., Balanced, MaxSavings, MaxHeadroom, ExtraHeadroom)
+# - cpuPolicy: CPU-specific policy override (overrides workloadPolicy for CPU)
+# - memoryPolicy: Memory-specific policy override (overrides workloadPolicy for memory)
+# - customTimeWindowDays: Number of days of historical data to use for recommendations
+# - memoryRequestEqualsLimit: When true, memory request will be set equal to the limit
+#
+apiVersion: perfectscale.io/v1
+kind: ClusterRecommendationsConfig
+metadata:
+  name: cluster-recommendations-config
+spec:
+  policies:
+    # General optimization policy applied to all workloads by default
+    workloadPolicy: Balanced
+
+    # Override the general policy for CPU specifically
+    cpuPolicy: MaxSavings
+
+    # Override the general policy for memory specifically
+    memoryPolicy: MaxHeadroom
+
+    # Use 30 days of historical data for recommendations
+    customTimeWindowDays: 30
+
+    # Ensure memory request equals limit for stability
+    memoryRequestEqualsLimit: false

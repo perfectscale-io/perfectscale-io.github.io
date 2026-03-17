@@ -3,7 +3,7 @@ revisionHistoryLimit: 10
 image:
   repository: public.ecr.aws/perfectscale-io/psc-exporter
   pullPolicy: Always
-  tag: "v1.0.93"
+  tag: "v1.0.94"
 initContainer:
   image:
     repository: public.ecr.aws/perfectscale-io/alpine
@@ -11,7 +11,6 @@ initContainer:
 # Notes generation override web portal
 webAppUrl: "http://app.perfectscale.io/"
 settings:
-  deployKubeStateMetrics: true
   deployCrManager: true
   serviceId: "psc-exporter"
   env: "prod"
@@ -45,7 +44,6 @@ settings:
   optimizationPolicyTimeWindow: "" # deprecated
   clusterName: ""
   collectorNumWorkers: "4"
-  #  ksmAddress: "http://kube-state-metrics:8080"
   scraper:
     ksmMetricsPort: "8080"
     labelSelector: ""
