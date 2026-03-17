@@ -1,0 +1,11 @@
+apiVersion: perfectscale.io/v1
+kind: ClusterUIAutomationSetting
+metadata:
+  name: cluster-ui-automation
+spec:
+  automation:
+    operational:
+      restrictions:
+        cpuManagement:
+          limit:
+            keepLimit: true

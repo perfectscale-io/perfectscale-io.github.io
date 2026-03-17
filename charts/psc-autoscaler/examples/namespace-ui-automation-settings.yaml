@@ -1,0 +1,17 @@
+apiVersion: perfectscale.io/v1
+kind: NamespaceUIAutomationSetting
+metadata:
+  name: default-ui-automation-list
+  namespace: default
+spec:
+  enabledWorkloadCount: 3
+  enabledWorkloads:
+    - id: "default-deployment-nginx"
+      name: "nginx"
+      kind: "deployment"
+    - id: "default-deployment-redis"
+      name: "redis"
+      kind: "deployment"
+    - id: "default-statefulset-postgres"
+      name: "postgres"
+      kind: "statefulset"
