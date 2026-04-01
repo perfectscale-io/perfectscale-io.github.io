@@ -1,11 +1,14 @@
 {{- define "crManager.admission.secret" -}}
+{{- if or .Values.crManager.admission.certManager.enabled .Values.crManager.admission.externalCertSecret.enabled }}
+{{- /* Return stable value — certs are managed externally */ -}}
+external
+{{- else if .Values.crManager.admission.staticCerts.enabled }}
+{{- .Values.crManager.admission.staticCerts.tlsCert }}{{ .Values.crManager.admission.staticCerts.tlsKey }}
+{{- else }}
 {{- $fullName := printf "%s-cr-manager" (include "helm.fullname" .) -}}
 {{- $altNames := list ( printf "%s.%s" $fullName .Release.Namespace ) ( printf "%s.%s.svc" $fullName .Release.Namespace ) -}}
 {{- $ca := genCA "psc-exporter-cr-manager-ca" 1825 -}}
 {{- $cert := genSignedCert $fullName nil $altNames 1825 $ca -}}
-{{- if .Values.crManager.admission.staticCerts.enabled }}
-{{- .Values.crManager.admission.staticCerts.tlsCert }}{{ .Values.crManager.admission.staticCerts.tlsKey }}
-{{- else }}
 {{- $cert.Cert }}{{ $cert.Key }}
 {{- end }}
 {{- end -}}
@@ -15,7 +18,7 @@
 {{- $ca := genCA "psc-exporter-cr-manager-ca" 1825 -}}
 {{- $cert := genSignedCert $fullName nil $altNames 1825 $ca -}}
 ---
-{{- if not .Values.crManager.admission.certManager.enabled }}
+{{- if and (not .Values.crManager.admission.certManager.enabled) (not .Values.crManager.admission.externalCertSecret.enabled) }}
 apiVersion: v1
 kind: Secret
 type: kubernetes.io/tls
@@ -88,6 +91,84 @@ webhooks:
         namespace: {{ .Release.Namespace }}
         name: {{ $fullName }}
         path: /validate/clustersettings
+        port: {{ .Values.crManager.service.port | default 8443 }}
+    admissionReviewVersions: ["v1"]
+    sideEffects: None
+    timeoutSeconds: {{ .Values.crManager.admission.timeout | default 15 }}
+    failurePolicy: {{ .Values.crManager.admission.failurePolicy | default "Fail" }}
+  - name: clusterrecommendationsconfig.perfectscale.io
+    rules:
+      - apiGroups: ["perfectscale.io"]
+        apiVersions: ["v1"]
+        operations: ["CREATE", "UPDATE"]
+        resources: ["clusterrecommendationsconfigs"]
+        scope: "Cluster"
+    clientConfig:
+      {{- if not .Values.crManager.admission.certManager.enabled }}
+        {{- if .Values.crManager.admission.externalCertSecret.enabled }}
+      caBundle: {{ .Values.crManager.admission.externalCertSecret.caCert }}
+        {{- else if .Values.crManager.admission.staticCerts.enabled }}
+      caBundle: {{ .Values.crManager.admission.staticCerts.caCert }}
+        {{- else }}
+      caBundle: {{ $ca.Cert | b64enc }}
+        {{- end }}
+      {{- end }}
+      service:
+        namespace: {{ .Release.Namespace }}
+        name: {{ $fullName }}
+        path: /validate/recommendationsconfig
+        port: {{ .Values.crManager.service.port | default 8443 }}
+    admissionReviewVersions: ["v1"]
+    sideEffects: None
+    timeoutSeconds: {{ .Values.crManager.admission.timeout | default 15 }}
+    failurePolicy: {{ .Values.crManager.admission.failurePolicy | default "Fail" }}
+  - name: namespacerecommendationsconfig.perfectscale.io
+    rules:
+      - apiGroups: ["perfectscale.io"]
+        apiVersions: ["v1"]
+        operations: ["CREATE", "UPDATE"]
+        resources: ["namespacerecommendationsconfigs"]
+        scope: "Namespaced"
+    clientConfig:
+      {{- if not .Values.crManager.admission.certManager.enabled }}
+        {{- if .Values.crManager.admission.externalCertSecret.enabled }}
+      caBundle: {{ .Values.crManager.admission.externalCertSecret.caCert }}
+        {{- else if .Values.crManager.admission.staticCerts.enabled }}
+      caBundle: {{ .Values.crManager.admission.staticCerts.caCert }}
+        {{- else }}
+      caBundle: {{ $ca.Cert | b64enc }}
+        {{- end }}
+      {{- end }}
+      service:
+        namespace: {{ .Release.Namespace }}
+        name: {{ $fullName }}
+        path: /validate/recommendationsconfig
+        port: {{ .Values.crManager.service.port | default 8443 }}
+    admissionReviewVersions: ["v1"]
+    sideEffects: None
+    timeoutSeconds: {{ .Values.crManager.admission.timeout | default 15 }}
+    failurePolicy: {{ .Values.crManager.admission.failurePolicy | default "Fail" }}
+  - name: workloadrecommendationsconfig.perfectscale.io
+    rules:
+      - apiGroups: ["perfectscale.io"]
+        apiVersions: ["v1"]
+        operations: ["CREATE", "UPDATE"]
+        resources: ["workloadrecommendationsconfigs"]
+        scope: "Namespaced"
+    clientConfig:
+      {{- if not .Values.crManager.admission.certManager.enabled }}
+        {{- if .Values.crManager.admission.externalCertSecret.enabled }}
+      caBundle: {{ .Values.crManager.admission.externalCertSecret.caCert }}
+        {{- else if .Values.crManager.admission.staticCerts.enabled }}
+      caBundle: {{ .Values.crManager.admission.staticCerts.caCert }}
+        {{- else }}
+      caBundle: {{ $ca.Cert | b64enc }}
+        {{- end }}
+      {{- end }}
+      service:
+        namespace: {{ .Release.Namespace }}
+        name: {{ $fullName }}
+        path: /validate/recommendationsconfig
         port: {{ .Values.crManager.service.port | default 8443 }}
     admissionReviewVersions: ["v1"]
     sideEffects: None

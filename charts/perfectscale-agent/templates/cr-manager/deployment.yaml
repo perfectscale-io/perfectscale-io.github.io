@@ -37,7 +37,7 @@ spec:
         {{- with .Values.crManager.podAnnotations }}
           {{- toYaml . | nindent 8 }}
         {{- end }}
-        {{- if not .Values.crManager.admission.staticCerts.enabled }}
+        {{- if and (not .Values.crManager.admission.staticCerts.enabled) (not .Values.crManager.admission.externalCertSecret.enabled) (not .Values.crManager.admission.certManager.enabled) }}
         {{- /* it requires to reload the latest re-generated certs for mtls after helm upgrade*/}}
         rolloutme: {{ randAlphaNum 5 | quote }}
         {{- end }}
