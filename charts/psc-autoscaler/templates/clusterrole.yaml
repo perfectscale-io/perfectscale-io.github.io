@@ -20,7 +20,13 @@ rules:
     verbs: [ "get", "list", "watch" ]
   - apiGroups: [ "" ]
     resources: [ "namespaces" ]
-    verbs: [ "get", "list", "watch" ]
+    verbs:
+      - get
+      - list
+      - watch
+      {{- if .Values.settings.allowNamespaceCreation }}
+      - create
+      {{- end }}
   - apiGroups: [ "" ]
     resources: [ "pods" ]
     verbs: [ "get", "list", "watch", "delete", "patch" ]
@@ -40,6 +46,6 @@ rules:
     resources: [ "rollouts" ]
     verbs: [ "get", "list", "watch", "patch" ]
   - apiGroups: [ "perfectscale.io" ]
-    resources: [ "workloads", "clusterautomationconfigs", "namespaceautomationconfigs", "workloadautomationconfigs", "workloadautomationstatuses" ]
+    resources: [ "workloads", "clusterautomationconfigs", "namespaceautomationconfigs", "workloadautomationconfigs", "workloadautomationstatuses", "clusteruiautomationsettings", "namespaceuiautomationsettings" ]
     verbs: [ "create", "get", "delete", "list", "patch", "update", "watch" ]
 {{ end }}

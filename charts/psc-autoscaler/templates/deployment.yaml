@@ -206,12 +206,12 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - name: https
-              containerPort: {{ .Values.settings.port }}
+            - name: {{ .Values.cmd.sync.probe.name | default "http" }}
+              containerPort: {{ .Values.cmd.sync.probe.port | default 8080 }}
               protocol: TCP
           env:
             - name: HTTP_PORT
-              value: "{{ .Values.settings.port }}"
+              value: "{{ .Values.cmd.sync.probe.port | default 8080 }}"
             - name: ENV
               value: "{{ .Values.settings.env }}"
             - name: HTTP_TIMEOUT
@@ -254,6 +254,10 @@ spec:
               value: "{{ .Values.settings.excludedNamespaces | join "," }}"
             - name: UPDATE_CR_WORKERS_NUM
               value: "{{ .Values.settings.updateCRWorkersNum }}"
+            - name: ALLOW_NAMESPACE_CREATION
+              value: "{{ .Values.settings.allowNamespaceCreation }}"
+            - name: UI_SETTINGS_SYNC_INTERVAL
+              value: "{{ .Values.settings.uiSettingsSyncInterval | default "180s" }}"
             - name: KUBE_API_QPS
               value: "{{ .Values.settings.kubeApiQPS | default "30" }}"
             - name: "AUTOMATED_REVISIONS_RETENTION_HOURS"
@@ -265,6 +269,16 @@ spec:
           command:
             - "./app"
             - "sync"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.cmd.sync.probe.name | default "http" }}
+              scheme: HTTP
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.cmd.sync.probe.name | default "http" }}
+              scheme: HTTP
           resources:
             {{- toYaml .Values.cmd.sync.resources | nindent 12 }}
       {{- if .Values.imagePullSecrets }}
@@ -334,12 +348,12 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - name: https
-              containerPort: {{ .Values.settings.port }}
+            - name: {{ .Values.cmd.evict.probe.name | default "http" }}
+              containerPort: {{ .Values.cmd.evict.probe.port | default 8080 }}
               protocol: TCP
           env:
             - name: HTTP_PORT
-              value: "{{ .Values.settings.port }}"
+              value: "{{ .Values.cmd.evict.probe.port | default 8080 }}"
             - name: ENV
               value: "{{ .Values.settings.env }}"
             - name: HTTP_TIMEOUT
@@ -395,8 +409,18 @@ spec:
           command:
             - "./app"
             - "evict"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.cmd.evict.probe.name | default "http" }}
+              scheme: HTTP
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.cmd.evict.probe.name | default "http" }}
+              scheme: HTTP
           resources:
-            {{- toYaml .Values.cmd.sync.resources | nindent 12 }}
+            {{- toYaml .Values.cmd.evict.resources | nindent 12 }}
       {{- if .Values.imagePullSecrets }}
       imagePullSecrets:
       - name: {{ .Values.imagePullSecrets.secretName }}

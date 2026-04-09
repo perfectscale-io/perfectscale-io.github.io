@@ -1,0 +1,29 @@
+{{- if and .Values.rbac.enabled (.Capabilities.APIVersions.Has "admissionregistration.k8s.io/v1/ValidatingAdmissionPolicy") -}}
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicy
+metadata:
+  name: {{ include "psc-autoscaler.fullname" . }}-ui-settings-protection
+  labels: {{- include "psc-autoscaler.labels" . | nindent 4 }}
+spec:
+  failurePolicy: Fail
+  matchConstraints:
+    resourceRules:
+      - apiGroups: ["perfectscale.io"]
+        apiVersions: ["v1"]
+        resources: ["clusteruiautomationsettings", "namespaceuiautomationsettings"]
+        operations: ["CREATE", "UPDATE", "DELETE"]
+  validations:
+    - expression: >-
+        request.userInfo.username == 'system:serviceaccount:{{ .Release.Namespace }}:{{ include "psc-autoscaler.serviceAccountName" . }}'
+      message: "Only psc-autoscaler service account can manage UI automation settings CRs"
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicyBinding
+metadata:
+  name: {{ include "psc-autoscaler.fullname" . }}-ui-settings-protection
+  labels: {{- include "psc-autoscaler.labels" . | nindent 4 }}
+spec:
+  policyName: {{ include "psc-autoscaler.fullname" . }}-ui-settings-protection
+  validationActions:
+    - Deny
+{{- end }}
