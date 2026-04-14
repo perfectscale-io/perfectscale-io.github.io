@@ -1,0 +1,126 @@
+{{/*
+  CRD lifecycle hook — applies all CRDs from the crds/ directory before
+  upgrade so that `helm upgrade` picks up new or changed CRDs.
+  Helm 3 natively handles crds/ on initial install, so this hook
+  only runs on pre-upgrade.
+
+  If CRD apply fails, the upgrade is aborted.
+  All hook resources are cleaned up on both success and failure.
+
+  Resources in this file (all ephemeral hook resources):
+    Weight -10: ConfigMap, ServiceAccount, ClusterRole, ClusterRoleBinding
+    Weight -5:  Job (kubectl apply + wait)
+*/}}
+{{- if .Values.crdUpgradeHook.enabled }}
+# ---------- ConfigMap: embeds all CRD manifests from crds/ ----------
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "helm.fullname" . }}-crd-upgrade-hook
+  labels: {{- include "helm.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": pre-upgrade
+    "helm.sh/hook-weight": "-10"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
+data:
+  {{- range $path, $content := .Files.Glob "crds/*" }}
+  {{ base $path }}: |
+{{ $content | toString | indent 4 }}
+  {{- end }}
+---
+# ---------- ServiceAccount for the hook Job ----------
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ include "helm.fullname" . }}-crd-upgrade-hook
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "helm.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": pre-upgrade
+    "helm.sh/hook-weight": "-10"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
+automountServiceAccountToken: false
+---
+# ---------- ClusterRole: minimum privilege for CRD management ----------
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "helm.fullname" . }}-crd-upgrade-hook
+  labels: {{- include "helm.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": pre-upgrade
+    "helm.sh/hook-weight": "-10"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
+rules:
+  - apiGroups: ["apiextensions.k8s.io"]
+    resources: ["customresourcedefinitions"]
+    verbs: ["create", "get", "list", "patch", "update", "watch"]
+---
+# ---------- ClusterRoleBinding ----------
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ include "helm.fullname" . }}-crd-upgrade-hook
+  labels: {{- include "helm.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": pre-upgrade
+    "helm.sh/hook-weight": "-10"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "helm.fullname" . }}-crd-upgrade-hook
+    namespace: {{ .Release.Namespace }}
+roleRef:
+  kind: ClusterRole
+  name: {{ include "helm.fullname" . }}-crd-upgrade-hook
+  apiGroup: rbac.authorization.k8s.io
+---
+# ---------- Job: apply CRDs and wait for them to be established ----------
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "helm.fullname" . }}-crd-upgrade-hook
+  labels:
+    {{- include "helm.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": pre-upgrade
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
+spec:
+  backoffLimit: {{ .Values.crdUpgradeHook.backoffLimit }}
+  template:
+    metadata:
+      labels:
+        {{- include "helm.selectorLabels" . | nindent 8 }}
+        job: crd-upgrade-hook
+    spec:
+      serviceAccountName: {{ include "helm.fullname" . }}-crd-upgrade-hook
+      automountServiceAccountToken: true
+      restartPolicy: Never
+      containers:
+        - name: crd-apply
+          image: "{{ .Values.crdUpgradeHook.image.repository }}:{{ .Values.crdUpgradeHook.image.tag }}"
+          imagePullPolicy: {{ .Values.crdUpgradeHook.image.pullPolicy }}
+          command: ["sh", "-c"]
+          args:
+            - |
+              echo "CRD Upgrade Hook: STARTED"
+              for f in /crds/*.yaml; do
+                kubectl apply --server-side -f "$f" || { echo "CRD Upgrade Hook: FAILURE"; exit 1; }
+              done
+              echo "CRD Upgrade Hook: SUCCESS"
+          resources:
+            {{- toYaml .Values.crdUpgradeHook.resources | nindent 12 }}
+          volumeMounts:
+            - name: crds
+              mountPath: /crds
+              readOnly: true
+      volumes:
+        - name: crds
+          configMap:
+            name: {{ include "helm.fullname" . }}-crd-upgrade-hook
+      {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+        - name: {{ .Values.imagePullSecrets.secretName }}
+      {{- end }}
+{{- end }}

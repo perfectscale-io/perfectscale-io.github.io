@@ -24,9 +24,3 @@
 .vscode/
 
 values/
-
-# Recommendation config CRDs - not auto-installed until feature is fully ready
-# For dev testing: kubectl apply -f helm/crds/<file>.yaml
-crds/clusterrecommendationsconfigs.yaml
-crds/namespacerecommendationsconfigs.yaml
-crds/workloadrecommendationsconfigs.yaml

@@ -50,5 +50,5 @@ spec:
     name: rabbitmq
   policies:
     workloadPolicy: MaxHeadroom
-    customTimeWindowDays: 60
+    customTimeWindowDays: 30
     memoryRequestEqualsLimit: true

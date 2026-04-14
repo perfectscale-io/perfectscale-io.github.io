@@ -3,7 +3,7 @@ revisionHistoryLimit: 10
 image:
   repository: public.ecr.aws/perfectscale-io/psc-exporter
   pullPolicy: Always
-  tag: "v1.0.96"
+  tag: "v1.0.98"
 initContainer:
   image:
     repository: public.ecr.aws/perfectscale-io/alpine
@@ -318,7 +318,7 @@ coroot:
   image:
     repository: public.ecr.aws/perfectscale-io/coroot-node-agent
     pullPolicy: Always
-    tag: "v0.0.7"
+    tag: "v0.0.8"
   resources:
     requests:
       cpu: 10m
@@ -340,3 +340,18 @@ coroot:
   # Pod affinity rules.
   # Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   affinity: {}
+## CRD lifecycle hook — ensures CRDs are applied/updated on helm upgrade which is not done automatically on upgrade
+crdUpgradeHook:
+  enabled: true
+  image:
+    repository: public.ecr.aws/l4d0e8n7/kubectl
+    tag: "1.30"
+    pullPolicy: IfNotPresent
+  backoffLimit: 3
+  resources:
+    limits:
+      memory: 64Mi
+    requests:
+      cpu: 50m
+      memory: 32Mi
+      ephemeral-storage: 10Mi
