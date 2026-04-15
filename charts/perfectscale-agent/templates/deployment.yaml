@@ -117,6 +117,20 @@ spec:
             value: "{{ .Values.settings.podRegex | default "" }}"
           - name: CONTAINER_REGEX
             value: "{{ .Values.settings.containerRegex | default "" }}"
+          - name: LEADER_ELECTION_ENABLED
+            value: "{{ .Values.rbac.leaseLeaderElection.enabled | default false }}"
+          - name: LEADER_ELECTION_LEASE_NAMESPACE
+            value: "{{ .Values.rbac.leaseLeaderElection.namespace | default .Release.Namespace }}"
+          - name: LEADER_ELECTION_LEASE_NAME
+            value: "{{ .Values.rbac.leaseLeaderElection.leaseName | default $fullName }}"
+          - name: LEADER_ELECTION_LEASE_DURATION
+            value: "{{ .Values.rbac.leaseLeaderElection.leaseDuration | default "60s" }}"
+          - name: LEADER_ELECTION_RENEW_DEADLINE
+            value: "{{ .Values.rbac.leaseLeaderElection.renewDeadline | default "50s" }}"
+          - name: LEADER_ELECTION_RETRY_PERIOD
+            value: "{{ .Values.rbac.leaseLeaderElection.retryPeriod | default "10s" }}"
+          - name: LEADER_ELECTION_EXIT_DELAY
+            value: "{{ .Values.rbac.leaseLeaderElection.exitDelay | default "35s" }}"
           - name: "KUBERNETES_CLIENT_BURST"
             value: "{{ .Values.settings.k8sClientBurst }}"
           - name: "KUBERNETES_CLIENT_QPS"

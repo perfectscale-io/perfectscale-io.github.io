@@ -124,3 +124,7 @@ Create the name of the service account to use
 {{- "" }}
 {{- end }}
 {{- end }}
+
+{{- define "helm.leaseLeaderElectionEnabled" -}}
+{{- and .Values.rbac.create .Values.rbac.leaseLeaderElection.enabled -}}
+{{- end }}

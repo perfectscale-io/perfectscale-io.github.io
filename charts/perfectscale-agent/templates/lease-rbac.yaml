@@ -1,0 +1,34 @@
+{{- if eq (include "helm.leaseLeaderElectionEnabled" . | trim) "true" }}
+{{- $fullName := printf "%s-lease" (include "helm.fullname" .) -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: {{ .Values.rbac.leaseLeaderElection.namespace | default .Release.Namespace }}
+  name: {{ $fullName }}
+  labels:
+    {{- include "helm.labels" . | nindent 4 }}
+rules:
+- apiGroups: ["coordination.k8s.io"]
+  resources: ["leases"]
+  verbs: ["create"]
+- apiGroups: ["coordination.k8s.io"]
+  resources: ["leases"]
+  resourceNames: [{{ .Values.rbac.leaseLeaderElection.leaseName | quote }}]
+  verbs: ["get", "update"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ $fullName }}-binding
+  namespace: {{ .Values.rbac.leaseLeaderElection.namespace | default .Release.Namespace }}
+  labels:
+    {{- include "helm.labels" . | nindent 4 }}
+subjects:
+- kind: ServiceAccount
+  name: {{ include "helm.serviceAccountName" . }}
+  namespace: {{ .Release.Namespace }}
+roleRef:
+  kind: Role
+  name: {{ $fullName }}
+  apiGroup: rbac.authorization.k8s.io
+{{- end }}
