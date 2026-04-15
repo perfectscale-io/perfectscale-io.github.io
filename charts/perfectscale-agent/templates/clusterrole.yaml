@@ -18,6 +18,7 @@ rules:
       {{- if ne (.Values.settings.cAdvisorScrapingMode | default "auto") "direct" }}
       - nodes/proxy
       {{- end }}
+      - configmaps
       - replicationcontrollers
       - persistentvolumeclaims
       - persistentvolumes
