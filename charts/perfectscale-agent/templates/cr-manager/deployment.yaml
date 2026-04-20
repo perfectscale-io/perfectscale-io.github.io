@@ -19,6 +19,10 @@ metadata:
 spec:
   revisionHistoryLimit: {{ .Values.revisionHistoryLimit | default 10 }}
   replicas: 1  # Singleton - always 1 replica for CR Manager
+  {{- with .Values.crManager.strategy }}
+  strategy:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
   selector:
     matchLabels:
       app.kubernetes.io/name: {{ include "helm.name" . }}-cr-manager
@@ -42,6 +46,10 @@ spec:
         rolloutme: {{ randAlphaNum 5 | quote }}
         {{- end }}
     spec:
+      {{- if .Values.crManager.hostNetwork }}
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      {{- end }}
       {{- if ne .Values.priorityClass.enabled false }}
       priorityClassName: {{ .Values.priorityClass.name | default "perfectscale-exporter" }}
       {{- end }}

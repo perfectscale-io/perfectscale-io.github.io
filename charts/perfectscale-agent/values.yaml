@@ -3,7 +3,7 @@ revisionHistoryLimit: 10
 image:
   repository: public.ecr.aws/perfectscale-io/psc-exporter
   pullPolicy: Always
-  tag: "v1.1.0"
+  tag: "v1.1.1"
 initContainer:
   image:
     repository: public.ecr.aws/perfectscale-io/alpine
@@ -161,6 +161,16 @@ crManager:
   # Affinity (inherits from main if not set)
   # affinity: {}
 
+  # Deployment strategy override. Defaults to RollingUpdate when unset.
+  # When using hostNetwork, consider setting Recreate to avoid host port conflicts during rollout:
+  # strategy:
+  #   type: Recreate
+  strategy: {}
+  # Use host network for the cr-manager pod.
+  # Required when Kubernetes control-plane cannot reach the webhook service via pod networking
+  # (e.g. custom CNI plugins such as Calico with certain configurations).
+  # When enabled, dnsPolicy is automatically set to ClusterFirstWithHostNet.
+  hostNetwork: false
   ## Admission Webhook Configuration
   admission:
     # Ref: https://kubernetes.io/docs/reference/access-authn-authz/extensible-admission-controllers/#timeouts

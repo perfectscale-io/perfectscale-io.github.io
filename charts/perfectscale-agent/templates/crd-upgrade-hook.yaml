@@ -106,7 +106,7 @@ spec:
             - |
               echo "CRD Upgrade Hook: STARTED"
               for f in /crds/*.yaml; do
-                kubectl apply --server-side -f "$f" || { echo "CRD Upgrade Hook: FAILURE"; exit 1; }
+                kubectl apply --server-side --force-conflicts -f "$f" || { echo "CRD Upgrade Hook: FAILURE"; exit 1; }
               done
               echo "CRD Upgrade Hook: SUCCESS"
           resources:
