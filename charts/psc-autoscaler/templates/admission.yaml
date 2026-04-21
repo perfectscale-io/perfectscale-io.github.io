@@ -2,7 +2,7 @@
 {{- $ca := genCA "psc-autoscaler-ca" 1825 -}}
 {{- $cert := genSignedCert ( include "psc-autoscaler.fullname" . ) nil $altNames 1825 $ca -}}
 ---
-{{- if not .Values.admission.certManager.enabled }}
+{{- if and (not .Values.admission.certManager.enabled) (not .Values.admission.externalCertSecret.enabled) }}
 apiVersion: v1
 kind: Secret
 type: kubernetes.io/tls
