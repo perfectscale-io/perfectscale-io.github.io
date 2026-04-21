@@ -129,8 +129,6 @@ spec:
             value: "{{ .Values.rbac.leaseLeaderElection.renewDeadline | default "50s" }}"
           - name: LEADER_ELECTION_RETRY_PERIOD
             value: "{{ .Values.rbac.leaseLeaderElection.retryPeriod | default "10s" }}"
-          - name: LEADER_ELECTION_EXIT_DELAY
-            value: "{{ .Values.rbac.leaseLeaderElection.exitDelay | default "35s" }}"
           - name: "KUBERNETES_CLIENT_BURST"
             value: "{{ .Values.settings.k8sClientBurst }}"
           - name: "KUBERNETES_CLIENT_QPS"
