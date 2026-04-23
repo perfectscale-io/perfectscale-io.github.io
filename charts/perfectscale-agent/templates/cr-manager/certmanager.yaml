@@ -24,8 +24,8 @@ spec:
   isCA: true
   commonName: ca.{{ $fullName }}.psc.local
   secretName: {{ $fullName }}-ca-keypair
-  duration: 87600h # 10 years
-  renewBefore: 720h
+  duration: {{ .Values.crManager.admission.certManager.caCert.duration }}
+  renewBefore: {{ .Values.crManager.admission.certManager.caCert.renewBefore }}
   issuerRef:
     name: {{ $fullName }}-selfsigned
     kind: Issuer
@@ -52,8 +52,8 @@ metadata:
     app.kubernetes.io/component: psc-exporter-cr-manager
 spec:
   secretName: {{ $fullName }}-tls
-  duration: 2160h # 90 days
-  renewBefore: 360h # 15 days
+  duration: {{ .Values.crManager.admission.certManager.cert.duration }}
+  renewBefore: {{ .Values.crManager.admission.certManager.cert.renewBefore }}
   subject:
     organizations:
       - psc-exporter-cr-manager
