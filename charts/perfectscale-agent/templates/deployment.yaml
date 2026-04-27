@@ -122,7 +122,7 @@ spec:
           - name: LEADER_ELECTION_LEASE_NAMESPACE
             value: "{{ .Values.rbac.leaseLeaderElection.namespace | default .Release.Namespace }}"
           - name: LEADER_ELECTION_LEASE_NAME
-            value: "{{ .Values.rbac.leaseLeaderElection.leaseName | default $fullName }}"
+            value: "{{ include "helm.exporter.leaseName" . }}"
           - name: LEADER_ELECTION_LEASE_DURATION
             value: "{{ .Values.rbac.leaseLeaderElection.leaseDuration | default "60s" }}"
           - name: LEADER_ELECTION_RENEW_DEADLINE

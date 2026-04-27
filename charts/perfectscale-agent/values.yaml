@@ -3,7 +3,7 @@ revisionHistoryLimit: 10
 image:
   repository: public.ecr.aws/perfectscale-io/psc-exporter
   pullPolicy: Always
-  tag: "v1.1.2"
+  tag: "v1.1.3"
 initContainer:
   image:
     repository: public.ecr.aws/perfectscale-io/alpine
@@ -334,7 +334,7 @@ coroot:
   image:
     repository: public.ecr.aws/perfectscale-io/coroot-node-agent
     pullPolicy: Always
-    tag: "v0.0.8"
+    tag: "v0.0.10"
   resources:
     requests:
       cpu: 10m

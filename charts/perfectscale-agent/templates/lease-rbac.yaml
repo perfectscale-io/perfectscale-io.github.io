@@ -13,7 +13,7 @@ rules:
   verbs: ["create"]
 - apiGroups: ["coordination.k8s.io"]
   resources: ["leases"]
-  resourceNames: [{{ .Values.rbac.leaseLeaderElection.leaseName | quote }}]
+  resourceNames: [{{ include "helm.exporter.leaseName" . | quote }}]
   verbs: ["get", "update"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1

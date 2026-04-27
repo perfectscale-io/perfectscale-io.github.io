@@ -128,3 +128,18 @@ Create the name of the service account to use
 {{- define "helm.leaseLeaderElectionEnabled" -}}
 {{- and .Values.rbac.create .Values.rbac.leaseLeaderElection.enabled -}}
 {{- end }}
+
+{{- /*
+Full lease name used by the exporter: the configured base plus a
+"-<clusterUID>" suffix when clusterUID is set. Referenced by both the
+LEADER_ELECTION_LEASE_NAME env var and the Role's resourceNames so the pod
+has permission to act on exactly the lease it will use.
+*/ -}}
+{{- define "helm.exporter.leaseName" -}}
+{{- $base := .Values.rbac.leaseLeaderElection.leaseName | default (include "helm.fullname" .) -}}
+{{- if .Values.settings.clusterUID -}}
+{{- printf "%s-%s" $base .Values.settings.clusterUID -}}
+{{- else -}}
+{{- $base -}}
+{{- end -}}
+{{- end }}
