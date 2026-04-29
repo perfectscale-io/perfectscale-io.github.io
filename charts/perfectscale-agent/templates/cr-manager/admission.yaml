@@ -24,6 +24,7 @@ kind: Secret
 type: kubernetes.io/tls
 metadata:
   name: {{ $fullName }}-tls
+  namespace: {{ .Release.Namespace }}
   labels:
     {{- include "helm.labels" . | nindent 4 }}
     app.kubernetes.io/component: psc-exporter-cr-manager
