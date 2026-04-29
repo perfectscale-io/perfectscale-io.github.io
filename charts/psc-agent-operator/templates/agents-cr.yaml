@@ -1,0 +1,31 @@
+{{- if .Values.agents.create }}
+apiVersion: perfectscale.io/v1alpha1
+kind: Agents
+metadata:
+  name: agents
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "psc-agent-operator.labels" . | nindent 4 }}
+spec:
+  exporter:
+    installationMode: {{ .Values.agents.exporter.installationMode | quote }}
+    upgrade:
+      mode: {{ .Values.agents.exporter.upgrade.mode | quote }}
+      {{- if eq .Values.agents.exporter.upgrade.mode "manual" }}
+      version: {{ required "agents.exporter.upgrade.version is required for manual mode" .Values.agents.exporter.upgrade.version | quote }}
+      {{- end }}
+  promexporter:
+    installationMode: {{ .Values.agents.promexporter.installationMode | quote }}
+    upgrade:
+      mode: {{ .Values.agents.promexporter.upgrade.mode | quote }}
+      {{- if eq .Values.agents.promexporter.upgrade.mode "manual" }}
+      version: {{ required "agents.promexporter.upgrade.version is required for manual mode" .Values.agents.promexporter.upgrade.version | quote }}
+      {{- end }}
+  autoscaler:
+    installationMode: {{ .Values.agents.autoscaler.installationMode | quote }}
+    upgrade:
+      mode: {{ .Values.agents.autoscaler.upgrade.mode | quote }}
+      {{- if eq .Values.agents.autoscaler.upgrade.mode "manual" }}
+      version: {{ required "agents.autoscaler.upgrade.version is required for manual mode" .Values.agents.autoscaler.upgrade.version | quote }}
+      {{- end }}
+{{- end }}

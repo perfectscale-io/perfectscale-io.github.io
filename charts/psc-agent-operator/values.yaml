@@ -1,0 +1,86 @@
+createNamespace: false
+replicas: 3
+image:
+  repository: public.ecr.aws/perfectscale-io/psc-agent-operator
+  tag: "v0.3.1"
+args:
+  - --config=/etc/operator/operator-config.yaml
+resources:
+  limits:
+    cpu: 500m
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+podSecurityContext:
+  runAsNonRoot: true
+  seccompProfile:
+    type: RuntimeDefault
+nodeSelector: {}
+tolerations: []
+topologySpreadConstraints: []
+metricsService:
+  ports:
+    - name: https
+      port: 8443
+      protocol: TCP
+      targetPort: 8443
+  type: ClusterIP
+serviceAccount:
+  annotations: {}
+  automount: true
+  create: true
+  name: ""
+operatorConfig:
+  charts:
+    baseUrl: "https://perfectscale-io.github.io"
+  server:
+    metricsBindAddress: ":8443"
+    healthProbeBindAddress: ":8081"
+    leaderElect: true
+    secureMetrics: true
+    enableHttp2: false
+  apiClient:
+    settingsUrl: "https://api.app.perfectscale.io/psc-settings"
+    authUrl: "https://api.app.perfectscale.io/psc-tenant-manager"
+    telemetryUrl: "https://api.app.perfectscale.io/psc-telemetry"
+webhook:
+  singletonName: "agents"
+  timeout: 15
+  failurePolicy: "Fail"
+  staticCerts:
+    enabled: false
+    tlsCert: ""
+    tlsKey: ""
+    caCert: ""
+  certManager:
+    enabled: false
+secret:
+  create: false
+  secretName: "psc-credentials"
+  clientId: ""
+  clientSecret: ""
+agents:
+  create: false
+  clusterName: ""
+  clusterUid: ""
+  exporter:
+    installationMode: "off"
+    upgrade:
+      mode: "auto"
+      version: ""
+  promexporter:
+    installationMode: "off"
+    upgrade:
+      mode: "auto"
+      version: ""
+  autoscaler:
+    installationMode: "off"
+    upgrade:
+      mode: "auto"
+      version: ""

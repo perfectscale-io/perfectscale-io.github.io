@@ -1,0 +1,55 @@
+{{- if .Values.webhook.certManager.enabled }}
+{{- $fullName := include "psc-agent-operator.fullname" . -}}
+{{- $webhookName := printf "%s-webhook" $fullName -}}
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: {{ $webhookName }}-selfsigned
+  labels:
+  {{- include "psc-agent-operator.labels" . | nindent 4 }}
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ $webhookName }}-ca
+  labels:
+  {{- include "psc-agent-operator.labels" . | nindent 4 }}
+spec:
+  isCA: true
+  commonName: {{ $webhookName }}-ca
+  secretName: {{ $webhookName }}-ca-tls
+  duration: 87600h # 10 years
+  issuerRef:
+    name: {{ $webhookName }}-selfsigned
+    kind: Issuer
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: {{ $webhookName }}-ca-issuer
+  labels:
+  {{- include "psc-agent-operator.labels" . | nindent 4 }}
+spec:
+  ca:
+    secretName: {{ $webhookName }}-ca-tls
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ $webhookName }}-tls
+  labels:
+  {{- include "psc-agent-operator.labels" . | nindent 4 }}
+spec:
+  secretName: {{ $webhookName }}-tls
+  duration: 2160h # 90 days
+  renewBefore: 360h # 15 days
+  dnsNames:
+    - {{ $webhookName }}.{{ .Release.Namespace }}
+    - {{ $webhookName }}.{{ .Release.Namespace }}.svc
+  issuerRef:
+    name: {{ $webhookName }}-ca-issuer
+    kind: Issuer
+{{- end }}

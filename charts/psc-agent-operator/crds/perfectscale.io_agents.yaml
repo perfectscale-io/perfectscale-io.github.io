@@ -1,0 +1,205 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.18.0
+  name: agents.perfectscale.io
+spec:
+  group: perfectscale.io
+  names:
+    kind: Agents
+    listKind: AgentsList
+    plural: agents
+    singular: agents
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: Agents is the Schema for the agents API.
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: AgentsSpec defines the desired state of Agents.
+            properties:
+              autoscaler:
+                description: AgentComponentSpec configures a specific agent (exporter/autoscaler).
+                properties:
+                  installationMode:
+                    default: "off"
+                    description: InstallationMode defines how to control component
+                      installation.
+                    enum:
+                    - "on"
+                    - "off"
+                    type: string
+                  upgrade:
+                    description: UpgradePolicy defines how a component is upgraded.
+                    properties:
+                      mode:
+                        description: UpgradeMode defines how upgrades are handled.
+                        enum:
+                        - manual
+                        - auto
+                        - webapp
+                        type: string
+                      version:
+                        pattern: ^v\d+\.\d+\.\d+$
+                        type: string
+                    required:
+                    - mode
+                    type: object
+                    x-kubernetes-validations:
+                    - message: version must be set for manual mode and must be omitted
+                        for auto and webapp modes
+                      rule: (self.mode == 'manual' && has(self.version)) || (self.mode
+                        != 'manual' && !has(self.version))
+                  valuesOverride:
+                    type: object
+                    x-kubernetes-preserve-unknown-fields: true
+                required:
+                - installationMode
+                - upgrade
+                type: object
+              exporter:
+                description: AgentComponentSpec configures a specific agent (exporter/autoscaler).
+                properties:
+                  installationMode:
+                    default: "off"
+                    description: InstallationMode defines how to control component
+                      installation.
+                    enum:
+                    - "on"
+                    - "off"
+                    type: string
+                  upgrade:
+                    description: UpgradePolicy defines how a component is upgraded.
+                    properties:
+                      mode:
+                        description: UpgradeMode defines how upgrades are handled.
+                        enum:
+                        - manual
+                        - auto
+                        - webapp
+                        type: string
+                      version:
+                        pattern: ^v\d+\.\d+\.\d+$
+                        type: string
+                    required:
+                    - mode
+                    type: object
+                    x-kubernetes-validations:
+                    - message: version must be set for manual mode and must be omitted
+                        for auto and webapp modes
+                      rule: (self.mode == 'manual' && has(self.version)) || (self.mode
+                        != 'manual' && !has(self.version))
+                  valuesOverride:
+                    type: object
+                    x-kubernetes-preserve-unknown-fields: true
+                required:
+                - installationMode
+                - upgrade
+                type: object
+              promexporter:
+                description: AgentComponentSpec configures a specific agent (exporter/autoscaler).
+                properties:
+                  installationMode:
+                    default: "off"
+                    description: InstallationMode defines how to control component
+                      installation.
+                    enum:
+                    - "on"
+                    - "off"
+                    type: string
+                  upgrade:
+                    description: UpgradePolicy defines how a component is upgraded.
+                    properties:
+                      mode:
+                        description: UpgradeMode defines how upgrades are handled.
+                        enum:
+                        - manual
+                        - auto
+                        - webapp
+                        type: string
+                      version:
+                        pattern: ^v\d+\.\d+\.\d+$
+                        type: string
+                    required:
+                    - mode
+                    type: object
+                    x-kubernetes-validations:
+                    - message: version must be set for manual mode and must be omitted
+                        for auto and webapp modes
+                      rule: (self.mode == 'manual' && has(self.version)) || (self.mode
+                        != 'manual' && !has(self.version))
+                  valuesOverride:
+                    type: object
+                    x-kubernetes-preserve-unknown-fields: true
+                required:
+                - installationMode
+                - upgrade
+                type: object
+            required:
+            - autoscaler
+            - exporter
+            - promexporter
+            type: object
+          status:
+            description: AgentsStatus defines the observed state of Agents.
+            properties:
+              autoscaler:
+                description: AgentComponentStatus describes the observed state of
+                  a single agent component.
+                properties:
+                  currentVersion:
+                    type: string
+                  errorMessage:
+                    type: string
+                  expectedVersion:
+                    type: string
+                type: object
+              exporter:
+                description: AgentComponentStatus describes the observed state of
+                  a single agent component.
+                properties:
+                  currentVersion:
+                    type: string
+                  errorMessage:
+                    type: string
+                  expectedVersion:
+                    type: string
+                type: object
+              promexporter:
+                description: AgentComponentStatus describes the observed state of
+                  a single agent component.
+                properties:
+                  currentVersion:
+                    type: string
+                  errorMessage:
+                    type: string
+                  expectedVersion:
+                    type: string
+                type: object
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

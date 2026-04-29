@@ -1,0 +1,81 @@
+{{- $fullName := include "psc-agent-operator.fullname" . -}}
+{{- $webhookName := printf "%s-webhook" $fullName -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $fullName }}
+  labels:
+    app.kubernetes.io/component: operator
+  {{- include "psc-agent-operator.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: operator
+      {{- include "psc-agent-operator.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: operator
+        {{- include "psc-agent-operator.selectorLabels" . | nindent 8 }}
+      annotations:
+        kubectl.kubernetes.io/default-container: manager
+    spec:
+      containers:
+      - args: {{- toYaml .Values.args | nindent 8 }}
+        command:
+        - /manager
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag
+          | default .Chart.AppVersion }}
+        env:
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        ports:
+        - containerPort: 9443
+          name: webhook-server
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8081
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        name: manager
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: 8081
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        resources: {{- toYaml .Values.resources | nindent 10
+          }}
+        securityContext: {{- toYaml .Values.containerSecurityContext
+          | nindent 10 }}
+        volumeMounts:
+        - name: operator-config
+          mountPath: /etc/operator
+          readOnly: true
+        - name: webhook-tls
+          mountPath: /tmp/k8s-webhook-server/serving-certs
+          readOnly: true
+      {{- with .Values.nodeSelector }}
+      nodeSelector: {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext: {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      serviceAccountName: {{ include "psc-agent-operator.serviceAccountName" . }}
+      terminationGracePeriodSeconds: 10
+      {{- with .Values.tolerations }}
+      tolerations: {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+      - name: operator-config
+        configMap:
+          name: {{ $fullName }}-config
+      - name: webhook-tls
+        secret:
+          secretName: {{ $webhookName }}-tls

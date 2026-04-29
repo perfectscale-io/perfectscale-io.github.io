@@ -1,0 +1,59 @@
+{{- $fullName := include "psc-agent-operator.fullname" . -}}
+{{- $webhookName := printf "%s-webhook" $fullName -}}
+{{- $altNames := list ( printf "%s.%s" $webhookName .Release.Namespace ) ( printf "%s.%s.svc" $webhookName .Release.Namespace ) -}}
+{{- $ca := genCA "psc-agent-operator-ca" 1825 -}}
+{{- $cert := genSignedCert $webhookName nil $altNames 1825 $ca -}}
+---
+{{- if not .Values.webhook.certManager.enabled }}
+apiVersion: v1
+kind: Secret
+type: kubernetes.io/tls
+metadata:
+  name: {{ $webhookName }}-tls
+  labels:
+  {{- include "psc-agent-operator.labels" . | nindent 4 }}
+data:
+{{- if .Values.webhook.staticCerts.enabled }}
+  tls.crt: {{ .Values.webhook.staticCerts.tlsCert }}
+  tls.key: {{ .Values.webhook.staticCerts.tlsKey }}
+{{- else }}
+  tls.crt: {{ $cert.Cert | b64enc }}
+  tls.key: {{ $cert.Key | b64enc }}
+{{- end }}
+{{- end }}
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: {{ $webhookName }}
+  labels:
+  {{- include "psc-agent-operator.labels" . | nindent 4 }}
+{{- if .Values.webhook.certManager.enabled }}
+  annotations:
+    cert-manager.io/inject-ca-from: {{ .Release.Namespace }}/{{ $webhookName }}-ca
+{{- end }}
+webhooks:
+  - name: vagents.kb.io
+    rules:
+      - apiGroups: ["perfectscale.io"]
+        apiVersions: ["v1alpha1"]
+        operations: ["CREATE"]
+        resources: ["agents"]
+        scope: "Namespaced"
+    clientConfig:
+{{- if not .Values.webhook.certManager.enabled }}
+  {{- if .Values.webhook.staticCerts.enabled }}
+      caBundle: {{ .Values.webhook.staticCerts.caCert }}
+  {{- else }}
+      caBundle: {{ $ca.Cert | b64enc }}
+  {{- end }}
+{{- end }}
+      service:
+        namespace: {{ .Release.Namespace }}
+        name: {{ $webhookName }}
+        path: /validate-perfectscale-io-v1alpha1-agents
+        port: 443
+    admissionReviewVersions: ["v1"]
+    sideEffects: None
+    timeoutSeconds: {{ .Values.webhook.timeout | default 15 }}
+    failurePolicy: {{ .Values.webhook.failurePolicy | default "Fail" }}

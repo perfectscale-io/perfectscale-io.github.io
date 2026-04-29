@@ -1,0 +1,9 @@
+{{- if .Values.createNamespace }}
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/component: operator
+    {{- include "psc-agent-operator.labels" . | nindent 4 }}
+{{- end }}
