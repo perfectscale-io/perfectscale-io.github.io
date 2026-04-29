@@ -339,6 +339,16 @@ coroot:
     requests:
       cpu: 10m
       memory: 50Mi
+  ## environment variables of the coroot-node-agent container
+  env:
+    CGROUPFS_ROOT: "/host/sys/fs/cgroup"
+    DISABLE_LOG_PARSING: "true"
+    COROOT_EBPF_PROFILING: "disabled"
+    COROOT_LOG_MONITORING: "disabled"
+    COROOT_EBPF_TRACES: "disabled"
+    DISABLE_L7_TRACING: "true"
+    LISTEN: "0.0.0.0:8080"
+    GLOG_v: "4"
   ## Additional labels to set in the all objects. Together with standard labels from the chart
   additionalLabels: {}
   ## Labels to add to the pod
