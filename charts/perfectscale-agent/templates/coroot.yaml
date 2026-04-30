@@ -42,13 +42,13 @@ spec:
               value: "/host/sys/fs/cgroup"
             - name: DISABLE_LOG_PARSING
               value: "true"
-            - name: COROOT_EBPF_PROFILING
-              value: "disabled"
-            - name: COROOT_LOG_MONITORING
-              value: "disabled"
-            - name: COROOT_EBPF_TRACES
-              value: "disabled"
             - name: DISABLE_L7_TRACING
+              value: "true"
+            - name: DISABLE_GPU_MONITORING
+              value: "true"
+            - name: ENABLE_JAVA_ASYNC_PROFILER
+              value: "false"
+            - name: DISABLE_PINGER
               value: "true"
             - name: LISTEN
               value: "0.0.0.0:8080"
