@@ -25,7 +25,7 @@ data:
       key_client_secret: "clientSecret"
     cluster:
       name: {{ .Values.agents.clusterName | quote }}
-      uid: {{ .Values.agents.clusterUid | quote }}
+      uid: {{ .Values.agents.clusterUID | quote }}
     api_client:
       settings_url: {{ .Values.operatorConfig.apiClient.settingsUrl | quote }}
       auth_url: {{ .Values.operatorConfig.apiClient.authUrl | quote }}
