@@ -2,7 +2,7 @@ createNamespace: false
 replicas: 3
 image:
   repository: public.ecr.aws/perfectscale-io/psc-agent-operator
-  tag: "v0.3.1"
+  tag: "v0.3.2"
 args:
   - --config=/etc/operator/operator-config.yaml
 resources:
