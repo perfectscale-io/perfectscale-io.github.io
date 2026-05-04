@@ -21,8 +21,6 @@ data:
       singleton_name: {{ .Values.webhook.singletonName | default "agents" | quote }}
     credentials:
       secret_name: {{ .Values.secret.secretName | quote }}
-      key_client_id: "clientId"
-      key_client_secret: "clientSecret"
     cluster:
       name: {{ .Values.agents.clusterName | quote }}
       uid: {{ .Values.agents.clusterUID | quote }}
