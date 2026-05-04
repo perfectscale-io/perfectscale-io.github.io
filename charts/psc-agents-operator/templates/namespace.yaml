@@ -1,9 +1,0 @@
-{{- if .Values.createNamespace }}
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: {{ .Release.Namespace }}
-  labels:
-    control-plane: controller-manager
-    {{- include "psc-agents-operator.labels" . | nindent 4 }}
-{{- end }}
