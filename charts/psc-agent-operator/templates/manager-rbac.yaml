@@ -13,7 +13,10 @@ rules:
   resources:
   - namespaces
   verbs:
+  - create
   - get
+  - list
+  - watch
 - apiGroups:
   - ""
   resources:
@@ -74,6 +77,8 @@ rules:
   resources:
   - validatingwebhookconfigurations
   - mutatingwebhookconfigurations
+  - validatingadmissionpolicies
+  - validatingadmissionpolicybindings
   verbs:
   - create
   - delete
@@ -85,27 +90,9 @@ rules:
 - apiGroups:
   - perfectscale.io
   resources:
-  - agents
+  - '*'
   verbs:
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - perfectscale.io
-  resources:
-  - agents/finalizers
-  verbs:
-  - update
-- apiGroups:
-  - perfectscale.io
-  resources:
-  - agents/status
-  verbs:
-  - get
-  - patch
-  - update
+  - '*'
 - apiGroups:
   - storage.k8s.io
   resources:
@@ -128,6 +115,167 @@ rules:
   - metrics.k8s.io
   resources:
   - pods
+  verbs:
+  - get
+  - list
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  - endpoints
+  - limitranges
+  - persistentvolumeclaims
+  - replicationcontrollers
+  - resourcequotas
+  - serviceaccounts
+  - services
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - events
+  verbs:
+  - create
+  - get
+  - list
+  - patch
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  verbs:
+  - delete
+  - get
+  - list
+  - patch
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - pods/proxy
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - pods/resize
+  verbs:
+  - patch
+- apiGroups:
+  - apps
+  resources:
+  - controllerrevisions
+  - daemonsets
+  - deployments
+  - replicasets
+  - statefulsets
+  verbs:
+  - get
+  - list
+  - patch
+  - watch
+- apiGroups:
+  - apps
+  resources:
+  - cronjobs
+  - jobs
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - batch
+  resources:
+  - cronjobs
+  - jobs
+  verbs:
+  - get
+  - list
+  - patch
+  - watch
+- apiGroups:
+  - autoscaling
+  resources:
+  - horizontalpodautoscalers
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - policy
+  resources:
+  - poddisruptionbudgets
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - coordination.k8s.io
+  resources:
+  - leases
+  verbs:
+  - create
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - networking.k8s.io
+  resources:
+  - networkpolicies
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - rbac.authorization.k8s.io
+  resources:
+  - roles
+  - rolebindings
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - argoproj.io
+  resources:
+  - replicasets
+  - rollouts
+  - rollouts/scale
+  - rollouts/status
+  verbs:
+  - get
+  - list
+  - patch
+  - watch
+- apiGroups:
+  - extensions
+  resources:
+  - daemonsets
+  - deployments
+  - replicasets
+  verbs:
+  - list
+  - watch
+- apiGroups:
+  - nvidia.com
+  resources:
+  - clusterpolicies
   verbs:
   - get
   - list
@@ -259,24 +407,9 @@ rules:
 - apiGroups:
   - perfectscale.io
   resources:
-  - clusterautomationconfigs
-  - clusterrecommendationsconfigs
-  - namespaceautomationconfigs
-  - namespacerecommendationsconfigs
-  - workloadautomationconfigs
-  - workloadautomationstatuses
-  - workloadrecommendationsconfigs
-  - clustersettings
-  - workloads
+  - '*'
   verbs:
-  - create
-  - delete
-  - deletecollection
-  - get
-  - list
-  - patch
-  - update
-  - watch
+  - '*'
 - apiGroups:
   - policy
   resources:

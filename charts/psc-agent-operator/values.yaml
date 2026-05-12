@@ -2,7 +2,7 @@ createNamespace: false
 replicas: 3
 image:
   repository: public.ecr.aws/perfectscale-io/psc-agent-operator
-  tag: "v0.3.4"
+  tag: "v0.3.5"
 args:
   - --config=/etc/operator/operator-config.yaml
 resources:
@@ -51,6 +51,7 @@ operatorConfig:
     telemetryUrl: "https://api.app.perfectscale.io/psc-telemetry"
 webhook:
   singletonName: "agents"
+  allowArbitraryName: false
   timeout: 15
   failurePolicy: "Fail"
   staticCerts:

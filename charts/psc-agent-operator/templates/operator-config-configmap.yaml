@@ -19,6 +19,7 @@ data:
       cert_name: "tls.crt"
       cert_key: "tls.key"
       singleton_name: {{ .Values.webhook.singletonName | default "agents" | quote }}
+      allow_arbitrary_name: {{ .Values.webhook.allowArbitraryName | default false }}
     credentials:
       secret_name: {{ .Values.secret.secretName | quote }}
     cluster:
