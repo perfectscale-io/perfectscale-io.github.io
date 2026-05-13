@@ -11,7 +11,7 @@ spec:
       - apiGroups: ["perfectscale.io"]
         apiVersions: ["v1"]
         resources: ["clusteruiautomationsettings", "namespaceuiautomationsettings"]
-        operations: ["CREATE", "UPDATE", "DELETE"]
+        operations: ["CREATE", "UPDATE"]
   validations:
     - expression: >-
         request.userInfo.username == 'system:serviceaccount:{{ .Release.Namespace }}:{{ include "psc-autoscaler.serviceAccountName" . }}'
