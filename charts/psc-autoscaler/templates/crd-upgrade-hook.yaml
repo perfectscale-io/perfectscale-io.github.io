@@ -16,7 +16,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "psc-autoscaler.fullname" . }}-crd-upgrade-hook
+  name: {{ include "psc-autoscaler.crdUpgradeHookName" . }}
   labels: {{- include "psc-autoscaler.labels" . | nindent 4 }}
   annotations:
     "helm.sh/hook": pre-upgrade
@@ -32,7 +32,7 @@ data:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: {{ include "psc-autoscaler.fullname" . }}-crd-upgrade-hook
+  name: {{ include "psc-autoscaler.crdUpgradeHookName" . }}
   namespace: {{ .Release.Namespace }}
   labels: {{- include "psc-autoscaler.labels" . | nindent 4 }}
   annotations:
@@ -45,7 +45,7 @@ automountServiceAccountToken: false
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ include "psc-autoscaler.fullname" . }}-crd-upgrade-hook
+  name: {{ include "psc-autoscaler.crdUpgradeHookName" . }}
   labels: {{- include "psc-autoscaler.labels" . | nindent 4 }}
   annotations:
     "helm.sh/hook": pre-upgrade
@@ -60,7 +60,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: {{ include "psc-autoscaler.fullname" . }}-crd-upgrade-hook
+  name: {{ include "psc-autoscaler.crdUpgradeHookName" . }}
   labels: {{- include "psc-autoscaler.labels" . | nindent 4 }}
   annotations:
     "helm.sh/hook": pre-upgrade
@@ -68,18 +68,18 @@ metadata:
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
 subjects:
   - kind: ServiceAccount
-    name: {{ include "psc-autoscaler.fullname" . }}-crd-upgrade-hook
+    name: {{ include "psc-autoscaler.crdUpgradeHookName" . }}
     namespace: {{ .Release.Namespace }}
 roleRef:
   kind: ClusterRole
-  name: {{ include "psc-autoscaler.fullname" . }}-crd-upgrade-hook
+  name: {{ include "psc-autoscaler.crdUpgradeHookName" . }}
   apiGroup: rbac.authorization.k8s.io
 ---
 # ---------- Job: apply CRDs and wait for them to be established ----------
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ include "psc-autoscaler.fullname" . }}-crd-upgrade-hook
+  name: {{ include "psc-autoscaler.crdUpgradeHookName" . }}
   labels:
     {{- include "psc-autoscaler.labels" . | nindent 4 }}
   annotations:
@@ -94,7 +94,7 @@ spec:
         {{- include "psc-autoscaler.selectorLabels" . | nindent 8 }}
         job: crd-upgrade-hook
     spec:
-      serviceAccountName: {{ include "psc-autoscaler.fullname" . }}-crd-upgrade-hook
+      serviceAccountName: {{ include "psc-autoscaler.crdUpgradeHookName" . }}
       automountServiceAccountToken: true
       restartPolicy: Never
       containers:
@@ -118,9 +118,21 @@ spec:
       volumes:
         - name: crds
           configMap:
-            name: {{ include "psc-autoscaler.fullname" . }}-crd-upgrade-hook
+            name: {{ include "psc-autoscaler.crdUpgradeHookName" . }}
       {{- if .Values.imagePullSecrets }}
       imagePullSecrets:
         - name: {{ .Values.imagePullSecrets.secretName }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
       {{- end }}
 {{- end }}
