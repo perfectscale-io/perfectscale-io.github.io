@@ -16,7 +16,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "helm.fullname" . }}-crd-upgrade-hook
+  name: {{ include "helm.crdUpgradeHookName" . }}
   namespace: {{ .Release.Namespace }}
   labels: {{- include "helm.labels" . | nindent 4 }}
   annotations:
@@ -33,7 +33,7 @@ data:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: {{ include "helm.fullname" . }}-crd-upgrade-hook
+  name: {{ include "helm.crdUpgradeHookName" . }}
   namespace: {{ .Release.Namespace }}
   labels: {{- include "helm.labels" . | nindent 4 }}
   annotations:
@@ -46,7 +46,7 @@ automountServiceAccountToken: false
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ include "helm.fullname" . }}-crd-upgrade-hook
+  name: {{ include "helm.crdUpgradeHookName" . }}
   labels: {{- include "helm.labels" . | nindent 4 }}
   annotations:
     "helm.sh/hook": pre-upgrade
@@ -61,7 +61,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: {{ include "helm.fullname" . }}-crd-upgrade-hook
+  name: {{ include "helm.crdUpgradeHookName" . }}
   labels: {{- include "helm.labels" . | nindent 4 }}
   annotations:
     "helm.sh/hook": pre-upgrade
@@ -69,18 +69,18 @@ metadata:
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
 subjects:
   - kind: ServiceAccount
-    name: {{ include "helm.fullname" . }}-crd-upgrade-hook
+    name: {{ include "helm.crdUpgradeHookName" . }}
     namespace: {{ .Release.Namespace }}
 roleRef:
   kind: ClusterRole
-  name: {{ include "helm.fullname" . }}-crd-upgrade-hook
+  name: {{ include "helm.crdUpgradeHookName" . }}
   apiGroup: rbac.authorization.k8s.io
 ---
 # ---------- Job: apply CRDs and wait for them to be established ----------
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ include "helm.fullname" . }}-crd-upgrade-hook
+  name: {{ include "helm.crdUpgradeHookName" . }}
   namespace: {{ .Release.Namespace }}
   labels:
     {{- include "helm.labels" . | nindent 4 }}
@@ -96,7 +96,7 @@ spec:
         {{- include "helm.selectorLabels" . | nindent 8 }}
         job: crd-upgrade-hook
     spec:
-      serviceAccountName: {{ include "helm.fullname" . }}-crd-upgrade-hook
+      serviceAccountName: {{ include "helm.crdUpgradeHookName" . }}
       automountServiceAccountToken: true
       restartPolicy: Never
       containers:
@@ -120,9 +120,21 @@ spec:
       volumes:
         - name: crds
           configMap:
-            name: {{ include "helm.fullname" . }}-crd-upgrade-hook
+            name: {{ include "helm.crdUpgradeHookName" . }}
       {{- if .Values.imagePullSecrets }}
       imagePullSecrets:
         - name: {{ .Values.imagePullSecrets.secretName }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
       {{- end }}
 {{- end }}

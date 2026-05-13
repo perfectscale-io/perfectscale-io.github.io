@@ -51,6 +51,26 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
+Name used by all CRD upgrade hook resources. The name must stay <= 63 chars
+because Kubernetes auto-injects the Job name as a label value on the hook
+Pod (`job-name`, `batch.kubernetes.io/job-name`) and label values have a
+63-char limit. An 8-char SHA256 hash of namespace + fullname keeps the name
+unique when long fullnames share the same truncated prefix — important for
+the cluster-scoped ClusterRole and ClusterRoleBinding.
+
+Length budget (= 63 chars):
+  - 37 chars  readable fullname prefix
+  -  1 char   separator
+  -  8 chars  hash
+  - 17 chars  "-crd-upgrade-hook" suffix
+*/}}
+{{- define "helm.crdUpgradeHookName" -}}
+{{- $fullname := include "helm.fullname" . -}}
+{{- $hash := printf "%s:%s" .Release.Namespace $fullname | sha256sum | trunc 8 -}}
+{{- printf "%s-%s-crd-upgrade-hook" ($fullname | trunc 37 | trimSuffix "-") $hash -}}
+{{- end }}
+
+{{/*
 Create the name of the service account to use
 */}}
 {{- define "helm.serviceAccountName" -}}
