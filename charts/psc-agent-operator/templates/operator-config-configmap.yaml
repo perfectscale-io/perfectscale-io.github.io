@@ -23,8 +23,8 @@ data:
     credentials:
       secret_name: {{ .Values.secret.secretName | quote }}
     cluster:
-      name: {{ .Values.agents.clusterName | quote }}
-      uid: {{ .Values.agents.clusterUID | quote }}
+      name: {{ .Values.settings.clusterName | quote }}
+      uid: {{ .Values.settings.clusterUID | quote }}
     api_client:
       settings_url: {{ .Values.operatorConfig.apiClient.settingsUrl | quote }}
       auth_url: {{ .Values.operatorConfig.apiClient.authUrl | quote }}

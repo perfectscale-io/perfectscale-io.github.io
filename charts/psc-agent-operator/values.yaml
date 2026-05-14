@@ -2,7 +2,7 @@ createNamespace: false
 replicas: 3
 image:
   repository: public.ecr.aws/perfectscale-io/psc-agent-operator
-  tag: "v0.3.5"
+  tag: "v0.3.6"
 args:
   - --config=/etc/operator/operator-config.yaml
 resources:
@@ -66,10 +66,11 @@ secret:
   secretName: "perfectscale-secret"
   clientId: ""
   clientSecret: ""
-agents:
-  create: false
+settings:
   clusterName: ""
   clusterUID: ""
+agents:
+  create: false
   exporter:
     installationMode: "off"
     upgrade:
