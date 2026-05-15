@@ -88,6 +88,12 @@ rules:
   - update
   - watch
 - apiGroups:
+  - admissionregistration.k8s.io
+  resources:
+  - rolebindings
+  verbs:
+  - get
+- apiGroups:
   - perfectscale.io
   resources:
   - '*'
