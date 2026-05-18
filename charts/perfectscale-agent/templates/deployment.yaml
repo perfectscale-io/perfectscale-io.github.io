@@ -118,7 +118,7 @@ spec:
           - name: CONTAINER_REGEX
             value: "{{ .Values.settings.containerRegex | default "" }}"
           - name: LEADER_ELECTION_ENABLED
-            value: "{{ .Values.rbac.leaseLeaderElection.enabled | default false }}"
+            value: "{{ include "helm.leaseLeaderElectionEnabled" . | trim }}"
           - name: LEADER_ELECTION_LEASE_NAMESPACE
             value: "{{ .Values.rbac.leaseLeaderElection.namespace | default .Release.Namespace }}"
           - name: LEADER_ELECTION_LEASE_NAME
