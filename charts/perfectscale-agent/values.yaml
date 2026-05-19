@@ -190,6 +190,12 @@ crManager:
       caCert: "" # Base64 encoded CA certificate
     certManager:
       enabled: false
+      caCert:
+        duration: 87600h # 10 years
+        renewBefore: 720h # 30 days
+      cert:
+        duration: 2160h # 90 days
+        renewBefore: 360h # 15 days
     # If you have a Kubernetes secret containing the certificates for the webhook created outside of the Helm chart,
     # set enabled: true under externalCertSecret, specify the secret name in the tlsName field,
     # and provide the actual base64 encoded CA bundle in the caCert field.
