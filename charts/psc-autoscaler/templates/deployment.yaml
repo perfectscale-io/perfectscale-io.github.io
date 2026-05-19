@@ -112,6 +112,10 @@ spec:
             - name: INSECURE_SKIP_VERIFY
               value: "{{ .Values.settings.insecureSkipVerify }}"
             {{- end }}
+            {{- if .Values.settings.pprofEnabled }}
+            - name: PPROF_ENABLED
+              value: "true"
+            {{- end }}
           command:
             - "./app"
             - "serve"
@@ -266,6 +270,10 @@ spec:
             - name: INSECURE_SKIP_VERIFY
               value: "{{ .Values.settings.insecureSkipVerify }}"
             {{- end }}
+            {{- if .Values.settings.pprofEnabled }}
+            - name: PPROF_ENABLED
+              value: "true"
+            {{- end }}
           command:
             - "./app"
             - "sync"
@@ -405,6 +413,10 @@ spec:
             {{- if (.Values.settings).insecureSkipVerify }}
             - name: INSECURE_SKIP_VERIFY
               value: "{{ .Values.settings.insecureSkipVerify }}"
+            {{- end }}
+            {{- if .Values.settings.pprofEnabled }}
+            - name: PPROF_ENABLED
+              value: "true"
             {{- end }}
           command:
             - "./app"
