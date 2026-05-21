@@ -91,6 +91,18 @@ rules:
   - admissionregistration.k8s.io
   resources:
   - rolebindings
+  - roles
+  - clusterroles
+  - clusterrolebindings
+  verbs:
+  - get
+- apiGroups:
+  - rbac.authorization.k8s.io
+  resources:
+  - mutatingwebhookconfigurations
+  - validatingwebhookconfigurations
+  - validatingadmissionpolicies
+  - validatingadmissionpolicybindings
   verbs:
   - get
 - apiGroups:
@@ -116,6 +128,18 @@ rules:
   verbs:
   - get
   - list
+  - watch
+- apiGroups:
+  - scheduling.k8s.io
+  resources:
+  - priorityclasses
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
   - watch
 - apiGroups:
   - metrics.k8s.io
