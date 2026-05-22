@@ -10,6 +10,9 @@ metadata:
     {{- range $key, $value := .Values.serviceMonitor.labels }}
     {{ $key }}: {{ $value | quote }}
     {{- end }}
+    {{- if .Values.additionalLabels }}
+    {{- toYaml .Values.additionalLabels | nindent 4 }}
+    {{- end }}
   {{- with .Values.serviceMonitor.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}

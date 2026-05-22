@@ -50,6 +50,9 @@ metadata:
   labels:
     {{- $labels | nindent 4 }}
     app.kubernetes.io/component: psc-exporter-cr-manager
+    {{- if .Values.additionalLabels }}
+    {{- toYaml .Values.additionalLabels | nindent 4 }}
+    {{- end }}
 spec:
   secretName: {{ $fullName }}-tls
   duration: 2160h # 90 days
