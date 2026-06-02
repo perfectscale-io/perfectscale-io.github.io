@@ -110,6 +110,21 @@ rules:
       - get
       - list
       - watch
+  - apiGroups:
+      - "nvidia.com"
+    resources:
+      - clusterpolicies
+    verbs:
+      - get
+      - list
+  - apiGroups:
+      - "karpenter.k8s.aws"
+    resources:
+      - ec2nodeclasses
+    verbs:
+      - get
+      - list
+      - watch
   - nonResourceURLs:
       - "/version"
     verbs:
