@@ -97,10 +97,14 @@ spec:
       serviceAccountName: {{ include "psc-autoscaler.crdUpgradeHookName" . }}
       automountServiceAccountToken: true
       restartPolicy: Never
+      securityContext:
+        {{- toYaml .Values.crdUpgradeHook.podSecurityContext | nindent 8 }}
       containers:
         - name: crd-apply
           image: "{{ .Values.crdUpgradeHook.image.repository }}:{{ .Values.crdUpgradeHook.image.tag }}"
           imagePullPolicy: {{ .Values.crdUpgradeHook.image.pullPolicy }}
+          securityContext:
+            {{- toYaml .Values.crdUpgradeHook.securityContext | nindent 12 }}
           command: ["sh", "-c"]
           args:
             - |

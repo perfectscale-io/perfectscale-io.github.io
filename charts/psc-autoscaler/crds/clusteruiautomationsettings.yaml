@@ -26,6 +26,9 @@ spec:
       # One and only one version must be marked as the storage version.
       storage: true
       additionalPrinterColumns:
+        - name: CleanupAll
+          type: boolean
+          jsonPath: .spec.automation.operational.cleanupAllAutomation
         - name: KeepLimit
           type: boolean
           jsonPath: .spec.automation.operational.restrictions.cpuManagement.limit.keepLimit
