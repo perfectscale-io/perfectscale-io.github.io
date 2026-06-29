@@ -2,7 +2,7 @@ replicaCount: 1
 image:
   repository: public.ecr.aws/perfectscale-io/psc-prom-exporter
   pullPolicy: Always
-  tag: "v0.2.5"
+  tag: "v0.3.1"
 settings:
   deployKubeStateMetrics: true
   serviceId: "psc-prom-exporter"
@@ -56,7 +56,7 @@ config:
 scrapers:
   serviceMonitor:
     # When set true then use a ServiceMonitor to configure scraping
-    ennbled: false
+    enabled: false
     # Set how frequently Prometheus should scrape
     interval: 5m
     # Set path to the metrics
