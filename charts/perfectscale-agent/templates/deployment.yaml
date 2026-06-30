@@ -87,6 +87,18 @@ spec:
             value: "{{ .Values.settings.cAdvisorNumWorkers }}"
           - name: CADVISOR_SCRAPING_MODE
             value: "{{ .Values.settings.cAdvisorScrapingMode | default "auto" }}"
+          - name: CADVISOR_PROBE_INTERVAL
+            value: {{ dig "cAdvisorProbeConfig" "interval" "24h" .Values.settings | quote }}
+          - name: CADVISOR_PROBE_BACKOFF_INITIAL
+            value: {{ dig "cAdvisorProbeConfig" "backoffInitial" "5m" .Values.settings | quote }}
+          - name: CADVISOR_PROBE_BACKOFF_MAX
+            value: {{ dig "cAdvisorProbeConfig" "backoffMax" "2h" .Values.settings | quote }}
+          - name: CADVISOR_PROBE_BACKOFF_MULTIPLIER
+            value: {{ dig "cAdvisorProbeConfig" "backoffMultiplier" "2.0" .Values.settings | quote }}
+          - name: CADVISOR_PROBE_FAILURE_THRESHOLD
+            value: {{ dig "cAdvisorProbeConfig" "failureThreshold" "0.7" .Values.settings | quote }}
+          - name: CADVISOR_PROBE_FAILURE_WINDOW
+            value: {{ dig "cAdvisorProbeConfig" "failureWindow" "3" .Values.settings | quote }}
           - name: PS_URL
             value: "{{ .Values.settings.psUrl }}"
           - name: UPLOAD_POLICY_URL
@@ -113,6 +125,8 @@ spec:
             value: "{{ .Values.settings.enablePProf | default "false" }}"
           - name: ENABLE_OOM_DEBUG
             value: "{{ .Values.settings.enableOomDebug | default "false" }}"
+          - name: PHASE_STATS_COLLECTION_ENABLED
+            value: "{{ .Values.settings.phaseStatsCollectionEnabled | default "false" }}"
           - name: POD_REGEX
             value: "{{ .Values.settings.podRegex | default "" }}"
           - name: CONTAINER_REGEX
