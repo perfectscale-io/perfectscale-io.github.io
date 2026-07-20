@@ -130,6 +130,18 @@ rules:
   - list
   - watch
 - apiGroups:
+  - karpenter.k8s.aws
+  resources:
+  - ec2nodeclasses
+  verbs:
+  - get
+  - list
+  - watch
+- nonResourceURLs:
+  - /version
+  verbs:
+  - get
+- apiGroups:
   - scheduling.k8s.io
   resources:
   - priorityclasses
