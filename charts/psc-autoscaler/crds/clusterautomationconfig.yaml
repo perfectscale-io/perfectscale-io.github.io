@@ -65,6 +65,27 @@ spec:
                           type: string
                         duringRolloutInProgress:
                           type: string
+                        resourceQuotaAwareAutomation:
+                          type: string
+                          enum:
+                            - decreaseOnly
+                            - full
+                        splitInitRuntimeRecommendations:
+                          type: object
+                          x-kubernetes-preserve-unknown-fields: true
+                          properties:
+                            cpuManagement:
+                              type: object
+                              x-kubernetes-preserve-unknown-fields: true
+                              properties:
+                                enabled:
+                                  type: boolean
+                            memoryManagement:
+                              type: object
+                              x-kubernetes-preserve-unknown-fields: true
+                              properties:
+                                enabled:
+                                  type: boolean
                         workloadLabelSelectors:
                           type: array
                           items:
@@ -245,6 +266,27 @@ spec:
                                 type: string
                               duringRolloutInProgress:
                                 type: string
+                              resourceQuotaAwareAutomation:
+                                type: string
+                                enum:
+                                  - decreaseOnly
+                                  - full
+                              splitInitRuntimeRecommendations:
+                                type: object
+                                x-kubernetes-preserve-unknown-fields: true
+                                properties:
+                                  cpuManagement:
+                                    type: object
+                                    x-kubernetes-preserve-unknown-fields: true
+                                    properties:
+                                      enabled:
+                                        type: boolean
+                                  memoryManagement:
+                                    type: object
+                                    x-kubernetes-preserve-unknown-fields: true
+                                    properties:
+                                      enabled:
+                                        type: boolean
                               workloadLabelSelectors:
                                 type: array
                                 items:
