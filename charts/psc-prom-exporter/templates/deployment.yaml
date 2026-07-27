@@ -110,6 +110,8 @@ spec:
             value: "{{ include "helm.exporter.remoteLogBatchSize" . }}"
           - name: REMOTE_LOG_BATCH_INTERVAL
             value: "{{ include "helm.exporter.remoteLogBatchInterval" . }}"
+          - name: EXPAND_EPHEMERAL_WORKLOADS
+            value: "{{ .Values.settings.expandEphemeralWorkloads | default false }}"
           {{- if .Values.settings.httpProxyEnabled | default false }}
           - name: HTTP_PROXY
             value: "{{ .Values.settings.httpProxy }}"

@@ -2,7 +2,7 @@ replicaCount: 1
 image:
   repository: public.ecr.aws/perfectscale-io/psc-prom-exporter
   pullPolicy: Always
-  tag: "v0.3.1"
+  tag: "v0.3.2"
 settings:
   deployKubeStateMetrics: true
   serviceId: "psc-prom-exporter"
@@ -19,6 +19,9 @@ settings:
   httpProxy: "" #example: http://squid-proxy-service.default:3128
   httpsProxy: "" #example$ http://squid-proxy-service.default:3128
   noProxy: "" #example: ".cluster.local,.svc.cluster.local,172.20.0.1," the line must end with a coma, 172.20.0.1 it is KUBERNETES_SERVICE_HOST, API SERVICE
+  # When true, requests the full workload list  instead of the default response where ephemeral workloads
+  # are collapsed into a single aggregate row.
+  expandEphemeralWorkloads: false
 config:
   metrics:
     recommendations:
