@@ -14,6 +14,10 @@ spec:
       {{- if eq .Values.agents.exporter.upgrade.mode "manual" }}
       version: {{ required "agents.exporter.upgrade.version is required for manual mode" .Values.agents.exporter.upgrade.version | quote }}
       {{- end }}
+    {{- if .Values.agents.exporter.valuesOverride }}
+    valuesOverride:
+{{ .Values.agents.exporter.valuesOverride | toYaml | indent 6 }}
+    {{- end }}
   promexporter:
     installationMode: {{ .Values.agents.promexporter.installationMode | quote }}
     upgrade:
@@ -21,6 +25,10 @@ spec:
       {{- if eq .Values.agents.promexporter.upgrade.mode "manual" }}
       version: {{ required "agents.promexporter.upgrade.version is required for manual mode" .Values.agents.promexporter.upgrade.version | quote }}
       {{- end }}
+    {{- if .Values.agents.promexporter.valuesOverride }}
+    valuesOverride:
+{{ .Values.agents.promexporter.valuesOverride | toYaml | indent 6 }}
+    {{- end }}
   autoscaler:
     installationMode: {{ .Values.agents.autoscaler.installationMode | quote }}
     upgrade:
@@ -28,4 +36,8 @@ spec:
       {{- if eq .Values.agents.autoscaler.upgrade.mode "manual" }}
       version: {{ required "agents.autoscaler.upgrade.version is required for manual mode" .Values.agents.autoscaler.upgrade.version | quote }}
       {{- end }}
+    {{- if .Values.agents.autoscaler.valuesOverride }}
+    valuesOverride:
+{{ .Values.agents.autoscaler.valuesOverride | toYaml | indent 6 }}
+    {{- end }}
 {{- end }}

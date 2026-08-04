@@ -321,6 +321,52 @@ rules:
   verbs:
   - get
   - list
+# cert-manager.io: exporter (cr-manager/certmanager.yaml) and autoscaler (certmanager.yaml)
+# render Issuer + Certificate when certManager.enabled=true in valuesOverride.
+# Helm needs full CRUD to apply/diff/uninstall those resources.
+- apiGroups:
+  - cert-manager.io
+  resources:
+  - certificates
+  - issuers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+# monitoring.coreos.com: exporter (service-monitor.yaml, prometheus-rule.yaml) and
+# promexporter (service-monitor.yaml, prometheus-rule.yaml) render ServiceMonitor +
+# PrometheusRule when serviceMonitor/prometheusRule is enabled in valuesOverride.
+- apiGroups:
+  - monitoring.coreos.com
+  resources:
+  - servicemonitors
+  - prometheusrules
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+# datadoghq.com: promexporter (datadog-monitor.yaml) renders DatadogMonitor when
+# alerts.datadogMonitor.enabled=true in valuesOverride.
+- apiGroups:
+  - datadoghq.com
+  resources:
+  - datadogmonitors
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding

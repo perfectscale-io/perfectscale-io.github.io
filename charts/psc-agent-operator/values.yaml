@@ -2,7 +2,7 @@ createNamespace: false
 replicas: 3
 image:
   repository: public.ecr.aws/perfectscale-io/psc-agent-operator
-  tag: "v0.3.12"
+  tag: "v0.3.13"
 args:
   - --config=/etc/operator/operator-config.yaml
 resources:
@@ -76,13 +76,16 @@ agents:
     upgrade:
       mode: "auto"
       version: ""
+    valuesOverride: {}
   promexporter:
     installationMode: "off"
     upgrade:
       mode: "auto"
       version: ""
+    valuesOverride: {}
   autoscaler:
     installationMode: "off"
     upgrade:
       mode: "auto"
       version: ""
+    valuesOverride: {}
