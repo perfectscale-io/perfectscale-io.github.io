@@ -93,7 +93,7 @@ spec:
           - name: CLUSTER_UID
             value: "{{ include "helm.exporter.clusterUID" . }}"
           - name: CLUSTER_NAME
-            value: "{{ .Values.settings.clusterName }}"
+            value: "{{ tpl .Values.settings.clusterName . }}"
           - name: CR_MANAGER_NAMESPACE
             value: "{{ .Release.Namespace }}"
           - name: "KUBERNETES_CLIENT_BURST"
