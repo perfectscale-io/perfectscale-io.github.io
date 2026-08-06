@@ -59,10 +59,6 @@ spec:
           command: ["/bin/sh", "-c"]
           args: ["./app"]
           env:
-{{- if eq .Values.settings.env "dev" }}
-          - name: GOMEMLIMIT
-            value: "{{ .Values.resources.requests.memory }}B"
-{{- end }}
           - name: SERVICE_ID
             value: "{{ .Values.settings.serviceId }}"
           - name: ENV

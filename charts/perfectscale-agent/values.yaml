@@ -3,7 +3,7 @@ revisionHistoryLimit: 10
 image:
   repository: public.ecr.aws/perfectscale-io/psc-exporter
   pullPolicy: Always
-  tag: "v1.1.12"
+  tag: "v1.1.14"
 initContainer:
   image:
     repository: public.ecr.aws/perfectscale-io/alpine
@@ -267,6 +267,10 @@ grafana:
     labels:
       grafana_dashboard: "1"
 kube-state-metrics:
+  image:
+    registry: public.ecr.aws
+    repository: l4d0e8n7/kube-state-metrics
+    tag: "v2.18.0"
   containerSecurityContext:
     allowPrivilegeEscalation: false
     seccompProfile:

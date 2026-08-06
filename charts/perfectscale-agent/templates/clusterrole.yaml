@@ -25,6 +25,7 @@ rules:
       - services
       - namespaces
       - events
+      - resourcequotas
     verbs:
       - get
       - list
