@@ -172,7 +172,7 @@ spec:
           - name: "KSM_IMAGE_NAME"
             value: "{{ .Values.settings.scraper.ksmImageName }}"
           - name: "CLUSTER_NAME"
-            value: "{{ .Values.settings.clusterName }}"
+            value: "{{ tpl .Values.settings.clusterName . }}"
           - name: REMOTE_LOG_BATCH_SIZE
             value: "{{ include "helm.exporter.remoteLogBatchSize" . }}"
           - name: REMOTE_LOG_BATCH_INTERVAL
@@ -229,6 +229,18 @@ spec:
             value: "{{ .Values.settings.corootNodeAgent.numWorkers | default "30" }}"
           - name: COROOT_NODE_AGENT_ACCESS_TYPE
             value: "{{ .Values.settings.corootNodeAgent.accessType | default "direct" }}"
+          - name: COROOT_NODE_AGENT_PROBE_INTERVAL
+            value: {{ dig "corootNodeAgent" "probe" "interval" "24h" .Values.settings | quote }}
+          - name: COROOT_NODE_AGENT_PROBE_BACKOFF_INITIAL
+            value: {{ dig "corootNodeAgent" "probe" "backoffInitial" "5m" .Values.settings | quote }}
+          - name: COROOT_NODE_AGENT_PROBE_BACKOFF_MAX
+            value: {{ dig "corootNodeAgent" "probe" "backoffMax" "2h" .Values.settings | quote }}
+          - name: COROOT_NODE_AGENT_PROBE_BACKOFF_MULTIPLIER
+            value: {{ dig "corootNodeAgent" "probe" "backoffMultiplier" "2.0" .Values.settings | quote }}
+          - name: COROOT_NODE_AGENT_PROBE_FAILURE_THRESHOLD
+            value: {{ dig "corootNodeAgent" "probe" "failureThreshold" "0.7" .Values.settings | quote }}
+          - name: COROOT_NODE_AGENT_PROBE_FAILURE_WINDOW
+            value: {{ dig "corootNodeAgent" "probe" "failureWindow" "3" .Values.settings | quote }}
           - name: SNAPSHOT_INTERVAL_CYCLES
             value: "{{ .Values.settings.snapshotIntervalCycles | default "12" }}"
           ports:

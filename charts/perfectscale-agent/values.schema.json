@@ -24,6 +24,11 @@
           "enum": ["auto", "direct", "nodeProxy"],
           "description": "cAdvisor scraping mode: auto (failover), direct (nodes only), nodeProxy (API proxy only)",
           "default": "auto"
+        },
+        "clusterName": {
+          "type": "string",
+          "description": "Cluster name, rendered through tpl so it can reference other chart values (e.g. '{{ .Values.global.cluster.name }}')",
+          "default": ""
         }
       }
     }
