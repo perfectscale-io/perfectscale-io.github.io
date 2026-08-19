@@ -3,11 +3,11 @@ revisionHistoryLimit: 10
 image:
   repository: public.ecr.aws/perfectscale-io/psc-exporter
   pullPolicy: Always
-  tag: "v1.1.17"
+  tag: "v1.1.18"
 initContainer:
   image:
     repository: public.ecr.aws/perfectscale-io/alpine
-    tag: 3.21-init
+    tag: 3.24-init
 # Notes generation override web portal
 webAppUrl: "http://app.perfectscale.io/"
 settings:
@@ -338,7 +338,7 @@ coroot:
   image:
     repository: public.ecr.aws/perfectscale-io/coroot-node-agent
     pullPolicy: Always
-    tag: "v0.0.11"
+    tag: "v0.0.16"
   resources:
     requests:
       cpu: 10m
