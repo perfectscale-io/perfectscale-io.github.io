@@ -81,6 +81,9 @@ spec:
                 restartedAt:
                   type: string
                   format: date-time
+                splitInitRuntimeDisabledUntil:
+                  type: string
+                  format: date-time
                 current:
                   type: object
                   x-kubernetes-preserve-unknown-fields: true
@@ -814,3 +817,84 @@ spec:
                                               type: string
                                             memory:
                                               type: string
+                audit:
+                  type: object
+                  x-kubernetes-preserve-unknown-fields: true
+                  properties:
+                    phased:
+                      type: object
+                      x-kubernetes-preserve-unknown-fields: true
+                      additionalProperties:
+                        type: object
+                        x-kubernetes-preserve-unknown-fields: true
+                        properties:
+                          eventID:
+                            type: string
+                          init:
+                            type: object
+                            x-kubernetes-preserve-unknown-fields: true
+                            properties:
+                              before:
+                                type: object
+                                x-kubernetes-preserve-unknown-fields: true
+                                additionalProperties:
+                                  type: object
+                                  x-kubernetes-preserve-unknown-fields: true
+                                  properties:
+                                    requests:
+                                      type: object
+                                      x-kubernetes-preserve-unknown-fields: true
+                                      properties:
+                                        cpu:
+                                          type: string
+                                        memory:
+                                          type: string
+                                    limits:
+                                      type: object
+                                      x-kubernetes-preserve-unknown-fields: true
+                                      properties:
+                                        cpu:
+                                          type: string
+                                        memory:
+                                          type: string
+                              event:
+                                type: string
+                              eventTs:
+                                type: string
+                                format: date-time
+                              acked:
+                                type: boolean
+                          runtime:
+                            type: object
+                            x-kubernetes-preserve-unknown-fields: true
+                            properties:
+                              before:
+                                type: object
+                                x-kubernetes-preserve-unknown-fields: true
+                                additionalProperties:
+                                  type: object
+                                  x-kubernetes-preserve-unknown-fields: true
+                                  properties:
+                                    requests:
+                                      type: object
+                                      x-kubernetes-preserve-unknown-fields: true
+                                      properties:
+                                        cpu:
+                                          type: string
+                                        memory:
+                                          type: string
+                                    limits:
+                                      type: object
+                                      x-kubernetes-preserve-unknown-fields: true
+                                      properties:
+                                        cpu:
+                                          type: string
+                                        memory:
+                                          type: string
+                              event:
+                                type: string
+                              eventTs:
+                                type: string
+                                format: date-time
+                              acked:
+                                type: boolean

@@ -176,6 +176,20 @@ spec:
                                         - enum: [ -1 ]
                                         - minimum: 0
                                           exclusiveMinimum: true
+                                    cpuRunawayDetection:
+                                      type: object
+                                      x-kubernetes-preserve-unknown-fields: true
+                                      properties:
+                                        maxCpuRequestIncreaseIterations:
+                                          type: object
+                                          x-kubernetes-preserve-unknown-fields: true
+                                          properties:
+                                            daily:
+                                              type: integer
+                                              minimum: 0
+                                            weekly:
+                                              type: integer
+                                              minimum: 0
                                 limit:
                                   type: object
                                   x-kubernetes-preserve-unknown-fields: true
@@ -241,11 +255,9 @@ spec:
                                             daily:
                                               type: integer
                                               minimum: 0
-                                              exclusiveMinimum: true
                                             weekly:
                                               type: integer
                                               minimum: 0
-                                              exclusiveMinimum: true
                     workloadTypes:
                       type: object
                       additionalProperties:
@@ -377,7 +389,21 @@ spec:
                                               - enum: [ -1 ]
                                               - minimum: 0
                                                 exclusiveMinimum: true
-                                      limit:
+                                          cpuRunawayDetection:
+                                            type: object
+                                            x-kubernetes-preserve-unknown-fields: true
+                                            properties:
+                                              maxCpuRequestIncreaseIterations:
+                                                type: object
+                                                x-kubernetes-preserve-unknown-fields: true
+                                                properties:
+                                                  daily:
+                                                    type: integer
+                                                    minimum: 0
+                                                  weekly:
+                                                    type: integer
+                                                    minimum: 0
+                                        limit:
                                         type: object
                                         x-kubernetes-preserve-unknown-fields: true
                                         properties:
@@ -442,8 +468,6 @@ spec:
                                                   daily:
                                                     type: integer
                                                     minimum: 0
-                                                    exclusiveMinimum: true
                                                   weekly:
                                                     type: integer
                                                     minimum: 0
-                                                    exclusiveMinimum: true

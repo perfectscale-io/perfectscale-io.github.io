@@ -48,4 +48,10 @@ rules:
   - apiGroups: [ "perfectscale.io" ]
     resources: [ "workloads", "clusterautomationconfigs", "namespaceautomationconfigs", "workloadautomationconfigs", "workloadautomationstatuses", "clusteruiautomationsettings", "namespaceuiautomationsettings" ]
     verbs: [ "create", "get", "delete", "list", "patch", "update", "watch" ]
+  - apiGroups: [ "" ]
+    resources: [ "resourcequotas" ]
+    verbs: [ "get", "list", "watch" ]
+  - apiGroups: [ "autoscaling" ]
+    resources: [ "horizontalpodautoscalers" ]
+    verbs: [ "get", "list", "watch" ]
 {{ end }}

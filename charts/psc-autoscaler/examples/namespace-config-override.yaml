@@ -33,6 +33,10 @@ spec:
                 decreaseEnabled: true
                 minimumCores: 0.5
                 maximumCores: 8
+                cpuRunawayDetection:
+                  maxCpuRequestIncreaseIterations:
+                    daily: 4
+                    weekly: 7
               limit:
                 keepLimit: false
             memoryManagement:
