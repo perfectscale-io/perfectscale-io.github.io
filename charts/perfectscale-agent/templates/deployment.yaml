@@ -44,9 +44,10 @@ spec:
       {{- if ne .Values.settings.deployKubeStateMetrics false }}
       initContainers:
         - name: depends-on
-          image: "{{ .Values.initContainer.image.repository }}:{{ .Values.initContainer.image.tag }}"
-          command: [ 'sh' ]
-          args: [ '-c', 'curl --retry-all-errors --retry 30 --retry-delay 5 -s {{ include "helm.exporter.ksmAddress" . }}; sleep {{ .Values.settings.initSleep | default "1s" }}' ]
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: [ "/opt/app" ]
+          args: [ "check", "container", "--url", "{{ include "helm.exporter.ksmAddress" . }}" ]
           {{- if .Values.containerSecurityContext }}
           securityContext:
             {{- toYaml .Values.containerSecurityContext | nindent 12 }}

@@ -9,7 +9,7 @@
 
   Resources in this file (all ephemeral hook resources):
     Weight -10: ConfigMap, ServiceAccount, ClusterRole, ClusterRoleBinding
-    Weight -5:  Job (kubectl apply + wait)
+    Weight -5:  Job (psc-exporter crds apply)
 */}}
 {{- if .Values.crdUpgradeHook.enabled }}
 # ---------- ConfigMap: embeds all CRD manifests from crds/ ----------
@@ -101,16 +101,13 @@ spec:
       restartPolicy: Never
       containers:
         - name: crd-apply
-          image: "{{ .Values.crdUpgradeHook.image.repository }}:{{ .Values.crdUpgradeHook.image.tag }}"
-          imagePullPolicy: {{ .Values.crdUpgradeHook.image.pullPolicy }}
-          command: ["sh", "-c"]
-          args:
-            - |
-              echo "CRD Upgrade Hook: STARTED"
-              for f in /crds/*.yaml; do
-                kubectl apply --server-side --force-conflicts -f "$f" || { echo "CRD Upgrade Hook: FAILURE"; exit 1; }
-              done
-              echo "CRD Upgrade Hook: SUCCESS"
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: [ "/opt/app" ]
+          args: [ "crds", "apply" ]
+          env:
+            - name: KUBE_API_TIMEOUT
+              value: "{{ .Values.settings.kubeAPITimeoutSec }}"
           resources:
             {{- toYaml .Values.crdUpgradeHook.resources | nindent 12 }}
           volumeMounts:
