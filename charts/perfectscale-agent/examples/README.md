@@ -45,7 +45,6 @@ This directory contains examples of how to use the `ClusterSettings` Custom Reso
 ## UI-only Features
 
 Some PerfectScale features are currently available only through the UI and cannot be configured via CRD:
-- **Custom Grouping** (Ephemeral Pods Grouping) - See: https://docs.perfectscale.io/customize-workflow/ephemeral-pods-grouping
 - **Automation Policies** - Automation rules and maintenance windows
 
 All other profiles are fully supported via CRD.
