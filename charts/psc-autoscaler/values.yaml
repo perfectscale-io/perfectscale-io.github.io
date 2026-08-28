@@ -3,7 +3,7 @@ revisionHistoryLimit: 10
 image:
   repository: public.ecr.aws/perfectscale-io/psc-autoscaler
   pullPolicy: Always
-  tag: "v1.0.53"
+  tag: "v1.0.54"
 settings:
   port: 8443
   env: "prod"
@@ -79,6 +79,14 @@ priorityClass:
 ##
 rbac:
   enabled: true
+  leaseLeaderElection:
+    enabled: true
+    namespace: "default"
+    evictLeaseName: "psc-autoscaler-evict-leader"
+    syncLeaseName: "psc-autoscaler-sync-leader"
+    leaseDuration: "60s"
+    renewDeadline: "50s"
+    retryPeriod: "10s"
 # Using host network namespace for serve pod
 hostNetwork:
   enabled: false

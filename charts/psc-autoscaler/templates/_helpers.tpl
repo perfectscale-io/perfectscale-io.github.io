@@ -133,3 +133,31 @@ For testing purposes, in prod we want to get the actual cluster's UID
 {{- "" }}
 {{- end }}
 {{- end }}
+
+{{- define "helm.leaseLeaderElectionEnabled" -}}
+{{- and .Values.rbac.enabled .Values.rbac.leaseLeaderElection.enabled -}}
+{{- end }}
+
+{{- /*
+Full lease name used by the autoscaler: the configured base plus a
+"-<clusterUID>" suffix when clusterUID is set. Referenced by both the
+LEADER_ELECTION_EVICT_LEASE_NAME env var and the Role's resourceNames so the pod
+has permission to act on exactly the lease it will use.
+*/ -}}
+{{- define "helm.autoscaler.evictLeaseName" -}}
+{{- $base := .Values.rbac.leaseLeaderElection.evictLeaseName | default (include "helm.fullname" .) -}}
+{{- if .Values.settings.clusterUID -}}
+{{- printf "%s-%s" $base .Values.settings.clusterUID -}}
+{{- else -}}
+{{- $base -}}
+{{- end -}}
+{{- end }}
+
+{{- define "helm.autoscaler.syncLeaseName" -}}
+{{- $base := .Values.rbac.leaseLeaderElection.syncLeaseName | default (include "helm.fullname" .) -}}
+{{- if .Values.settings.clusterUID -}}
+{{- printf "%s-%s" $base .Values.settings.clusterUID -}}
+{{- else -}}
+{{- $base -}}
+{{- end -}}
+{{- end }}

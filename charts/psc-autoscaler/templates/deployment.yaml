@@ -74,6 +74,20 @@ spec:
               value: "/opt/tls/tls.crt"
             - name: TLS_KEY_FILE
               value: "/opt/tls/tls.key"
+            - name: LEADER_ELECTION_ENABLED
+              value: "{{ include "helm.leaseLeaderElectionEnabled" . | trim }}"
+            - name: LEADER_ELECTION_LEASE_NAMESPACE
+              value: "{{ .Values.rbac.leaseLeaderElection.namespace | default .Release.Namespace }}"
+            - name: LEADER_ELECTION_EVICT_LEASE_NAME
+              value: "{{ include "helm.autoscaler.evictLeaseName" . }}"
+            - name: LEADER_ELECTION_SYNC_LEASE_NAME
+              value: "{{ include "helm.autoscaler.syncLeaseName" . }}"
+            - name: LEADER_ELECTION_LEASE_DURATION
+              value: "{{ .Values.rbac.leaseLeaderElection.leaseDuration | default "60s" }}"
+            - name: LEADER_ELECTION_RENEW_DEADLINE
+              value: "{{ .Values.rbac.leaseLeaderElection.renewDeadline | default "50s" }}"
+            - name: LEADER_ELECTION_RETRY_PERIOD
+              value: "{{ .Values.rbac.leaseLeaderElection.retryPeriod | default "10s" }}"
             - name: CLIENT_ID
               valueFrom:
                 secretKeyRef:
