@@ -3,7 +3,7 @@ revisionHistoryLimit: 10
 image:
   repository: public.ecr.aws/perfectscale-io/psc-autoscaler
   pullPolicy: Always
-  tag: "v1.0.54"
+  tag: "v1.0.55"
 settings:
   port: 8443
   env: "prod"
@@ -168,9 +168,6 @@ crdUpgradeHook:
       type: RuntimeDefault
 integrationTests:
   enabled: true
-  image:
-    repository: public.ecr.aws/perfectscale-io/psc-autoscaler
-    tag: "v0.1.23-int-tests"
   serviceAccount:
     # Specifies whether a service account should be created
     create: true
