@@ -9,7 +9,8 @@
 
   Resources in this file (all ephemeral hook resources):
     Weight -10: ConfigMap, ServiceAccount, ClusterRole, ClusterRoleBinding
-    Weight -5:  Job (kubectl apply + wait)
+    Weight -5:  Job (runs the autoscaler's own image with the `apply-crds` subcommand,
+                which server-side applies the CRDs and waits for them to be Established)
 */}}
 {{- if .Values.crdUpgradeHook.enabled }}
 # ---------- ConfigMap: embeds all CRD manifests from crds/ ----------
@@ -101,18 +102,20 @@ spec:
         {{- toYaml .Values.crdUpgradeHook.podSecurityContext | nindent 8 }}
       containers:
         - name: crd-apply
-          image: "{{ .Values.crdUpgradeHook.image.repository }}:{{ .Values.crdUpgradeHook.image.tag }}"
-          imagePullPolicy: {{ .Values.crdUpgradeHook.image.pullPolicy }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           securityContext:
             {{- toYaml .Values.crdUpgradeHook.securityContext | nindent 12 }}
-          command: ["sh", "-c"]
-          args:
-            - |
-              echo "CRD Upgrade Hook: STARTED"
-              for f in /crds/*.yaml; do
-                kubectl apply --server-side --force-conflicts -f "$f" || { echo "CRD Upgrade Hook: FAILURE"; exit 1; }
-              done
-              echo "CRD Upgrade Hook: SUCCESS"
+          command:
+            - "./app"
+            - "apply-crds"
+          env:
+            - name: LOG_LEVEL
+              value: "{{ .Values.settings.logLevel }}"
+            - name: CRDS_DIR
+              value: "/crds"
+            - name: WAIT_TIMEOUT
+              value: "{{ .Values.crdUpgradeHook.waitTimeout | default "60s" }}"
           resources:
             {{- toYaml .Values.crdUpgradeHook.resources | nindent 12 }}
           volumeMounts:

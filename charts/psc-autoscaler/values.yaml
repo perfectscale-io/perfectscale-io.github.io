@@ -3,7 +3,7 @@ revisionHistoryLimit: 10
 image:
   repository: public.ecr.aws/perfectscale-io/psc-autoscaler
   pullPolicy: Always
-  tag: "v1.0.55"
+  tag: "v1.0.56"
 settings:
   port: 8443
   env: "prod"
@@ -22,6 +22,7 @@ settings:
   noProxy: "" #example: ".cluster.local,.svc.cluster.local,172.20.0.1," the line must end with a coma, 172.20.0.1 it is KUBERNETES_SERVICE_HOST, API SERVICE
   excludedNamespaces: []
   updateCRWorkersNum: 5
+  updateCRTimeout: "4m45s"
   uiSettingsSyncInterval: "180s"
   automatedRevisionsRetentionHours: "2h"
   allowNamespaceCreation: true
@@ -146,19 +147,17 @@ admission:
     tlsName: "somename"
     caCert: "someCAbundle"
 ## CRD lifecycle hook — ensures CRDs are applied/updated on helm upgrade which is not done automatically on upgrade
+## Runs the autoscaler's own image with the `apply-crds` subcommand (no external kubectl image needed).
 crdUpgradeHook:
   enabled: true
-  image:
-    repository: public.ecr.aws/l4d0e8n7/kubectl
-    tag: "1.30"
-    pullPolicy: IfNotPresent
   backoffLimit: 3
+  waitTimeout: "60s"
   resources:
     limits:
-      memory: 64Mi
+      memory: 128Mi
     requests:
       cpu: 50m
-      memory: 32Mi
+      memory: 64Mi
       ephemeral-storage: 10Mi
   podSecurityContext:
     runAsNonRoot: true

@@ -272,6 +272,8 @@ spec:
               value: "{{ .Values.settings.excludedNamespaces | join "," }}"
             - name: UPDATE_CR_WORKERS_NUM
               value: "{{ .Values.settings.updateCRWorkersNum }}"
+            - name: UPDATE_CR_TIMEOUT
+              value: "{{ .Values.settings.updateCRTimeout | default "4m45s" }}"
             - name: ALLOW_NAMESPACE_CREATION
               value: "{{ .Values.settings.allowNamespaceCreation }}"
             - name: UI_SETTINGS_SYNC_INTERVAL
