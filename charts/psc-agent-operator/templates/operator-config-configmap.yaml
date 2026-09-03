@@ -29,3 +29,5 @@ data:
       settings_url: {{ .Values.operatorConfig.apiClient.settingsUrl | quote }}
       auth_url: {{ .Values.operatorConfig.apiClient.authUrl | quote }}
       telemetry_url: {{ .Values.operatorConfig.apiClient.telemetryUrl | quote }}
+    helm:
+      timeout: {{ .Values.operatorConfig.helm.timeout | quote }}
