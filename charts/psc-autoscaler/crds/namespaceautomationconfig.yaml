@@ -403,7 +403,7 @@ spec:
                                                   weekly:
                                                     type: integer
                                                     minimum: 0
-                                        limit:
+                                      limit:
                                         type: object
                                         x-kubernetes-preserve-unknown-fields: true
                                         properties:
