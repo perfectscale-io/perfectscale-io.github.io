@@ -3,7 +3,7 @@ revisionHistoryLimit: 10
 image:
   repository: public.ecr.aws/perfectscale-io/psc-exporter
   pullPolicy: Always
-  tag: "v1.1.23"
+  tag: "v1.1.24"
 # Notes generation override web portal
 webAppUrl: "http://app.perfectscale.io/"
 settings:
@@ -362,6 +362,12 @@ coroot:
   # Pod affinity rules.
   # Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   affinity: {}
+  # DaemonSet update strategy.
+  # Ref: https://kubernetes.io/docs/tasks/manage-daemon/update-daemon-set/
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
 ## CRD lifecycle hook — ensures CRDs are applied/updated on helm upgrade which is not done automatically on upgrade
 crdUpgradeHook:
   enabled: true
