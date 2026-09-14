@@ -234,6 +234,17 @@ nodeSelector: {}
 # Pod affinity rules.
 # Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 affinity: {}
+# Pod topology spread constraints for the agent deployment (relevant when replicaCount > 1).
+# Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/
+# Example:
+# topologySpreadConstraints:
+#   - maxSkew: 1
+#     topologyKey: topology.kubernetes.io/zone
+#     whenUnsatisfiable: ScheduleAnyway
+#     labelSelector:
+#       matchLabels:
+#         app.kubernetes.io/name: perfectscale-agent
+topologySpreadConstraints: []
 serviceMonitor:
   # When set true then use a ServiceMonitor to configure scraping
   enable: false

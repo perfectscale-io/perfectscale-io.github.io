@@ -120,6 +120,18 @@ nodeSelector: {}
 # Pod affinity rules.
 # Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 affinity: {}
+# Pod topology spread constraints for the multi-replica "serve" (admission webhook) deployment.
+# Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/
+# Example:
+# topologySpreadConstraints:
+#   - maxSkew: 1
+#     topologyKey: topology.kubernetes.io/zone
+#     whenUnsatisfiable: ScheduleAnyway
+#     labelSelector:
+#       matchLabels:
+#         perfectscale.io/psc-autoscaler-cmd: serve
+#         app.kubernetes.io/name: psc-autoscaler
+topologySpreadConstraints: []
 # Timeout for webhook
 # Ref: https://kubernetes.io/docs/reference/access-authn-authz/extensible-admission-controllers/#timeouts
 admission:
