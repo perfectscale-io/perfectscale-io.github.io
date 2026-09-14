@@ -143,7 +143,7 @@ spec:
             initialDelaySeconds: 5
             periodSeconds: 10
           resources:
-            {{- toYaml (.Values.crManager.resources | default (dict "requests" (dict "cpu" "50m" "memory" "64Mi"))) | nindent 12 }}
+            {{- toYaml .Values.crManager.resources | nindent 12 }}
           volumeMounts:
             - name: tls
               mountPath: /opt/tls

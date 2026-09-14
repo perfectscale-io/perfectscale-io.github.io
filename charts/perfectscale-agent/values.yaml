@@ -3,7 +3,7 @@ revisionHistoryLimit: 10
 image:
   repository: public.ecr.aws/perfectscale-io/psc-exporter
   pullPolicy: Always
-  tag: "v1.1.25"
+  tag: "v1.1.26"
 # Notes generation override web portal
 webAppUrl: "http://app.perfectscale.io/"
 settings:
@@ -134,7 +134,8 @@ crManager:
     requests:
       cpu: 50m
       memory: 64Mi
-    # No limits set - following PerfectScale best practices (limits not recommended)
+    limits:
+      memory: 128Mi
   # Pod annotations specific to profile CR
   podAnnotations: {}
   # Pod labels specific to profile CR
