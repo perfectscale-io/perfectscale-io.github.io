@@ -244,6 +244,10 @@ spec:
             value: {{ dig "corootNodeAgent" "probe" "failureWindow" "3" .Values.settings | quote }}
           - name: SNAPSHOT_INTERVAL_CYCLES
             value: "{{ .Values.settings.snapshotIntervalCycles | default "12" }}"
+          {{- if hasKey .Values.settings "eventsCollectionEnabled" }}
+          - name: EVENTS_COLLECTION_ENABLED
+            value: "{{ .Values.settings.eventsCollectionEnabled }}"
+          {{- end }}
           ports:
             - name: http
               containerPort: 8080

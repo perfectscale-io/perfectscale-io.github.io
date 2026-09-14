@@ -3,7 +3,7 @@ revisionHistoryLimit: 10
 image:
   repository: public.ecr.aws/perfectscale-io/psc-exporter
   pullPolicy: Always
-  tag: "v1.1.26"
+  tag: "v1.1.27"
 # Notes generation override web portal
 webAppUrl: "http://app.perfectscale.io/"
 settings:
