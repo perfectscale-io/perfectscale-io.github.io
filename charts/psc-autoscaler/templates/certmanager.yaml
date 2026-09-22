@@ -24,8 +24,8 @@ spec:
   isCA: true
   commonName: ca.{{ $fullname }}.psc.local
   secretName: {{ $fullname }}-ca-keypair
-  duration: 87600h # 10 years
-  renewBefore: 720h
+  duration: {{ .Values.admission.certManager.caCert.duration }}
+  renewBefore: {{ .Values.admission.certManager.caCert.renewBefore }}
   issuerRef:
     name: {{ $fullname }}-selfsigned
     kind: Issuer
@@ -51,8 +51,8 @@ metadata:
     {{- $labels | nindent 4 }}
 spec:
   secretName: {{ $fullname }}-tls
-  duration: 2160h # 90 days
-  renewBefore: 360h # 15 days
+  duration: {{ .Values.admission.certManager.cert.duration }}
+  renewBefore: {{ .Values.admission.certManager.cert.renewBefore }}
   subject:
     organizations:
       - psc-autoscaler
