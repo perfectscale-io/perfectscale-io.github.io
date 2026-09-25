@@ -128,6 +128,7 @@ rules:
   verbs:
   - get
   - list
+  - patch
   - watch
 - apiGroups:
   - karpenter.k8s.aws
