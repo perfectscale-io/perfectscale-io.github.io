@@ -1,0 +1,60 @@
+suite: certmanager
+templates:
+  - certmanager.yaml
+tests:
+  - it: should render nothing when certManager is disabled
+    set:
+      admission.certManager.enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: should use configured durations for CA and TLS certificates
+    set:
+      admission.certManager.enabled: true
+      admission.certManager.caCert.duration: 43800h
+      admission.certManager.caCert.renewBefore: 500h
+      admission.certManager.cert.duration: 1080h
+      admission.certManager.cert.renewBefore: 180h
+    asserts:
+      - equal:
+          path: spec.duration
+          value: 43800h
+        template: certmanager.yaml
+        documentIndex: 1
+      - equal:
+          path: spec.renewBefore
+          value: 500h
+        template: certmanager.yaml
+        documentIndex: 1
+      - equal:
+          path: spec.duration
+          value: 1080h
+        template: certmanager.yaml
+        documentIndex: 3
+      - equal:
+          path: spec.renewBefore
+          value: 180h
+        template: certmanager.yaml
+        documentIndex: 3
+
+  - it: should use default durations from values.yaml when not overridden
+    set:
+      admission.certManager.enabled: true
+    asserts:
+      - equal:
+          path: spec.duration
+          value: 87600h
+        documentIndex: 1
+      - equal:
+          path: spec.renewBefore
+          value: 720h
+        documentIndex: 1
+      - equal:
+          path: spec.duration
+          value: 2160h
+        documentIndex: 3
+      - equal:
+          path: spec.renewBefore
+          value: 360h
+        documentIndex: 3
