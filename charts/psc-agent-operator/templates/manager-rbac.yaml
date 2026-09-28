@@ -131,6 +131,14 @@ rules:
   - patch
   - watch
 - apiGroups:
+  - karpenter.sh
+  resources:
+  - nodeclaims
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
   - karpenter.k8s.aws
   resources:
   - ec2nodeclasses
