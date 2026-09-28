@@ -29,6 +29,23 @@
           "type": "string",
           "description": "Cluster name, rendered through tpl so it can reference other chart values (e.g. '{{ .Values.global.cluster.name }}')",
           "default": ""
+        },
+        "snapshotIntervalCycles": {
+          "description": "Cluster snapshots are taken every N settings-refresh cycles; one cycle is SETTINGS_REFRESH_INTERVAL_MINUTES (10 by default). 12 = every 2 hours, 3 = every 30 minutes. Accepts a number, a digit string, or \"\" for the default. Rejects values below 1, which disable snapshots entirely, and leading zeros, which urfave/cli parses as octal (\"010\" would silently mean 8).",
+          "default": "12",
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[1-9][0-9]*$"
+            },
+            {
+              "type": "integer",
+              "minimum": 1
+            },
+            {
+              "const": ""
+            }
+          ]
         }
       }
     }

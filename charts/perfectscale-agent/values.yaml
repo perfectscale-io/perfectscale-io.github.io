@@ -3,7 +3,7 @@ revisionHistoryLimit: 10
 image:
   repository: public.ecr.aws/perfectscale-io/psc-exporter
   pullPolicy: Always
-  tag: "v1.1.28"
+  tag: "v1.1.29"
 # Notes generation override web portal
 webAppUrl: "http://app.perfectscale.io/"
 settings:
@@ -21,7 +21,11 @@ settings:
   scrapingInterval: "30s"
   ksmTimeout: "30s"
   kubeAPITimeoutSec: "15"
-  # Take snapshot every N settings refresh cycles (default: 12 cycles × 10 min = 2 hours)
+  # Take snapshot every N settings-refresh cycles. One cycle lasts
+  # SETTINGS_REFRESH_INTERVAL_MINUTES (10 by default), so 12 cycles = 2 hours and 3 = 30 minutes.
+  # Must be >= 1 without leading zeros; the chart schema rejects anything else, because 0 would
+  # silently stop snapshots and "010" would be read as octal 8. The platform can override the
+  # interval per cluster by sending snapshot_interval_minutes in the cluster settings.
   snapshotIntervalCycles: "12"
   cAdvisorNumWorkers: "30"
   # cAdvisorScrapingMode defines the way to communicate with cAdvisor. Options: auto, direct, nodeProxy
@@ -85,6 +89,20 @@ resources:
   requests:
     cpu: 200m
     memory: 300Mi
+livenessProbe:
+  httpGet:
+    path: /health
+    port: http
+  periodSeconds: 10
+  timeoutSeconds: 1
+  failureThreshold: 3
+readinessProbe:
+  httpGet:
+    path: /health
+    port: http
+  periodSeconds: 10
+  timeoutSeconds: 1
+  failureThreshold: 3
 ## Additional labels to set in the all objects. Together with standard labels from the chart
 additionalLabels: {}
 podLabels: {}
