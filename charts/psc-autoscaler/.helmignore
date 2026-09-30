@@ -21,3 +21,12 @@
 .idea/
 *.tmproj
 .vscode/
+# Karpenter automation CRDs are not released yet. On dev, apply them manually:
+#   kubectl apply -f helm/crds/clusternodegroupautomationconfig.yaml \
+#     -f helm/crds/nodegroupautomationconfig.yaml -f helm/crds/karpenterautomationstatus.yaml
+crds/clusternodegroupautomationconfig.yaml
+crds/nodegroupautomationconfig.yaml
+crds/karpenterautomationstatus.yaml
+# NodeAutomationStatus CRD is not released yet. On dev, apply it manually:
+#   kubectl apply -f helm/crds/nodeautomationstatus.yaml
+crds/nodeautomationstatus.yaml

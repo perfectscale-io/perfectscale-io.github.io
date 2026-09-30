@@ -1,0 +1,104 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  # name must match the spec fields below, and be in the form: <plural>.<group>
+  name: nodeautomationstatuses.perfectscale.io
+spec:
+  # either Namespaced or Cluster
+  scope: Cluster
+  # group name to use for REST API: /apis/<group>/<version>
+  group: perfectscale.io
+  names:
+    # plural name to be used in the URL: /apis/<group>/<version>/<plural>
+    plural: nodeautomationstatuses
+    # singular name to be used as an alias on the CLI and for display
+    singular: nodeautomationstatus
+    # kind is normally the CamelCased singular type. Your resource manifests use this.
+    kind: NodeAutomationStatus
+    # shortNames allow shorter string to match your resource on the CLI
+    shortNames:
+      - nas
+  # list of versions supported by this CustomResourceDefinition
+  versions:
+    - name: v1
+      # Each version can be enabled/disabled by Served flag.
+      served: true
+      # One and only one version must be marked as the storage version.
+      storage: true
+      additionalPrinterColumns:
+        - name: NodeGroup
+          type: string
+          jsonPath: .spec.nodeGroup
+        - name: Phase
+          type: string
+          jsonPath: .status.phase
+        - name: Age
+          type: date
+          jsonPath: .metadata.creationTimestamp
+      schema:
+        openAPIV3Schema:
+          type: object
+          x-kubernetes-preserve-unknown-fields: true
+          properties:
+            spec:
+              type: object
+              x-kubernetes-preserve-unknown-fields: true
+              properties:
+                nodeName:
+                  type: string
+                nodeId:
+                  type: string
+                nodeGroup:
+                  type: string
+                recommendedAt:
+                  type: string
+                  format: date-time
+            status:
+              type: object
+              x-kubernetes-preserve-unknown-fields: true
+              properties:
+                phase:
+                  type: string
+                attempt:
+                  type: integer
+                eventId:
+                  type: string
+                startedAt:
+                  type: string
+                  format: date-time
+                finishedAt:
+                  type: string
+                  format: date-time
+                retryAfter:
+                  type: string
+                  format: date-time
+                failedReason:
+                  type: string
+                autoscaler:
+                  type: string
+                plan:
+                  type: object
+                  x-kubernetes-preserve-unknown-fields: true
+                  properties:
+                    placed:
+                      type: integer
+                    stuck:
+                      type: integer
+                    refused:
+                      type: integer
+                    skipped:
+                      type: integer
+                    caveated:
+                      type: integer
+                    stuckPods:
+                      type: array
+                      items:
+                        type: string
+                    refusedPods:
+                      type: array
+                      items:
+                        type: string
+                podsEvicted:
+                  type: integer
+                terminalStep:
+                  type: string

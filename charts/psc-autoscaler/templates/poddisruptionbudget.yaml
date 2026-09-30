@@ -1,0 +1,19 @@
+{{- if .Values.cmd.serve.podDisruptionBudget.enabled }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "psc-autoscaler.fullname" . }}-serve
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/component: serve
+    {{- include "psc-autoscaler.labels" . | nindent 4 }}
+    {{- if .Values.additionalLabels }}
+    {{- toYaml .Values.additionalLabels | nindent 4 }}
+    {{- end }}
+spec:
+  maxUnavailable: {{ .Values.cmd.serve.podDisruptionBudget.maxUnavailable }}
+  selector:
+    matchLabels:
+      perfectscale.io/psc-autoscaler-cmd: serve
+      {{- include "psc-autoscaler.selectorLabels" . | nindent 6 }}
+{{- end }}

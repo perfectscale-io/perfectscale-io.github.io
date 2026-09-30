@@ -1,0 +1,12 @@
+apiVersion: perfectscale.io/v1
+kind: ClusterNodeGroupAutomationConfig
+metadata:
+  name: cluster-nodegroup-automation
+spec:
+  automation:
+    operational:
+      stopAllAutomation: false
+    binpacking:
+      operational:
+        automationMode: DryRun
+        evictBarePods: true

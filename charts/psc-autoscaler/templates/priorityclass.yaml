@@ -1,13 +1,29 @@
+{{- /*
+Three cases:
+1. No PriorityClass with this name exists: render it, Helm creates it.
+2. It exists and this release owns it (Helm ownership annotations match): render it, so Helm
+   keeps it in the release manifest on upgrade. Without this, Helm would delete it on every
+   second upgrade because it dropped out of the rendered manifest.
+3. It exists and something else owns it: skip, to avoid the "already exists" install conflict.
+lookup returns an empty dict outside a cluster (helm template, --dry-run), which is case 1.
+The helm.sh/resource-policy: keep annotation stops Helm from deleting the class on uninstall,
+upgrade, or rollback. Other releases may still reference it. Remove it by hand if needed.
+*/}}
 {{- if .Values.priorityClass.create }}
-{{- $priorityClassExists := lookup "scheduling.k8s.io/v1" "PriorityClass" "" .Values.priorityClass.name }}
-{{- if not $priorityClassExists }}
+{{- $existing := lookup "scheduling.k8s.io/v1" "PriorityClass" "" .Values.priorityClass.name }}
+{{- $ownerName := dig "metadata" "annotations" "meta.helm.sh/release-name" "" $existing }}
+{{- $ownerNamespace := dig "metadata" "annotations" "meta.helm.sh/release-namespace" "" $existing }}
+{{- $ownedByThisRelease := and (eq $ownerName .Release.Name) (eq $ownerNamespace .Release.Namespace) }}
+{{- if or (not $existing) $ownedByThisRelease }}
 apiVersion: scheduling.k8s.io/v1
 kind: PriorityClass
 metadata:
-  name:  {{ .Values.priorityClass.name }}
+  name: {{ .Values.priorityClass.name }}
+  annotations:
+    helm.sh/resource-policy: keep
 value: {{ .Values.priorityClass.value | default "1000000" }}
 preemptionPolicy: {{ .Values.priorityClass.preemptionpolicy | default "PreemptLowerPriority" }}
 globalDefault: false
-description: "Priority class used by high priority perfectscale exporter pods."
+description: "Priority class used by high priority perfectscale autoscaler pods."
 {{- end }}
 {{- end }}

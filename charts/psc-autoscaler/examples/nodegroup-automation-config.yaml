@@ -1,0 +1,15 @@
+apiVersion: perfectscale.io/v1
+kind: NodeGroupAutomationConfig
+metadata:
+  name: general-purpose
+spec:
+  targetRef:
+    kind: NodeGroup # NodePool for Karpenter, NodeGroup otherwise
+    name: general-purpose # node group name as PerfectScale shows it
+  automation:
+    binpacking:
+      operational:
+        automationMode: Enabled
+        evictBarePods: true
+      karpenter:
+        doNotDisruptFor: "30m"

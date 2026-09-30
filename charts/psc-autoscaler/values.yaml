@@ -3,7 +3,7 @@ revisionHistoryLimit: 10
 image:
   repository: public.ecr.aws/perfectscale-io/psc-autoscaler
   pullPolicy: Always
-  tag: "v1.0.57"
+  tag: "v1.0.58"
 settings:
   port: 8443
   env: "prod"
@@ -35,6 +35,17 @@ cmd:
       requests:
         cpu: 100m
         memory: 128Mi
+    topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: kubernetes.io/hostname
+        whenUnsatisfiable: ScheduleAnyway
+        ## Selects on the chart's stable cmd label, so nameOverride does not break the constraint.
+        labelSelector:
+          matchLabels:
+            perfectscale.io/psc-autoscaler-cmd: serve
+    podDisruptionBudget:
+      enabled: true
+      maxUnavailable: 1
   sync:
     resources:
       limits:
@@ -69,12 +80,17 @@ podLabels: {}
 annotations: {}
 ## Annotations to add to the pod
 podAnnotations: {}
+## Priority class keeps the autoscaler pods scheduled on packed nodes.
+## Set enabled: false to run without a priority class.
+## Set create: false to use an existing class with the given name.
+## The created class stays in the cluster after helm uninstall. To remove it:
+##   kubectl delete priorityclass perfectscale-autoscaler
 priorityClass:
-  enabled: false
-  create: false
+  enabled: true
+  create: true
   name: perfectscale-autoscaler
   preemptionpolicy: PreemptLowerPriority
-  value: ''
+  value: "1000000"
 ## Role Based Access
 ## Ref: https://kubernetes.io/docs/admin/authorization/rbac/
 ##
@@ -139,6 +155,12 @@ admission:
 
   certManager:
     enabled: false
+    caCert:
+      duration: 87600h # 10 years
+      renewBefore: 720h # 30 days
+    cert:
+      duration: 2160h # 90 days
+      renewBefore: 360h # 15 days
   #If you have a Kubernetes secret containing the certificates for the webhook created outside of the Helm chart, 
   # set enabled: true under externalCertSecret, specify the secret name in the tlsName field, 
   # and provide the actual base64 encoded CA bundle in the caCert field.
@@ -165,6 +187,11 @@ crdUpgradeHook:
     allowPrivilegeEscalation: false
     seccompProfile:
       type: RuntimeDefault
+karpenterAutomation:
+  enabled: false
+binpacking:
+  drain:
+    enabled: false
 integrationTests:
   enabled: true
   serviceAccount:

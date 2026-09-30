@@ -1,0 +1,229 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: nodegroupautomationconfigs.perfectscale.io
+spec:
+  scope: Cluster
+  group: perfectscale.io
+  names:
+    plural: nodegroupautomationconfigs
+    singular: nodegroupautomationconfig
+    kind: NodeGroupAutomationConfig
+    shortNames:
+      - ngaconf
+  versions:
+    - name: v1
+      served: true
+      storage: true
+      additionalPrinterColumns:
+        - name: Target
+          type: string
+          jsonPath: .spec.targetRef.name
+        - name: BinpackingAutomationMode
+          type: string
+          jsonPath: .spec.automation.binpacking.operational.automationMode
+        - name: Age
+          type: date
+          jsonPath: .metadata.creationTimestamp
+      schema:
+        openAPIV3Schema:
+          type: object
+          x-kubernetes-preserve-unknown-fields: true
+          properties:
+            spec:
+              type: object
+              x-kubernetes-preserve-unknown-fields: true
+              required:
+                - targetRef
+              properties:
+                targetRef:
+                  type: object
+                  x-kubernetes-preserve-unknown-fields: true
+                  properties:
+                    kind:
+                      type: string
+                    name:
+                      type: string
+                  required:
+                    - kind
+                    - name
+                automation:
+                  type: object
+                  x-kubernetes-preserve-unknown-fields: true
+                  properties:
+                    operational:
+                      type: object
+                      x-kubernetes-preserve-unknown-fields: true
+                      properties:
+                        cleanUpAutomation:
+                          type: boolean
+                        timeConstraints:
+                          type: object
+                          x-kubernetes-preserve-unknown-fields: true
+                          properties:
+                            consolidationMaxAutomationFrequency:
+                              type: string
+                            maintenanceWindow:
+                              type: object
+                              x-kubernetes-preserve-unknown-fields: true
+                              properties:
+                                monday:
+                                  type: array
+                                  items:
+                                    type: string
+                                tuesday:
+                                  type: array
+                                  items:
+                                    type: string
+                                wednesday:
+                                  type: array
+                                  items:
+                                    type: string
+                                thursday:
+                                  type: array
+                                  items:
+                                    type: string
+                                friday:
+                                  type: array
+                                  items:
+                                    type: string
+                                saturday:
+                                  type: array
+                                  items:
+                                    type: string
+                                sunday:
+                                  type: array
+                                  items:
+                                    type: string
+                        labelSelectors:
+                          type: array
+                          items:
+                            type: object
+                            x-kubernetes-preserve-unknown-fields: true
+                            properties:
+                              key:
+                                type: string
+                              value:
+                                type: string
+                              allowAutomation:
+                                type: boolean
+                    karpenter:
+                      type: object
+                      x-kubernetes-preserve-unknown-fields: true
+                      properties:
+                        operational:
+                          type: object
+                          x-kubernetes-preserve-unknown-fields: true
+                          properties:
+                            automationMode:
+                              type: string
+                            cleanUpAutomation:
+                              type: boolean
+                            timeConstraints:
+                              type: object
+                              x-kubernetes-preserve-unknown-fields: true
+                              properties:
+                                consolidationMaxAutomationFrequency:
+                                  type: string
+                                maintenanceWindow:
+                                  type: object
+                                  x-kubernetes-preserve-unknown-fields: true
+                                  properties:
+                                    monday:
+                                      type: array
+                                      items:
+                                        type: string
+                                    tuesday:
+                                      type: array
+                                      items:
+                                        type: string
+                                    wednesday:
+                                      type: array
+                                      items:
+                                        type: string
+                                    thursday:
+                                      type: array
+                                      items:
+                                        type: string
+                                    friday:
+                                      type: array
+                                      items:
+                                        type: string
+                                    saturday:
+                                      type: array
+                                      items:
+                                        type: string
+                                    sunday:
+                                      type: array
+                                      items:
+                                        type: string
+                            labelSelectors:
+                              type: array
+                              items:
+                                type: object
+                                x-kubernetes-preserve-unknown-fields: true
+                                properties:
+                                  key:
+                                    type: string
+                                  value:
+                                    type: string
+                                  allowAutomation:
+                                    type: boolean
+                            restrictions:
+                              type: object
+                              x-kubernetes-preserve-unknown-fields: true
+                              properties:
+                                consolidateAfter:
+                                  type: object
+                                  x-kubernetes-preserve-unknown-fields: true
+                                  properties:
+                                    enabled:
+                                      type: boolean
+                                    minimum:
+                                      type: string
+                                    maximum:
+                                      type: string
+                                disruptionBudgets:
+                                  type: object
+                                  x-kubernetes-preserve-unknown-fields: true
+                                  properties:
+                                    enabled:
+                                      type: boolean
+                                    minimumNodes:
+                                      type: string
+                                instanceFamilies:
+                                  type: object
+                                  x-kubernetes-preserve-unknown-fields: true
+                                  properties:
+                                    enabled:
+                                      type: boolean
+                                terminationGracePeriod:
+                                  type: object
+                                  x-kubernetes-preserve-unknown-fields: true
+                                  properties:
+                                    enabled:
+                                      type: boolean
+                                    minimum:
+                                      type: string
+                                    maximum:
+                                      type: string
+                                    allowSetFromUnset:
+                                      type: boolean
+                    binpacking:
+                      type: object
+                      x-kubernetes-preserve-unknown-fields: true
+                      properties:
+                        operational:
+                          type: object
+                          x-kubernetes-preserve-unknown-fields: true
+                          properties:
+                            automationMode:
+                              type: string
+                            evictBarePods:
+                              type: boolean
+                        karpenter:
+                          type: object
+                          x-kubernetes-preserve-unknown-fields: true
+                          properties:
+                            doNotDisruptFor:
+                              type: string

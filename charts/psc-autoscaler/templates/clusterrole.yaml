@@ -46,8 +46,13 @@ rules:
     resources: [ "rollouts" ]
     verbs: [ "get", "list", "watch", "patch" ]
   - apiGroups: [ "perfectscale.io" ]
-    resources: [ "workloads", "clusterautomationconfigs", "namespaceautomationconfigs", "workloadautomationconfigs", "workloadautomationstatuses", "clusteruiautomationsettings", "namespaceuiautomationsettings" ]
+    resources: [ "workloads", "clusterautomationconfigs", "namespaceautomationconfigs", "workloadautomationconfigs", "workloadautomationstatuses", "clusteruiautomationsettings", "namespaceuiautomationsettings", "clusternodegroupautomationconfigs", "nodegroupautomationconfigs", "karpenterautomationstatuses", "nodeautomationstatuses" ]
     verbs: [ "create", "get", "delete", "list", "patch", "update", "watch" ]
+  {{- if .Values.karpenterAutomation.enabled }}
+  - apiGroups: [ "karpenter.sh" ]
+    resources: [ "nodepools" ]
+    verbs: [ "get", "patch" ]
+  {{- end }}
   - apiGroups: [ "" ]
     resources: [ "resourcequotas" ]
     verbs: [ "get", "list", "watch" ]

@@ -231,6 +231,8 @@ spec:
                                       type: boolean
                                     decreaseEnabled:
                                       type: boolean
+                                    inPlaceDecreaseEnabled:
+                                      type: boolean
                                     minimumGiB:
                                       type: number
                                       format: double
@@ -352,6 +354,8 @@ spec:
                                           increaseEnabled:
                                             type: boolean
                                           decreaseEnabled:
+                                            type: boolean
+                                          inPlaceDecreaseEnabled:
                                             type: boolean
                                           minimumGiB:
                                             type: number
