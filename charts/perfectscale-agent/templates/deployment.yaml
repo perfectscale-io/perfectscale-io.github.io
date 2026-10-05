@@ -122,8 +122,10 @@ spec:
             value: "{{ .Values.settings.enablePProf | default "false" }}"
           - name: ENABLE_OOM_DEBUG
             value: "{{ .Values.settings.enableOomDebug | default "false" }}"
+          {{- if hasKey .Values.settings "phaseStatsCollectionEnabled" }}
           - name: PHASE_STATS_COLLECTION_ENABLED
-            value: "{{ .Values.settings.phaseStatsCollectionEnabled | default "false" }}"
+            value: "{{ .Values.settings.phaseStatsCollectionEnabled }}"
+          {{- end }}
           - name: POD_REGEX
             value: "{{ .Values.settings.podRegex | default "" }}"
           - name: CONTAINER_REGEX
