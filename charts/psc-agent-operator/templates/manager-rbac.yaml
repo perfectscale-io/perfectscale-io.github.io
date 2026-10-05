@@ -24,6 +24,7 @@ rules:
   verbs:
   - get
   - list
+  - patch
   - watch
 - apiGroups:
   - ""
@@ -135,6 +136,7 @@ rules:
   resources:
   - nodeclaims
   verbs:
+  - delete
   - get
   - list
   - watch
@@ -218,6 +220,12 @@ rules:
   - pods/resize
   verbs:
   - patch
+- apiGroups:
+  - ""
+  resources:
+  - pods/eviction
+  verbs:
+  - create
 - apiGroups:
   - apps
   resources:
