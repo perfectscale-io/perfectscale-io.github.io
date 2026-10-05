@@ -424,6 +424,24 @@ spec:
               value: "{{ .Values.settings.restartDeploymentThreshold }}"
             - name: "BYPASSED_PODS_CHECK_INTERVAL"
               value: "{{ .Values.settings.bypassedPodsCheckInterval }}"
+            - name: "POD_REPLACER_MAX_PARALLEL_WORKLOADS"
+              value: "{{ .Values.settings.podReplacerMaxParallelWorkloads }}"
+            - name: "POD_REPLACER_WAIT_TIMEOUT"
+              value: "{{ .Values.settings.podReplacerWaitTimeout }}"
+            - name: "POD_REPLACER_PAUSE_DURATION"
+              value: "{{ .Values.settings.podReplacerPauseDuration }}"
+            - name: "POD_REPLACER_GUARD_RETRY_DELAY"
+              value: "{{ .Values.settings.podReplacerGuardRetryDelay }}"
+            - name: "SPLIT_POD_RECONCILER_RUNTIME_RESIZE_STUCK_AFTER"
+              value: "{{ .Values.settings.splitPodReconcilerRuntimeResizeStuckAfter }}"
+            - name: "SPLIT_CHURN_TRACKER_WINDOW"
+              value: "{{ .Values.settings.splitChurnTrackerWindow }}"
+            - name: "SPLIT_CHURN_TRACKER_MIN_RUNTIME_RESTARTS"
+              value: "{{ .Values.settings.splitChurnTrackerMinRuntimeRestarts }}"
+            - name: "SPLIT_CHURN_TRACKER_MIN_SPAN"
+              value: "{{ .Values.settings.splitChurnTrackerMinSpan }}"
+            - name: KARPENTER_AUTOMATION_ENABLED
+              value: "{{ .Values.karpenterAutomation.enabled }}"
             {{- if .Values.settings.httpProxyEnabled | default false }}
             - name: HTTP_PROXY
               value: "{{ .Values.settings.httpProxy }}"
@@ -475,3 +493,142 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+{{- if .Values.binpacking.drain.enabled }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "psc-autoscaler.fullname" . }}-drain
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/component: drain
+    {{- include "psc-autoscaler.labels" . | nindent 4 }}
+    {{- if .Values.additionalLabels }}
+    {{- toYaml .Values.additionalLabels | nindent 4 }}
+    {{- end }}
+  {{- with .Values.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      perfectscale.io/psc-autoscaler-cmd: drain
+      {{- include "psc-autoscaler.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        automation.perfectscale.io/excluded: "true"
+        app.kubernetes.io/component: drain
+        perfectscale.io/psc-autoscaler-cmd: drain
+        {{- include "psc-autoscaler.selectorLabels" . | nindent 8 }}
+        {{- if .Values.podLabels }}
+        {{- toYaml .Values.podLabels | nindent 8 }}
+        {{- end }}
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    spec:
+      {{- if .Values.priorityClass.enabled }}
+      priorityClassName: {{ .Values.priorityClass.name }}
+      {{- end }}
+      serviceAccountName: {{ include "psc-autoscaler.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}-drain
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: {{ .Values.cmd.drain.probe.name | default "http" }}
+              containerPort: {{ .Values.cmd.drain.probe.port | default 8080 }}
+              protocol: TCP
+          env:
+            - name: HTTP_PORT
+              value: "{{ .Values.cmd.drain.probe.port | default 8080 }}"
+            - name: ENV
+              value: "{{ .Values.settings.env }}"
+            - name: HTTP_TIMEOUT
+              value: "{{ .Values.settings.httpTimeout }}"
+            - name: LOG_LEVEL
+              value: "{{ .Values.settings.logLevel }}"
+            - name: PS_URL
+              value: "{{ .Values.settings.psUrl }}"
+            - name: CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secret.name | default $fullName }}
+                  key: "clientId"
+                  optional: false
+            - name: CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secret.name | default $fullName }}
+                  key: "clientSecret"
+                  optional: false
+            - name: CLUSTER_UID
+              value: "{{ include "psc-autoscaler.clusterUID" . }}"
+            - name: REMOTE_LOG_BATCH_SIZE
+              value: "{{ include "helm.autoscaler.remoteLogBatchSize" . }}"
+            - name: REMOTE_LOG_BATCH_INTERVAL
+              value: "{{ include "helm.autoscaler.remoteLogBatchInterval" . }}"
+            - name: TELEMETRY_URL
+              value: "{{ .Values.settings.telemetryUrl }}"
+            - name: PUSH_TELEMETRY_FREQUENCY
+              value: "{{ .Values.settings.pushTelemetryFrequency }}"
+            {{- if .Values.settings.httpProxyEnabled | default false }}
+            - name: HTTP_PROXY
+              value: "{{ .Values.settings.httpProxy }}"
+            - name: HTTPS_PROXY
+              value: "{{ .Values.settings.httpsProxy }}"
+            - name: NO_PROXY
+              value: "{{ .Values.settings.noProxy }}"
+            {{- end }}
+            - name: KUBE_API_QPS
+              value: "{{ .Values.settings.kubeApiQPS | default "20" }}"
+            {{- if (.Values.settings).insecureSkipVerify }}
+            - name: INSECURE_SKIP_VERIFY
+              value: "{{ .Values.settings.insecureSkipVerify }}"
+            {{- end }}
+            {{- if .Values.settings.pprofEnabled }}
+            - name: PPROF_ENABLED
+              value: "true"
+            {{- end }}
+          command:
+            - "./app"
+            - "drain"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.cmd.drain.probe.name | default "http" }}
+              scheme: HTTP
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.cmd.drain.probe.name | default "http" }}
+              scheme: HTTP
+          resources:
+            {{- toYaml .Values.cmd.drain.resources | nindent 12 }}
+      {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+      - name: {{ .Values.imagePullSecrets.secretName }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

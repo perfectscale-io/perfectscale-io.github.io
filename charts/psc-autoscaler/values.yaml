@@ -3,7 +3,7 @@ revisionHistoryLimit: 10
 image:
   repository: public.ecr.aws/perfectscale-io/psc-autoscaler
   pullPolicy: Always
-  tag: "v1.0.58"
+  tag: "v1.0.59"
 settings:
   port: 8443
   env: "prod"
@@ -15,6 +15,15 @@ settings:
   maxParallelRestarts: 3
   restartDeploymentThreshold: 0.1 # defines the number of bypassed pods of the deployment below which we restart individual pods
   bypassedPodsCheckInterval: "30m"
+  # split pod replacer: pods that cannot take their init resources in place after a restart are replaced
+  podReplacerMaxParallelWorkloads: 10 # workloads whose pods are replaced at once
+  podReplacerWaitTimeout: "5m" # how long replacement pods may take to become ready
+  podReplacerPauseDuration: "30m" # pause of pod replacement for a workload after its replacements failed
+  podReplacerGuardRetryDelay: "15s" # retry delay while the workload is being automated
+  splitPodReconcilerRuntimeResizeStuckAfter: "10m" # how long a resize to runtime resources may keep applying, deferred included, before the pod is replaced
+  splitChurnTrackerWindow: "3h" # window the pod restarts on runtime resources of a workload are counted in
+  splitChurnTrackerMinRuntimeRestarts: 3 # fewest restarts that disable split mode for churn; half the replicas when more
+  splitChurnTrackerMinSpan: "60m" # how far apart the first and the last restart must be
   httpTimeout: "3m"
   httpProxyEnabled: false
   httpProxy: "" #example: http://squid-proxy-service.default:3128
@@ -57,6 +66,16 @@ cmd:
       port: 8080
       name: http
   evict:
+    resources:
+      limits:
+        memory: 256Mi
+      requests:
+        cpu: 100m
+        memory: 128Mi
+    probe:
+      port: 8080
+      name: http
+  drain:
     resources:
       limits:
         memory: 256Mi
@@ -191,6 +210,8 @@ karpenterAutomation:
   enabled: false
 binpacking:
   drain:
+    # Renders the drain Deployment and its RBAC (node patch, NodeClaim delete, kube-system
+    # cluster-autoscaler-status ConfigMap read). Pod eviction is in the base rules.
     enabled: false
 integrationTests:
   enabled: true

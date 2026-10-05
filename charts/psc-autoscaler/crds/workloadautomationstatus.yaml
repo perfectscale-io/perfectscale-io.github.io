@@ -81,9 +81,14 @@ spec:
                 restartedAt:
                   type: string
                   format: date-time
-                splitInitRuntimeDisabledUntil:
-                  type: string
-                  format: date-time
+                splitInitRuntime:
+                  type: object
+                  properties:
+                    disabledUntil:
+                      type: string
+                      format: date-time
+                    disabledCount:
+                      type: integer
                 current:
                   type: object
                   x-kubernetes-preserve-unknown-fields: true

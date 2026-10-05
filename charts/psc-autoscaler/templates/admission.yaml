@@ -106,7 +106,7 @@ webhooks:
       - apiGroups: [ "perfectscale.io" ]
         apiVersions: [ "v1" ]
         operations: [ "CREATE", "UPDATE" ]
-        resources: [ "clusterautomationconfigs" ]
+        resources: [ "clusterautomationconfigs", "clusternodegroupautomationconfigs", "nodegroupautomationconfigs" ]
         scope: "*"
       - apiGroups: [ "perfectscale.io" ]
         apiVersions: [ "v1" ]

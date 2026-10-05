@@ -34,6 +34,9 @@ rules:
     resources: [ "pods/resize" ]
     verbs: [ "patch" ]
   - apiGroups: [ "" ]
+    resources: [ "pods/eviction" ]
+    verbs: [ "create" ]
+  - apiGroups: [ "" ]
     resources: [ "events" ]
     verbs: [ "get", "list","watch","create", "patch" ]
   - apiGroups: [ "apps" ]
@@ -52,6 +55,14 @@ rules:
   - apiGroups: [ "karpenter.sh" ]
     resources: [ "nodepools" ]
     verbs: [ "get", "patch" ]
+  {{- end }}
+  {{- if .Values.binpacking.drain.enabled }}
+  - apiGroups: [ "" ]
+    resources: [ "nodes" ]
+    verbs: [ "patch" ]
+  - apiGroups: [ "karpenter.sh" ]
+    resources: [ "nodeclaims" ]
+    verbs: [ "get", "list", "delete" ]
   {{- end }}
   - apiGroups: [ "" ]
     resources: [ "resourcequotas" ]
