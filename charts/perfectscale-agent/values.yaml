@@ -3,7 +3,7 @@ revisionHistoryLimit: 10
 image:
   repository: public.ecr.aws/perfectscale-io/psc-exporter
   pullPolicy: Always
-  tag: "v1.1.36"
+  tag: "v1.1.37"
 # Notes generation override web portal
 webAppUrl: "http://app.perfectscale.io/"
 settings:
@@ -36,12 +36,15 @@ settings:
   enableOomDebug: false
   podRegex: ""
   containerRegex: ""
+  # The three settings below are deprecated and will be removed in a future release.
+  # Set the optimization policy in the PerfectScale UI or with a ClusterRecommendationsConfig CR
+  # instead (see helm/crds/clusterrecommendationsconfigs.yaml and helm/examples/clusterrecommendationsconfig.yaml).
+  # Docs: https://docs.perfectscale.io/customize-workflow/optimization-policy-customization
   # supported resilience levels: low, medium, high, highest
-  # deprecated field since we introduced the clusterOptimizationPolicy
-  clusterResilienceLevel: "" # deprecated
+  clusterResilienceLevel: "" # deprecated: use the UI or a ClusterRecommendationsConfig CR
   # supported optimization policies: MaxSavings, Balanced, ExtraHeadroom, MaxHeadroom
-  clusterOptimizationPolicy: "" # deprecated
-  optimizationPolicyTimeWindow: "" # deprecated
+  clusterOptimizationPolicy: "" # deprecated: use the UI or a ClusterRecommendationsConfig CR
+  optimizationPolicyTimeWindow: "" # deprecated: use the UI or a ClusterRecommendationsConfig CR
   clusterName: ""
   collectorNumWorkers: "4"
   scraper:

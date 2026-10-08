@@ -18,5 +18,7 @@ DEPRECATION NOTICE:
 {{- if $optw }}
 - settings.optimizationPolicyTimeWindow is deprecated and will be removed in a future release.
 {{- end }}
+Set the optimization policy in the PerfectScale UI or with a ClusterRecommendationsConfig CR instead.
+See https://docs.perfectscale.io/customize-workflow/optimization-policy-customization
 
 {{- end }}
