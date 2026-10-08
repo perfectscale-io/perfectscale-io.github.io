@@ -221,6 +221,9 @@ spec:
                               type: string
                             evictBarePods:
                               type: boolean
+                              description: >-
+                                Default true: pods without an owner are evicted and deleted for good, since nothing
+                                recreates them. false skips a node that runs one.
                         karpenter:
                           type: object
                           x-kubernetes-preserve-unknown-fields: true

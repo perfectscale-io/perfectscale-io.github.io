@@ -16,9 +16,6 @@ spec:
       served: true
       storage: true
       additionalPrinterColumns:
-        - name: RecommendationAge
-          type: date
-          jsonPath: .status.current.recommendation.generatedAt
         - name: Generation
           type: integer
           jsonPath: .status.current.recommendation.generation
@@ -57,10 +54,9 @@ spec:
                       type: object
                       x-kubernetes-preserve-unknown-fields: true
                       properties:
-                        generatedAt:
-                          type: string
-                          format: date-time
                         configVersion:
+                          type: string
+                        uid:
                           type: string
                         generation:
                           type: integer
@@ -85,10 +81,9 @@ spec:
                       type: object
                       x-kubernetes-preserve-unknown-fields: true
                       properties:
-                        generatedAt:
-                          type: string
-                          format: date-time
                         configVersion:
+                          type: string
+                        uid:
                           type: string
                         generation:
                           type: integer
@@ -108,6 +103,9 @@ spec:
                               after:
                                 x-kubernetes-preserve-unknown-fields: true
                                 nullable: true
+                automationAppliedAt:
+                  type: string
+                  format: date-time
                 drift:
                   type: object
                   x-kubernetes-preserve-unknown-fields: true

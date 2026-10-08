@@ -6,6 +6,12 @@ spec:
   automation:
     operational:
       stopAllAutomation: false
+      cleanUpAutomation: false
+    karpenter:
+      operational:
+        automationMode: Enabled
+        stopAllAutomation: false
+        cleanUpAutomation: false
     binpacking:
       operational:
         automationMode: DryRun

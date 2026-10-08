@@ -3,7 +3,7 @@ revisionHistoryLimit: 10
 image:
   repository: public.ecr.aws/perfectscale-io/psc-autoscaler
   pullPolicy: Always
-  tag: "v1.0.59"
+  tag: "v1.0.60"
 settings:
   port: 8443
   env: "prod"
@@ -210,8 +210,9 @@ karpenterAutomation:
   enabled: false
 binpacking:
   drain:
-    # Renders the drain Deployment and its RBAC (node patch, NodeClaim delete, kube-system
-    # cluster-autoscaler-status ConfigMap read). Pod eviction is in the base rules.
+    # Renders the drain Deployment and its RBAC (node patch, NodeClaim delete, PDB/PV/PVC list
+    # for the drain snapshot, kube-system cluster-autoscaler-status ConfigMap read). Pod
+    # eviction is in the base rules.
     enabled: false
 integrationTests:
   enabled: true

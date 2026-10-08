@@ -63,6 +63,12 @@ rules:
   - apiGroups: [ "karpenter.sh" ]
     resources: [ "nodeclaims" ]
     verbs: [ "get", "list", "delete" ]
+  - apiGroups: [ "policy" ]
+    resources: [ "poddisruptionbudgets" ]
+    verbs: [ "list" ]
+  - apiGroups: [ "" ]
+    resources: [ "persistentvolumes", "persistentvolumeclaims" ]
+    verbs: [ "list" ]
   {{- end }}
   - apiGroups: [ "" ]
     resources: [ "resourcequotas" ]

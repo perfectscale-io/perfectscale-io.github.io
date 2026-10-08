@@ -238,6 +238,8 @@ spec:
           env:
             - name: HTTP_PORT
               value: "{{ .Values.cmd.sync.probe.port | default 8080 }}"
+            - name: KARPENTER_AUTOMATION_ENABLED
+              value: "{{ .Values.karpenterAutomation.enabled }}"
             - name: ENV
               value: "{{ .Values.settings.env }}"
             - name: HTTP_TIMEOUT

@@ -100,5 +100,20 @@ spec:
                         type: string
                 podsEvicted:
                   type: integer
+                evictedOwners:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      kind:
+                        type: string
+                      namespace:
+                        type: string
+                      name:
+                        type: string
+                      readyBefore:
+                        type: integer
                 terminalStep:
                   type: string
+                releasePending:
+                  type: boolean
