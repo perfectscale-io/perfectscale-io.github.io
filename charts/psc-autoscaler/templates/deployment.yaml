@@ -135,16 +135,25 @@ spec:
           command:
             - "./app"
             - "serve"
+          startupProbe:
+            httpGet:
+              path: /health
+              port: https
+              scheme: HTTPS
+            periodSeconds: 5
+            failureThreshold: {{ (.Values.cmd.serve.probe).startupFailureThreshold | default 36 }}
           livenessProbe:
             httpGet:
               path: /health
               port: https
               scheme: HTTPS
+            timeoutSeconds: 5
           readinessProbe:
             httpGet:
-              path: /health
+              path: /ready
               port: https
               scheme: HTTPS
+            timeoutSeconds: 5
           resources:
             {{- toYaml .Values.cmd.serve.resources | nindent 12 }}
           volumeMounts:

@@ -3,7 +3,7 @@ revisionHistoryLimit: 10
 image:
   repository: public.ecr.aws/perfectscale-io/psc-autoscaler
   pullPolicy: Always
-  tag: "v1.0.61"
+  tag: "v1.0.62"
 settings:
   port: 8443
   env: "prod"
@@ -42,7 +42,7 @@ cmd:
       limits:
         memory: 256Mi
       requests:
-        cpu: 100m
+        cpu: 200m
         memory: 128Mi
     topologySpreadConstraints:
       - maxSkew: 1
@@ -55,12 +55,15 @@ cmd:
     podDisruptionBudget:
       enabled: true
       maxUnavailable: 1
+    probe:
+      # startup probe allows failureThreshold * 5s for the process to bind its port
+      startupFailureThreshold: 36
   sync:
     resources:
       limits:
         memory: 256Mi
       requests:
-        cpu: 100m
+        cpu: 200m
         memory: 128Mi
     probe:
       port: 8080
@@ -70,7 +73,7 @@ cmd:
       limits:
         memory: 256Mi
       requests:
-        cpu: 100m
+        cpu: 200m
         memory: 128Mi
     probe:
       port: 8080

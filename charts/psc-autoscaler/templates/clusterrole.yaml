@@ -54,7 +54,7 @@ rules:
   {{- if .Values.karpenterAutomation.enabled }}
   - apiGroups: [ "karpenter.sh" ]
     resources: [ "nodepools" ]
-    verbs: [ "get", "patch" ]
+    verbs: [ "get", "list", "watch", "patch" ]
   {{- end }}
   {{- if .Values.binpacking.drain.enabled }}
   - apiGroups: [ "" ]
