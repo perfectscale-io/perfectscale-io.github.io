@@ -297,6 +297,8 @@ spec:
               value: "{{ .Values.settings.allowNamespaceCreation }}"
             - name: UI_SETTINGS_SYNC_INTERVAL
               value: "{{ .Values.settings.uiSettingsSyncInterval | default "180s" }}"
+            - name: NODE_DRAIN_STALE_TERMINAL_GRACE
+              value: "{{ .Values.settings.nodeDrainStaleTerminalGrace | default "12h" }}"
             - name: KUBE_API_QPS
               value: "{{ .Values.settings.kubeApiQPS | default "30" }}"
             - name: "AUTOMATED_REVISIONS_RETENTION_HOURS"
