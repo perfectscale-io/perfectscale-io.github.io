@@ -69,6 +69,9 @@ rules:
   - apiGroups: [ "" ]
     resources: [ "persistentvolumes", "persistentvolumeclaims" ]
     verbs: [ "list" ]
+  - apiGroups: [ "storage.k8s.io" ]
+    resources: [ "csinodes" ]
+    verbs: [ "list" ]
   {{- end }}
   - apiGroups: [ "" ]
     resources: [ "resourcequotas" ]

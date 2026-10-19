@@ -66,6 +66,13 @@ spec:
                       type: boolean
                     isSpecHonored:
                       type: boolean
+                nodeShape:
+                  type: object
+                  properties:
+                    cores:
+                      type: integer
+                    memGiB:
+                      type: integer
                 replicas:
                   type: integer
             status:
@@ -293,6 +300,10 @@ spec:
                                 type: number
                                 format: double
                               initsObserved:
+                                type: boolean
+                              cpuMature:
+                                type: boolean
+                              memMature:
                                 type: boolean
                               split:
                                 type: object
@@ -661,6 +672,10 @@ spec:
                                 type: number
                                 format: double
                               initsObserved:
+                                type: boolean
+                              cpuMature:
+                                type: boolean
+                              memMature:
                                 type: boolean
                               onOOM:
                                 type: object

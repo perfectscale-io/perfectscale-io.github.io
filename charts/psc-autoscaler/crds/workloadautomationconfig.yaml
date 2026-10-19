@@ -76,10 +76,10 @@ spec:
                           type: string
                         nodeSizeAwareAutomation:
                           type: string
-                          description: DaemonSet only. separated automates each node size on its own, consolidated treats the DaemonSet as one workload. Default separated.
+                          description: Not implemented yet. DaemonSet only. separated automates each node size on its own, consolidated treats the DaemonSet as one workload. Default separated.
                         unresizablePodPolicy:
                           type: string
-                          description: DaemonSet only. keepPods leaves pods that in-place resize cannot touch, recreatePods recreates them. Default keepPods.
+                          description: Not implemented yet. DaemonSet only. keepPods leaves pods that in-place resize cannot touch, recreatePods recreates them. Default keepPods.
                         duringRolloutInProgress:
                           type: string
                         resourceQuotaAwareAutomation:
@@ -267,6 +267,66 @@ spec:
                                             weekly:
                                               type: integer
                                               minimum: 0
+                                    fastOOMReaction:
+                                      type: object
+                                      description: 'NOTE: This configuration is part of the new feature, which is not yet available. This note will be removed on the GA release of the feature.'
+                                      x-kubernetes-preserve-unknown-fields: true
+                                      properties:
+                                        enabled:
+                                          type: boolean
+                    hpa:
+                      type: object
+                      x-kubernetes-preserve-unknown-fields: true
+                      properties:
+                        operational:
+                          type: object
+                          x-kubernetes-preserve-unknown-fields: true
+                          properties:
+                            automationMode:
+                              type: string
+                            restrictions:
+                              type: object
+                              x-kubernetes-preserve-unknown-fields: true
+                              properties:
+                                minReplicas:
+                                  type: object
+                                  x-kubernetes-preserve-unknown-fields: true
+                                  properties:
+                                    enabled:
+                                      type: boolean
+                                    min:
+                                      type: integer
+                                      minimum: 1
+                                    max:
+                                      type: integer
+                                      minimum: 1
+                                cpuTrigger:
+                                  type: object
+                                  x-kubernetes-preserve-unknown-fields: true
+                                  properties:
+                                    enabled:
+                                      type: boolean
+                                    min:
+                                      type: integer
+                                      minimum: 1
+                                    max:
+                                      type: integer
+                                      minimum: 1
+                                memoryTrigger:
+                                  type: object
+                                  x-kubernetes-preserve-unknown-fields: true
+                                  properties:
+                                    enabled:
+                                      type: boolean
+                                    min:
+                                      type: integer
+                                      minimum: 1
+                                    max:
+                                      type: integer
+                                      minimum: 1
+                                minWasteUSDPerMonth:
+                                  type: integer
+                                  minimum: 0
                     containers:
                       type: object
                       additionalProperties:
@@ -391,3 +451,46 @@ spec:
                                                   weekly:
                                                     type: integer
                                                     minimum: 0
+                                          fastOOMReaction:
+                                            type: object
+                                            description: 'NOTE: This configuration is part of the new feature, which is not yet available. This note will be removed on the GA release of the feature.'
+                                            x-kubernetes-preserve-unknown-fields: true
+                                            properties:
+                                              enabled:
+                                                type: boolean
+                          hpa:
+                            type: object
+                            x-kubernetes-preserve-unknown-fields: true
+                            properties:
+                              operational:
+                                type: object
+                                x-kubernetes-preserve-unknown-fields: true
+                                properties:
+                                  restrictions:
+                                    type: object
+                                    x-kubernetes-preserve-unknown-fields: true
+                                    properties:
+                                      cpuTrigger:
+                                        type: object
+                                        x-kubernetes-preserve-unknown-fields: true
+                                        properties:
+                                          enabled:
+                                            type: boolean
+                                          min:
+                                            type: integer
+                                            minimum: 1
+                                          max:
+                                            type: integer
+                                            minimum: 1
+                                      memoryTrigger:
+                                        type: object
+                                        x-kubernetes-preserve-unknown-fields: true
+                                        properties:
+                                          enabled:
+                                            type: boolean
+                                          min:
+                                            type: integer
+                                            minimum: 1
+                                          max:
+                                            type: integer
+                                            minimum: 1

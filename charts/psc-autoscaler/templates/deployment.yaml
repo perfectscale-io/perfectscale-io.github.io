@@ -433,6 +433,8 @@ spec:
               value: "{{ .Values.settings.pushTelemetryFrequency }}"
             - name: "MAX_PARALLEL_RESTARTS"
               value: "{{ .Values.settings.maxParallelRestarts }}"
+            - name: "FAST_OOM_RESERVED_SLOTS"
+              value: "{{ .Values.settings.fastOOMReservedSlots }}"
             - name: "RESTART_DEPLOYMENT_THRESHOLD"
               value: "{{ .Values.settings.restartDeploymentThreshold }}"
             - name: "BYPASSED_PODS_CHECK_INTERVAL"
@@ -453,6 +455,8 @@ spec:
               value: "{{ .Values.settings.splitChurnTrackerMinRuntimeRestarts }}"
             - name: "SPLIT_CHURN_TRACKER_MIN_SPAN"
               value: "{{ .Values.settings.splitChurnTrackerMinSpan }}"
+            - name: FAST_OOM_WATCH_ALL_PODS
+              value: "{{ .Values.settings.fastOOM.watchAllPods }}"
             - name: KARPENTER_AUTOMATION_ENABLED
               value: "{{ .Values.karpenterAutomation.enabled }}"
             {{- if .Values.settings.httpProxyEnabled | default false }}

@@ -3,7 +3,7 @@ revisionHistoryLimit: 10
 image:
   repository: public.ecr.aws/perfectscale-io/psc-autoscaler
   pullPolicy: Always
-  tag: "v1.0.63"
+  tag: "v1.0.64"
 settings:
   port: 8443
   env: "prod"
@@ -13,6 +13,7 @@ settings:
   telemetryUrl: "https://api.app.perfectscale.io/psc-telemetry"
   pushTelemetryFrequency: "1m"
   maxParallelRestarts: 3
+  fastOOMReservedSlots: 1 # dispatcher slots on top of maxParallelRestarts that only fast-OOM reactions may use
   restartDeploymentThreshold: 0.1 # defines the number of bypassed pods of the deployment below which we restart individual pods
   bypassedPodsCheckInterval: "30m"
   # split pod replacer: pods that cannot take their init resources in place after a restart are replaced
@@ -24,6 +25,10 @@ settings:
   splitChurnTrackerWindow: "3h" # window the pod restarts on runtime resources of a workload are counted in
   splitChurnTrackerMinRuntimeRestarts: 3 # fewest restarts that disable split mode for churn; half the replicas when more
   splitChurnTrackerMinSpan: "60m" # how far apart the first and the last restart must be
+  fastOOM:
+    # false: watch only the pods that the autoscaler mutated (small pod cache).
+    # true: watch all pods outside split mode. This covers a workload before its first automation but needs a larger pod cache.
+    watchAllPods: false
   httpTimeout: "3m"
   httpProxyEnabled: false
   httpProxy: "" #example: http://squid-proxy-service.default:3128

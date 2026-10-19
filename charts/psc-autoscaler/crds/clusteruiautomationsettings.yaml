@@ -62,10 +62,10 @@ spec:
                           type: string
                         nodeSizeAwareAutomation:
                           type: string
-                          description: DaemonSet only. separated automates each node size on its own, consolidated treats the DaemonSet as one workload. Default separated.
+                          description: Not implemented yet. DaemonSet only. separated automates each node size on its own, consolidated treats the DaemonSet as one workload. Default separated.
                         unresizablePodPolicy:
                           type: string
-                          description: DaemonSet only. keepPods leaves pods that in-place resize cannot touch, recreatePods recreates them. Default keepPods.
+                          description: Not implemented yet. DaemonSet only. keepPods leaves pods that in-place resize cannot touch, recreatePods recreates them. Default keepPods.
                         duringRolloutInProgress:
                           type: string
                         workloadLabelSelectors:
@@ -260,10 +260,10 @@ spec:
                                 type: string
                               nodeSizeAwareAutomation:
                                 type: string
-                                description: DaemonSet only. separated automates each node size on its own, consolidated treats the DaemonSet as one workload. Default separated.
+                                description: Not implemented yet. DaemonSet only. separated automates each node size on its own, consolidated treats the DaemonSet as one workload. Default separated.
                               unresizablePodPolicy:
                                 type: string
-                                description: DaemonSet only. keepPods leaves pods that in-place resize cannot touch, recreatePods recreates them. Default keepPods.
+                                description: Not implemented yet. DaemonSet only. keepPods leaves pods that in-place resize cannot touch, recreatePods recreates them. Default keepPods.
                               duringRolloutInProgress:
                                 type: string
                               workloadLabelSelectors:
