@@ -73,12 +73,49 @@ spec:
                       type: integer
                     memGiB:
                       type: integer
+                policies:
+                  type: object
+                  x-kubernetes-preserve-unknown-fields: true
+                  properties:
+                    initPhaseDurationMinutes:
+                      type: integer
                 replicas:
                   type: integer
             status:
               type: object
               x-kubernetes-preserve-unknown-fields: true
               properties:
+                conditions:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - type
+                      - status
+                      - reason
+                      - message
+                      - lastTransitionTime
+                    properties:
+                      type:
+                        type: string
+                        maxLength: 32
+                      status:
+                        type: string
+                        enum: ["True", "False", "Unknown"]
+                      observedGeneration:
+                        type: integer
+                        format: int64
+                        minimum: 0
+                      lastTransitionTime:
+                        type: string
+                        format: date-time
+                      reason:
+                        type: string
+                        minLength: 1
+                        maxLength: 256
+                      message:
+                        type: string
+                        maxLength: 1024
                 automationAppliedAt:
                   type: string
                   format: date-time

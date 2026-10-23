@@ -16,3 +16,10 @@ spec:
       operational:
         automationMode: DryRun
         evictBarePods: true
+      safety:
+        allowHostPath: false
+        allowRunningJobs: false
+        excludedNodeSelectors:
+          - matchExpressions:
+              - key: node-role.kubernetes.io/control-plane
+                operator: Exists

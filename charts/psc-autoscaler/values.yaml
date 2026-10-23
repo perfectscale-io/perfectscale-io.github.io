@@ -3,7 +3,7 @@ revisionHistoryLimit: 10
 image:
   repository: public.ecr.aws/perfectscale-io/psc-autoscaler
   pullPolicy: Always
-  tag: "v1.0.64"
+  tag: "v1.0.65"
 settings:
   port: 8443
   env: "prod"
@@ -216,6 +216,8 @@ crdUpgradeHook:
     seccompProfile:
       type: RuntimeDefault
 karpenterAutomation:
+  enabled: false
+hpaAutomation:
   enabled: false
 binpacking:
   drain:

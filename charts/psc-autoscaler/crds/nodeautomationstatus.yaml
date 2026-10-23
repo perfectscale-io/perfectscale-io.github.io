@@ -98,6 +98,18 @@ spec:
                       type: array
                       items:
                         type: string
+                    hostPathPods:
+                      type: array
+                      items:
+                        type: string
+                    jobPods:
+                      type: array
+                      items:
+                        type: string
+                    protectedPods:
+                      type: array
+                      items:
+                        type: string
                 podsEvicted:
                   type: integer
                 evictedOwners:

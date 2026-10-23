@@ -49,7 +49,7 @@ rules:
     resources: [ "rollouts" ]
     verbs: [ "get", "list", "watch", "patch" ]
   - apiGroups: [ "perfectscale.io" ]
-    resources: [ "workloads", "clusterautomationconfigs", "namespaceautomationconfigs", "workloadautomationconfigs", "workloadautomationstatuses", "clusteruiautomationsettings", "namespaceuiautomationsettings", "clusternodegroupautomationconfigs", "nodegroupautomationconfigs", "karpenterautomationstatuses", "nodeautomationstatuses" ]
+    resources: [ "workloads", "clusterautomationconfigs", "namespaceautomationconfigs", "workloadautomationconfigs", "workloadautomationstatuses", "clusteruiautomationsettings", "namespaceuiautomationsettings", "clusternodegroupautomationconfigs", "nodegroupautomationconfigs", "karpenterautomationstatuses", "nodeautomationstatuses", "hpaautomationstatuses" ]
     verbs: [ "create", "get", "delete", "list", "patch", "update", "watch" ]
   {{- if .Values.karpenterAutomation.enabled }}
   - apiGroups: [ "karpenter.sh" ]
@@ -79,4 +79,12 @@ rules:
   - apiGroups: [ "autoscaling" ]
     resources: [ "horizontalpodautoscalers" ]
     verbs: [ "get", "list", "watch" ]
+  {{- if .Values.hpaAutomation.enabled }}
+  - apiGroups: [ "autoscaling" ]
+    resources: [ "horizontalpodautoscalers" ]
+    verbs: [ "patch", "update" ]
+  - apiGroups: [ "keda.sh" ]
+    resources: [ "scaledobjects" ]
+    verbs: [ "get", "list", "watch", "patch", "update" ]
+  {{- end }}
 {{ end }}

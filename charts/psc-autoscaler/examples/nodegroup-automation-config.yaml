@@ -13,3 +13,12 @@ spec:
         evictBarePods: true
       karpenter:
         doNotDisruptFor: "30m"
+      safety:
+        allowHostPath: false # default false: skip nodes running pods with stateful hostPath volumes
+        allowRunningJobs: false # default false: skip nodes running Job pods
+        protectedPodSelectors: # a node running a matching pod is skipped, merged with the cluster's
+          - matchLabels:
+              app: payments
+        excludedNodeSelectors: # a node with matching labels is skipped, merged with the cluster's
+          - matchLabels:
+              workload-tier: critical

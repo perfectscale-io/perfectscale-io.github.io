@@ -76,6 +76,10 @@ spec:
               value: "/opt/tls/tls.crt"
             - name: TLS_KEY_FILE
               value: "/opt/tls/tls.key"
+            - name: KARPENTER_AUTOMATION_ENABLED
+              value: "{{ .Values.karpenterAutomation.enabled }}"
+            - name: SERVICE_ACCOUNT_USERNAME
+              value: "system:serviceaccount:{{ .Release.Namespace }}:{{ include "psc-autoscaler.serviceAccountName" . }}"
             - name: LEADER_ELECTION_ENABLED
               value: "{{ include "helm.leaseLeaderElectionEnabled" . | trim }}"
             - name: LEADER_ELECTION_LEASE_NAMESPACE

@@ -230,3 +230,28 @@ spec:
                           properties:
                             doNotDisruptFor:
                               type: string
+                        safety:
+                          type: object
+                          x-kubernetes-preserve-unknown-fields: true
+                          properties:
+                            allowHostPath:
+                              type: boolean
+                              description: >-
+                                Default false: a node running a pod with a hostPath volume outside the system
+                                allowlist is skipped, since its data dies with the instance.
+                            allowRunningJobs:
+                              type: boolean
+                              description: >-
+                                Default false: a node running a Job pod is skipped.
+                            protectedPodSelectors:
+                                type: array
+                                description: Label selectors (a union across cluster and group). A node running a matching pod is skipped.
+                                items:
+                                  type: object
+                                  x-kubernetes-preserve-unknown-fields: true
+                            excludedNodeSelectors:
+                                type: array
+                                description: Label selectors (a union across cluster and group). A node with matching labels is skipped.
+                                items:
+                                  type: object
+                                  x-kubernetes-preserve-unknown-fields: true
