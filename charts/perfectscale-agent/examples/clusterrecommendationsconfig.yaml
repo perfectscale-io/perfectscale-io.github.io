@@ -15,6 +15,9 @@
 # - memoryPolicy: Memory-specific policy override (overrides workloadPolicy for memory)
 # - customTimeWindowDays: Number of days of historical data to use for recommendations
 # - memoryRequestEqualsLimit: When true, memory request will be set equal to the limit
+# - initPhaseDurationMinutes: Init phase duration in minutes for split init/runtime recommendations
+#   (workload > namespace > cluster; min 1). Keep it at 3 or more:
+#   fewer data points make init recommendations noisier.
 #
 apiVersion: perfectscale.io/v1
 kind: ClusterRecommendationsConfig
@@ -36,3 +39,6 @@ spec:
 
     # Ensure memory request equals limit for stability
     memoryRequestEqualsLimit: false
+
+    # Init phase duration in minutes for split init/runtime recommendations
+    initPhaseDurationMinutes: 10

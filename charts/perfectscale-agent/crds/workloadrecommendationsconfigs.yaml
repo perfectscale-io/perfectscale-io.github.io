@@ -25,6 +25,7 @@ metadata:
       - memoryPolicy: Memory-specific optimization policy override
       - customTimeWindowDays: Number of days of historical data to use for recommendations
       - memoryRequestEqualsLimit: Whether memory request should equal limit
+      - initPhaseDurationMinutes: Init phase duration in minutes for split init/runtime recommendations (min 1)
 
       EXAMPLES:
       See helm/examples/ directory for configuration examples
@@ -102,3 +103,6 @@ spec:
                       type: integer
                     memoryRequestEqualsLimit:
                       type: boolean
+                    initPhaseDurationMinutes:
+                      type: integer
+                      minimum: 1
