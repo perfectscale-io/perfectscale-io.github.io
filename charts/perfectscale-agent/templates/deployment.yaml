@@ -126,6 +126,8 @@ spec:
           - name: PHASE_STATS_COLLECTION_ENABLED
             value: "{{ .Values.settings.phaseStatsCollectionEnabled }}"
           {{- end }}
+          - name: RECOMMENDATIONS_CONFIG_CR_ENABLED
+            value: "{{ .Values.settings.deployCrManager | default false }}"
           - name: POD_REGEX
             value: "{{ .Values.settings.podRegex | default "" }}"
           - name: CONTAINER_REGEX

@@ -131,6 +131,18 @@ rules:
       - "/version"
     verbs:
       - "get"
+  {{- if .Values.settings.deployCrManager }}
+  - apiGroups:
+      - "perfectscale.io"
+    resources:
+      - clusterrecommendationsconfigs
+      - namespacerecommendationsconfigs
+      - workloadrecommendationsconfigs
+    verbs:
+      - get
+      - list
+      - watch
+  {{- end }}
   - apiGroups:
       - "policy"
     resources:
