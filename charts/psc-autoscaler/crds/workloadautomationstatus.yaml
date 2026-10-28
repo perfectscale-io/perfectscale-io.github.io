@@ -140,31 +140,36 @@ spec:
                     type: object
                     x-kubernetes-preserve-unknown-fields: true
                     properties:
-                      container:
-                        type: string
-                      oomAt:
-                        type: string
-                        format: date-time
                       bumpedAt:
                         type: string
                         format: date-time
                       preBumpRevisionId:
                         type: string
-                      candidate:
-                        type: string
-                      limit:
-                        type: string
-                      initLimit:
-                        type: string
-                      runtimeLimit:
-                        type: string
-                      requestMoved:
-                        type: boolean
                       closedAt:
                         type: string
                         format: date-time
                       repeatOOMs:
                         type: integer
+                      containers:
+                        type: object
+                        x-kubernetes-preserve-unknown-fields: true
+                        additionalProperties:
+                          type: object
+                          x-kubernetes-preserve-unknown-fields: true
+                          properties:
+                            oomAt:
+                              type: string
+                              format: date-time
+                            candidate:
+                              type: string
+                            limit:
+                              type: string
+                            initLimit:
+                              type: string
+                            runtimeLimit:
+                              type: string
+                            requestMoved:
+                              type: boolean
                 current:
                   type: object
                   x-kubernetes-preserve-unknown-fields: true
@@ -1117,6 +1122,8 @@ spec:
                         x-kubernetes-preserve-unknown-fields: true
                         properties:
                           eventID:
+                            type: string
+                          trigger:
                             type: string
                           split:
                             type: object

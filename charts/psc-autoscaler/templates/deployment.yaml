@@ -253,6 +253,8 @@ spec:
               value: "{{ .Values.cmd.sync.probe.port | default 8080 }}"
             - name: KARPENTER_AUTOMATION_ENABLED
               value: "{{ .Values.karpenterAutomation.enabled }}"
+            - name: HPA_AUTOMATION_ENABLED
+              value: "{{ .Values.hpaAutomation.enabled }}"
             - name: ENV
               value: "{{ .Values.settings.env }}"
             - name: HTTP_TIMEOUT

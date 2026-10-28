@@ -55,8 +55,6 @@ spec:
                       type: object
                       x-kubernetes-preserve-unknown-fields: true
                       properties:
-                        cleanUpAutomation:
-                          type: boolean
                         timeConstraints:
                           type: object
                           x-kubernetes-preserve-unknown-fields: true
@@ -117,8 +115,6 @@ spec:
                           properties:
                             automationMode:
                               type: string
-                            cleanUpAutomation:
-                              type: boolean
                             timeConstraints:
                               type: object
                               x-kubernetes-preserve-unknown-fields: true
