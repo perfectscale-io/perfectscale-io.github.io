@@ -87,6 +87,12 @@ spec:
                           enum:
                             - decreaseOnly
                             - full
+                        injectedSidecars:
+                          type: object
+                          x-kubernetes-preserve-unknown-fields: true
+                          properties:
+                            enabled:
+                              type: boolean
                         splitInitRuntimeRecommendations:
                           type: object
                           x-kubernetes-preserve-unknown-fields: true

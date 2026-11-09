@@ -175,18 +175,12 @@ spec:
                                   properties:
                                     enabled:
                                       type: boolean
-                                    minimum:
-                                      type: string
-                                    maximum:
-                                      type: string
                                 disruptionBudgets:
                                   type: object
                                   x-kubernetes-preserve-unknown-fields: true
                                   properties:
                                     enabled:
                                       type: boolean
-                                    minimumNodes:
-                                      type: string
                                 instanceFamilies:
                                   type: object
                                   x-kubernetes-preserve-unknown-fields: true
@@ -198,12 +192,6 @@ spec:
                                   x-kubernetes-preserve-unknown-fields: true
                                   properties:
                                     enabled:
-                                      type: boolean
-                                    minimum:
-                                      type: string
-                                    maximum:
-                                      type: string
-                                    allowSetFromUnset:
                                       type: boolean
                     binpacking:
                       type: object
@@ -239,6 +227,26 @@ spec:
                               type: boolean
                               description: >-
                                 Default false: a node running a Job pod is skipped.
+                            pdbOverride:
+                              type: object
+                              description: >-
+                                Overrides a PodDisruptionBudget that keeps refusing eviction: after a 2 minute wait the pod is deleted
+                                directly despite the PDB. WARNING: opt-in, off by default; the budget is NOT honored, so the workload may
+                                lose availability or data. A group overrides the cluster per field. A pod covered by several PDBs, which the
+                                Eviction API refuses with a 500, is overridden the same way. respectGracePeriod=false deletes with grace 0,
+                                so a StatefulSet replacement may start early.
+                              properties:
+                                enabled:
+                                  type: boolean
+                                  description: >-
+                                    Default false. True deletes pods despite their PodDisruptionBudgets once the eviction
+                                    stays refused.
+                                respectGracePeriod:
+                                  type: boolean
+                                  description: >-
+                                    Default true: the deleted pod keeps its own termination grace period. False deletes
+                                    it with grace period 0, so a StatefulSet replacement may start before the old
+                                    container stops.
                             protectedPodSelectors:
                                 type: array
                                 description: Label selectors (a union across cluster and group). A node running a matching pod is skipped.

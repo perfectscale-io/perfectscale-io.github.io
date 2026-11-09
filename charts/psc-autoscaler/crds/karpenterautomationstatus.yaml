@@ -66,6 +66,8 @@ spec:
                             type: object
                             x-kubernetes-preserve-unknown-fields: true
                             properties:
+                              rule:
+                                type: string
                               path:
                                 type: string
                               operation:
@@ -93,6 +95,8 @@ spec:
                             type: object
                             x-kubernetes-preserve-unknown-fields: true
                             properties:
+                              rule:
+                                type: string
                               path:
                                 type: string
                               operation:

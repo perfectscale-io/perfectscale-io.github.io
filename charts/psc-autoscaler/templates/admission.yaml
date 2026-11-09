@@ -104,8 +104,11 @@ webhooks:
         path: /v1/karpenter/nodepool
         port: {{ (.Values.service).port | default 443 }}
     admissionReviewVersions: [ "v1" ]
-    sideEffects: None
-    timeoutSeconds: {{ (.Values.admission).timeout | default 15 }}
+    # a revert is recorded in the KarpenterAutomationStatus of the pool, except on a dry run.
+    sideEffects: NoneOnDryRun
+    # the revert reads caches only and records off the request, like the HPA webhook, so a slow serve holds a
+    # NodePool write for 5s at most.
+    timeoutSeconds: 5
     # an unavailable serve must never block NodePool writes.
     failurePolicy: Ignore
   {{- end }}
@@ -146,7 +149,8 @@ webhooks:
         path: /v1/mutate/hpa
         port: {{ (.Values.service).port | default 443 }}
     admissionReviewVersions: [ "v1" ]
-    sideEffects: None
+    # a revert is recorded in the HpaAutomationStatus of the object, except on a dry run.
+    sideEffects: NoneOnDryRun
     timeoutSeconds: 5
     failurePolicy: Ignore
   {{- end }}

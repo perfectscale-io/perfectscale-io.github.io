@@ -78,6 +78,8 @@ spec:
               value: "/opt/tls/tls.key"
             - name: KARPENTER_AUTOMATION_ENABLED
               value: "{{ .Values.karpenterAutomation.enabled }}"
+            - name: HPA_AUTOMATION_ENABLED
+              value: "{{ .Values.hpaAutomation.enabled }}"
             - name: SERVICE_ACCOUNT_USERNAME
               value: "system:serviceaccount:{{ .Release.Namespace }}:{{ include "psc-autoscaler.serviceAccountName" . }}"
             - name: DRIFT_CONFLICT_THRESHOLD

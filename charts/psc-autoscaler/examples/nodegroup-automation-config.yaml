@@ -16,6 +16,9 @@ spec:
       safety:
         allowHostPath: false # default false: skip nodes running pods with stateful hostPath volumes
         allowRunningJobs: false # default false: skip nodes running Job pods
+        pdbOverride: # WARNING: deletes pods despite their PDBs once eviction stays refused for 2m, overrides the cluster's per field
+          enabled: false # default false
+          respectGracePeriod: true # default true: false deletes with grace period 0
         protectedPodSelectors: # a node running a matching pod is skipped, merged with the cluster's
           - matchLabels:
               app: payments

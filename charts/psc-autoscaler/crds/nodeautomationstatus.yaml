@@ -29,9 +29,9 @@ spec:
         - name: NodeGroup
           type: string
           jsonPath: .spec.nodeGroup
-        - name: Phase
+        - name: BinpackingPhase
           type: string
-          jsonPath: .status.phase
+          jsonPath: .status.binpacking.phase
         - name: Age
           type: date
           jsonPath: .metadata.creationTimestamp
@@ -57,75 +57,100 @@ spec:
               type: object
               x-kubernetes-preserve-unknown-fields: true
               properties:
-                phase:
-                  type: string
-                attempt:
-                  type: integer
-                eventId:
-                  type: string
-                startedAt:
-                  type: string
-                  format: date-time
-                finishedAt:
-                  type: string
-                  format: date-time
-                retryAfter:
-                  type: string
-                  format: date-time
-                failedReason:
-                  type: string
-                autoscaler:
-                  type: string
-                plan:
+                binpacking:
                   type: object
                   x-kubernetes-preserve-unknown-fields: true
                   properties:
-                    placed:
+                    phase:
+                      type: string
+                    attempt:
                       type: integer
-                    stuck:
+                    eventId:
+                      type: string
+                    startedAt:
+                      type: string
+                      format: date-time
+                    finishedAt:
+                      type: string
+                      format: date-time
+                    retryAfter:
+                      type: string
+                      format: date-time
+                    failedReason:
+                      type: string
+                    autoscaler:
+                      type: string
+                    plan:
+                      type: object
+                      x-kubernetes-preserve-unknown-fields: true
+                      properties:
+                        placed:
+                          type: integer
+                        stuck:
+                          type: integer
+                        refused:
+                          type: integer
+                        skipped:
+                          type: integer
+                        caveated:
+                          type: integer
+                        stuckPods:
+                          type: array
+                          items:
+                            type: string
+                        refusedPods:
+                          type: array
+                          items:
+                            type: string
+                        hostPathPods:
+                          type: array
+                          items:
+                            type: string
+                        jobPods:
+                          type: array
+                          items:
+                            type: string
+                        protectedPods:
+                          type: array
+                          items:
+                            type: string
+                        pdbBypassCandidates:
+                          type: array
+                          description: >-
+                            Pods whose PodDisruptionBudget can never allow eviction and that pdbOverride will delete directly
+                            if the PDB keeps refusing. Set only when pdbOverride is enabled.
+                          items:
+                            type: object
+                            properties:
+                              namespace:
+                                type: string
+                              name:
+                                type: string
+                    podsEvicted:
                       type: integer
-                    refused:
-                      type: integer
-                    skipped:
-                      type: integer
-                    caveated:
-                      type: integer
-                    stuckPods:
+                    evictedOwners:
                       type: array
                       items:
-                        type: string
-                    refusedPods:
+                        type: object
+                        properties:
+                          kind:
+                            type: string
+                          namespace:
+                            type: string
+                          name:
+                            type: string
+                          readyBefore:
+                            type: integer
+                    pdbBypassedPods:
                       type: array
                       items:
-                        type: string
-                    hostPathPods:
-                      type: array
-                      items:
-                        type: string
-                    jobPods:
-                      type: array
-                      items:
-                        type: string
-                    protectedPods:
-                      type: array
-                      items:
-                        type: string
-                podsEvicted:
-                  type: integer
-                evictedOwners:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      kind:
-                        type: string
-                      namespace:
-                        type: string
-                      name:
-                        type: string
-                      readyBefore:
-                        type: integer
-                terminalStep:
-                  type: string
-                releasePending:
-                  type: boolean
+                        type: object
+                        properties:
+                          namespace:
+                            type: string
+                          name:
+                            type: string
+                    terminalStep:
+                      type: string
+                    releasePending:
+                      type: boolean

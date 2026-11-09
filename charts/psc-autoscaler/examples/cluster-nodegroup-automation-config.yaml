@@ -19,6 +19,9 @@ spec:
       safety:
         allowHostPath: false
         allowRunningJobs: false
+        pdbOverride: # WARNING: deletes pods despite their PDBs once eviction stays refused for 2m
+          enabled: false # default false
+          respectGracePeriod: true # default true: false deletes with grace period 0
         excludedNodeSelectors:
           - matchExpressions:
               - key: node-role.kubernetes.io/control-plane
