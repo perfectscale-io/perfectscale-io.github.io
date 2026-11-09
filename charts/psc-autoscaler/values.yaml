@@ -3,7 +3,7 @@ revisionHistoryLimit: 10
 image:
   repository: public.ecr.aws/perfectscale-io/psc-autoscaler
   pullPolicy: Always
-  tag: "v1.0.69"
+  tag: "v1.0.70"
 settings:
   port: 8443
   env: "prod"
@@ -23,6 +23,7 @@ settings:
   podReplacerPauseDuration: "30m" # pause of pod replacement for a workload after its replacements failed
   podReplacerGuardRetryDelay: "15s" # retry delay while the workload is being automated
   splitPodReconcilerRuntimeResizeStuckAfter: "10m" # how long a resize to runtime resources may keep applying, deferred included, before the pod is replaced
+  splitPodReconcilerGraduationJitter: "20m" # most a pod's move to runtime resources is delayed past its init phase, spread per pod; 0 disables
   splitChurnTrackerWindow: "3h" # window the pod restarts on runtime resources of a workload are counted in
   splitChurnTrackerMinRuntimeRestarts: 3 # fewest restarts that disable split mode for churn; half the replicas when more
   splitChurnTrackerMinSpan: "60m" # how far apart the first and the last restart must be

@@ -463,6 +463,8 @@ spec:
               value: "{{ .Values.settings.podReplacerGuardRetryDelay }}"
             - name: "SPLIT_POD_RECONCILER_RUNTIME_RESIZE_STUCK_AFTER"
               value: "{{ .Values.settings.splitPodReconcilerRuntimeResizeStuckAfter }}"
+            - name: "SPLIT_POD_RECONCILER_GRADUATION_JITTER"
+              value: "{{ .Values.settings.splitPodReconcilerGraduationJitter }}"
             - name: "SPLIT_CHURN_TRACKER_WINDOW"
               value: "{{ .Values.settings.splitChurnTrackerWindow }}"
             - name: "SPLIT_CHURN_TRACKER_MIN_RUNTIME_RESTARTS"
