@@ -229,6 +229,7 @@ spec:
                                 Default false: a node running a Job pod is skipped.
                             pdbOverride:
                               type: object
+                              x-kubernetes-preserve-unknown-fields: true
                               description: >-
                                 Overrides a PodDisruptionBudget that keeps refusing eviction: after a 2 minute wait the pod is deleted
                                 directly despite the PDB. WARNING: opt-in, off by default; the budget is NOT honored, so the workload may
@@ -259,3 +260,76 @@ spec:
                                 items:
                                   type: object
                                   x-kubernetes-preserve-unknown-fields: true
+                    smartHeadroom:
+                      type: object
+                      x-kubernetes-preserve-unknown-fields: true
+                      properties:
+                        operational:
+                          type: object
+                          x-kubernetes-preserve-unknown-fields: true
+                          properties:
+                            automationMode:
+                              type: string
+                              enum: [Enabled, Disabled, DryRun]
+                        thresholds:
+                          type: object
+                          x-kubernetes-preserve-unknown-fields: true
+                          properties:
+                            podCpuFull:
+                              type: number
+                              format: double
+                            nodeCpuSome:
+                              type: number
+                              format: double
+                            breachSeconds:
+                              type: integer
+                            cooldownSeconds:
+                              type: integer
+                            throttledRatio:
+                              type: number
+                              format: double
+                        reservationTTLSeconds:
+                          type: integer
+                        failedEpisodeCooldownSeconds:
+                          type: integer
+                        allowedEvictionTargets:
+                          type: array
+                          items:
+                            type: string
+                            pattern: '^[^/]+/[^/]+$'
+                            x-kubernetes-validations:
+                              - rule: "!self.endsWith('/DaemonSet')"
+                                message: DaemonSet pods cannot be moved.
+                        evictableVolumes:
+                          type: array
+                          items:
+                            type: string
+                            enum: [emptyDir, hostPath]
+                        maxEvictionsPerNodePerHour:
+                          type: integer
+                        maxEvictionsPerWorkloadPerDay:
+                          type: integer
+                        maxBalloonsPerNode:
+                          type: integer
+                        maxBalloonAllocatablePercent:
+                          type: integer
+                        minRemainingNonDaemonSetPods:
+                          type: integer
+                        minReadyPercentAfterEviction:
+                          type: integer
+                        minTargetPodAgeSeconds:
+                          type: integer
+                        labelSelectors:
+                          type: array
+                          items:
+                            type: object
+                            x-kubernetes-preserve-unknown-fields: true
+                            properties:
+                              key:
+                                type: string
+                              value:
+                                type: string
+                              allowAutomation:
+                                  type: boolean
+                        balloonPriorityClassName:
+                          type: string

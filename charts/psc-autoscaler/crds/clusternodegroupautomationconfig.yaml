@@ -257,3 +257,79 @@ spec:
                                 items:
                                   type: object
                                   x-kubernetes-preserve-unknown-fields: true
+                    smartHeadroom:
+                      type: object
+                      x-kubernetes-preserve-unknown-fields: true
+                      properties:
+                        operational:
+                          type: object
+                          x-kubernetes-preserve-unknown-fields: true
+                          properties:
+                            automationMode:
+                              type: string
+                              enum: [Enabled, Disabled, DryRun]
+                            stopAllAutomation:
+                              type: boolean
+                        thresholds:
+                          type: object
+                          x-kubernetes-preserve-unknown-fields: true
+                          properties:
+                            podCpuFull:
+                              type: integer
+                            nodeCpuSome:
+                              type: integer
+                            breachSeconds:
+                              type: integer
+                            cooldownSeconds:
+                              type: integer
+                            throttledRatio:
+                              type: integer
+                        reservationTTLSeconds:
+                          type: integer
+                        failedEpisodeCooldownSeconds:
+                          type: integer
+                        allowedEvictionTargets:
+                          type: array
+                          items:
+                            type: string
+                            pattern: '^[^/]+/[^/]+$'
+                            x-kubernetes-validations:
+                              - rule: "!self.endsWith('/DaemonSet')"
+                                message: DaemonSet pods cannot be moved.
+                        evictableVolumes:
+                          type: array
+                          items:
+                            type: string
+                            enum: [emptyDir, hostPath]
+                        maxEvictionsPerNodePerHour:
+                          type: integer
+                        maxEvictionsPerWorkloadPerDay:
+                          type: integer
+                        maxBalloonsPerNode:
+                          type: integer
+                        maxBalloonAllocatablePercent:
+                          type: integer
+                        minRemainingNonDaemonSetPods:
+                          type: integer
+                        minReadyPercentAfterEviction:
+                          type: integer
+                        minTargetPodAgeSeconds:
+                          type: integer
+                        labelSelectors:
+                          type: array
+                          items:
+                            type: array
+                            items:
+                              type: object
+                              x-kubernetes-preserve-unknown-fields: true
+                              properties:
+                                key:
+                                  type: string
+                                value:
+                                  type: string
+                                allowAutomation:
+                                  type: boolean
+                        balloonPriorityClassName:
+                          type: string
+                        maxEvictionsPerClusterPerHour:
+                          type: integer

@@ -30,3 +30,6 @@ crds/karpenterautomationstatus.yaml
 # NodeAutomationStatus CRD is not released yet. On dev, apply it manually:
 #   kubectl apply -f helm/crds/nodeautomationstatus.yaml
 crds/nodeautomationstatus.yaml
+# NodeGroupAutomationStatus CRD is not released yet. On dev, apply it manually:
+#   kubectl apply -f helm/crds/nodegroupautomationstatus.yaml
+crds/nodegroupautomationstatus.yaml

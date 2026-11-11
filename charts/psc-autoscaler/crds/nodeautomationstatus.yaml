@@ -121,6 +121,7 @@ spec:
                             if the PDB keeps refusing. Set only when pdbOverride is enabled.
                           items:
                             type: object
+                            x-kubernetes-preserve-unknown-fields: true
                             properties:
                               namespace:
                                 type: string
@@ -132,6 +133,7 @@ spec:
                       type: array
                       items:
                         type: object
+                        x-kubernetes-preserve-unknown-fields: true
                         properties:
                           kind:
                             type: string
@@ -145,6 +147,7 @@ spec:
                       type: array
                       items:
                         type: object
+                        x-kubernetes-preserve-unknown-fields: true
                         properties:
                           namespace:
                             type: string
@@ -154,3 +157,28 @@ spec:
                       type: string
                     releasePending:
                       type: boolean
+                smartHeadroom:
+                  type: object
+                  x-kubernetes-preserve-unknown-fields: true
+                  properties:
+                    inEpisode:
+                      type: boolean
+                    startedAt:
+                      type: string
+                      format: date-time
+                    activeSteps:
+                      type: array
+                      items:
+                        type: object
+                        x-kubernetes-preserve-unknown-fields: true
+                        properties:
+                          workloadName:
+                            type: string
+                          podName:
+                            type: string
+                          startedAt:
+                            type: string
+                            format: date-time
+                          startPSI:
+                            type: number
+                            format: double
