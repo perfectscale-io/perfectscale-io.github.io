@@ -16,6 +16,13 @@ spec:
       safety:
         allowHostPath: false # default false: skip nodes running pods with stateful hostPath volumes
         allowRunningJobs: false # default false: skip nodes running Job pods
+        # allowAtMinSize: false # default false: skip a cluster-autoscaler node group at its min size
+        # blockOnPodAnnotations: # merged per key with the cluster's, a group overrides the value of a key
+        #   karpenter.sh/do-not-disrupt: "true"
+        # block: # OR-ed with the cluster's, a group cannot lift a true
+        #   kubeSystemPods: true
+        #   gpuNodes: true
+        #   diskEmptyDirPods: true
         pdbOverride: # WARNING: deletes pods despite their PDBs once eviction stays refused for 2m, overrides the cluster's per field
           enabled: false # default false
           respectGracePeriod: true # default true: false deletes with grace period 0

@@ -114,6 +114,31 @@ spec:
                           type: array
                           items:
                             type: string
+                        localPVPods:
+                          type: array
+                          items:
+                            type: string
+                        annotationBlockedPods:
+                          type: array
+                          items:
+                            type: string
+                        kubeSystemPods:
+                          type: array
+                          items:
+                            type: string
+                        emptyDirPods:
+                          type: array
+                          items:
+                            type: string
+                        nodeGroupSize:
+                          type: integer
+                          format: int32
+                        nodeGroupMinSize:
+                          type: integer
+                          format: int32
+                        minSizeSource:
+                          type: string
+                          description: ca-status when the group sizes were read, unknown when the min size check failed open.
                         pdbBypassCandidates:
                           type: array
                           description: >-

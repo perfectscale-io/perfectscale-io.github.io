@@ -227,6 +227,34 @@ spec:
                               type: boolean
                               description: >-
                                 Default false: a node running a Job pod is skipped.
+                            allowAtMinSize:
+                              type: boolean
+                              description: >-
+                                Default false: a cluster-autoscaler node group already at its min size is skipped, since the autoscaler would
+                                only replace the drained node. true lifts the block.
+                            blockOnPodAnnotations:
+                              type: object
+                              additionalProperties:
+                                type: string
+                              description: >-
+                                A node running a pod with an annotation key set to the mapped value is skipped; an empty value means any value
+                                of that key blocks. Merged per key, the cluster value wins on conflict and a group can only add keys.
+                                Do-not-disrupt example: {"karpenter.sh/do-not-disrupt":"true","cluster-autoscaler.kubernetes.io/safe-to-evict":"false"}.
+                            block:
+                              type: object
+                              x-kubernetes-preserve-unknown-fields: true
+                              description: >-
+                                Opt-in blocks, all off when unset. Merged with OR: a group cannot lift a cluster-wide block.
+                              properties:
+                                kubeSystemPods:
+                                  type: boolean
+                                  description: A node running a non-DaemonSet kube-system pod is skipped.
+                                gpuNodes:
+                                  type: boolean
+                                  description: A node with a GPU extended resource (nvidia.com/gpu, amd.com/gpu, any */gpu) is skipped.
+                                diskEmptyDirPods:
+                                  type: boolean
+                                  description: A node running a pod with a disk-backed emptyDir is skipped.
                             pdbOverride:
                               type: object
                               x-kubernetes-preserve-unknown-fields: true
