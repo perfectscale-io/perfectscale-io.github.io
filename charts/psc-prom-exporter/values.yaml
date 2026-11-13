@@ -2,7 +2,7 @@ replicaCount: 1
 image:
   repository: public.ecr.aws/perfectscale-io/psc-prom-exporter
   pullPolicy: Always
-  tag: "v0.3.12"
+  tag: "v0.3.13"
 settings:
   deployKubeStateMetrics: true
   serviceId: "psc-prom-exporter"
@@ -29,6 +29,8 @@ config:
     costs:
       enabled: true
     indicators:
+      enabled: true
+    userSpec:
       enabled: true
   filters:
     workloads:

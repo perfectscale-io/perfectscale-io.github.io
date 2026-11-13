@@ -146,10 +146,10 @@
             "uid": "${DataSource}"
           },
           "editorMode": "code",
-          "expr": "sum(ps_recommended_cpu_request_cores{ps_namespace=~\"${namespace}\", workload_name=~\"${workload}\", ps_container_name=~\"${container}\", cluster_uid=~\"${cluster_uid}\"}) by (pod, container_name)",
+          "expr": "sum(ps_recommended_cpu_request_cores{ps_namespace=~\"${namespace}\", workload_name=~\"${workload}\", ps_container_name=~\"${container}\", cluster_uid=~\"${cluster_uid}\"}) by (workload_name, ps_container_name)",
           "hide": false,
           "instant": false,
-          "legendFormat": "Recommendations Request: Pod: {{workload_name}} Container: {{container_name}}",
+          "legendFormat": "Recommendations Request: Pod: {{workload_name}} Container: {{ps_container_name}}",
           "range": true,
           "refId": "B"
         },
@@ -159,12 +159,25 @@
             "uid": "${DataSource}"
           },
           "editorMode": "code",
-          "expr": "sum(ps_current_cpu_request_cores{ps_namespace=~\"${namespace}\", workload_name=~\"${workload}\", ps_container_name=~\"${container}\", cluster_uid=~\"${cluster_uid}\"}) by (pod, container_name)",
+          "expr": "sum(ps_current_cpu_request_cores{ps_namespace=~\"${namespace}\", workload_name=~\"${workload}\", ps_container_name=~\"${container}\", cluster_uid=~\"${cluster_uid}\"}) by (workload_name, ps_container_name)",
           "hide": false,
           "instant": false,
-          "legendFormat": "Current Request: Pod: {{workload_name}} Container: {{container_name}}",
+          "legendFormat": "Current Request: Pod: {{workload_name}} Container: {{ps_container_name}}",
           "range": true,
           "refId": "D"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DataSource}"
+          },
+          "editorMode": "code",
+          "expr": "sum(ps_user_spec_cpu_request_cores{ps_namespace=~\"${namespace}\", workload_name=~\"${workload}\", ps_container_name=~\"${container}\", cluster_uid=~\"${cluster_uid}\"}) by (workload_name, ps_container_name)",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "User Spec CPU Request: Pod: {{workload_name}} Container: {{ps_container_name}}",
+          "range": true,
+          "refId": "E"
         }
       ],
       "title": "CPU Request",
@@ -261,10 +274,10 @@
             "uid": "${DataSource}"
           },
           "editorMode": "code",
-          "expr": "sum(ps_recommended_cpu_limit_cores{ps_namespace=~\"${namespace}\", workload_name=~\"${workload}\", ps_container_name=~\"${container}\", cluster_uid=~\"${cluster_uid}\"}) by (pod, container_name)",
+          "expr": "sum(ps_recommended_cpu_limit_cores{ps_namespace=~\"${namespace}\", workload_name=~\"${workload}\", ps_container_name=~\"${container}\", cluster_uid=~\"${cluster_uid}\"}) by (workload_name, ps_container_name)",
           "hide": false,
           "instant": false,
-          "legendFormat": "Recommendations Limit: Pod: {{workload_name}} Container: {{container_name}}",
+          "legendFormat": "Recommendations Limit: Pod: {{workload_name}} Container: {{ps_container_name}}",
           "range": true,
           "refId": "A"
         },
@@ -274,12 +287,25 @@
             "uid": "${DataSource}"
           },
           "editorMode": "code",
-          "expr": "sum(ps_current_cpu_limit_cores{ps_namespace=~\"${namespace}\", workload_name=~\"${workload}\", ps_container_name=~\"${container}\", cluster_uid=~\"${cluster_uid}\"}) by (pod, container_name)",
+          "expr": "sum(ps_current_cpu_limit_cores{ps_namespace=~\"${namespace}\", workload_name=~\"${workload}\", ps_container_name=~\"${container}\", cluster_uid=~\"${cluster_uid}\"}) by (workload_name, ps_container_name)",
           "hide": false,
           "instant": false,
-          "legendFormat": "Current Limit: Pod: {{workload_name}} Container: {{container_name}}",
+          "legendFormat": "Current Limit: Pod: {{workload_name}} Container: {{ps_container_name}}",
           "range": true,
           "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DataSource}"
+          },
+          "editorMode": "code",
+          "expr": "sum(ps_user_spec_cpu_limit_cores{ps_namespace=~\"${namespace}\", workload_name=~\"${workload}\", ps_container_name=~\"${container}\", cluster_uid=~\"${cluster_uid}\"}) by (workload_name, ps_container_name)",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "User Spec CPU Limit: Pod: {{workload_name}} Container: {{ps_container_name}}",
+          "range": true,
+          "refId": "E"
         }
       ],
       "title": "CPU Limit",
@@ -376,10 +402,10 @@
             "uid": "${DataSource}"
           },
           "editorMode": "code",
-          "expr": "sum(ps_recommended_memory_request_bytes{ps_namespace=~\"${namespace}\", workload_name=~\"${workload}\", ps_container_name=~\"${container}\", cluster_uid=~\"${cluster_uid}\"}) by (pod, container_name)",
+          "expr": "sum(ps_recommended_memory_request_bytes{ps_namespace=~\"${namespace}\", workload_name=~\"${workload}\", ps_container_name=~\"${container}\", cluster_uid=~\"${cluster_uid}\"}) by (workload_name, ps_container_name)",
           "hide": false,
           "instant": false,
-          "legendFormat": "Recommendations Request: Pod: {{workload_name}} Container: {{container_name}}",
+          "legendFormat": "Recommendations Request: Pod: {{workload_name}} Container: {{ps_container_name}}",
           "range": true,
           "refId": "B"
         },
@@ -389,12 +415,25 @@
             "uid": "${DataSource}"
           },
           "editorMode": "code",
-          "expr": "sum(ps_current_memory_request_bytes{ps_namespace=~\"${namespace}\", workload_name=~\"${workload}\", ps_container_name=~\"${container}\", cluster_uid=~\"${cluster_uid}\"}) by (pod, container_name)",
+          "expr": "sum(ps_current_memory_request_bytes{ps_namespace=~\"${namespace}\", workload_name=~\"${workload}\", ps_container_name=~\"${container}\", cluster_uid=~\"${cluster_uid}\"}) by (workload_name, ps_container_name)",
           "hide": false,
           "instant": false,
-          "legendFormat": "Current Request: Pod: {{workload_name}} Container: {{container_name}}",
+          "legendFormat": "Current Request: Pod: {{workload_name}} Container: {{ps_container_name}}",
           "range": true,
           "refId": "D"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DataSource}"
+          },
+          "editorMode": "code",
+          "expr": "sum(ps_user_spec_memory_request_bytes{ps_namespace=~\"${namespace}\", workload_name=~\"${workload}\", ps_container_name=~\"${container}\", cluster_uid=~\"${cluster_uid}\"}) by (workload_name, ps_container_name)",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "User Spec Memory Request: Pod: {{workload_name}} Container: {{ps_container_name}}",
+          "range": true,
+          "refId": "E"
         }
       ],
       "title": "Memory Request",
@@ -491,10 +530,10 @@
             "uid": "${DataSource}"
           },
           "editorMode": "code",
-          "expr": "sum(ps_recommended_memory_limit_bytes{ps_namespace=~\"${namespace}\", workload_name=~\"${workload}\", ps_container_name=~\"${container}\", cluster_uid=~\"${cluster_uid}\"}) by (pod, container_name)",
+          "expr": "sum(ps_recommended_memory_limit_bytes{ps_namespace=~\"${namespace}\", workload_name=~\"${workload}\", ps_container_name=~\"${container}\", cluster_uid=~\"${cluster_uid}\"}) by (workload_name, ps_container_name)",
           "hide": false,
           "instant": false,
-          "legendFormat": "Recommendations Limit: Pod: {{workload_name}} Container: {{container_name}}",
+          "legendFormat": "Recommendations Limit: Pod: {{workload_name}} Container: {{ps_container_name}}",
           "range": true,
           "refId": "A"
         },
@@ -504,12 +543,25 @@
             "uid": "${DataSource}"
           },
           "editorMode": "code",
-          "expr": "sum(ps_current_memory_limit_bytes{ps_namespace=~\"${namespace}\", workload_name=~\"${workload}\", ps_container_name=~\"${container}\", cluster_uid=~\"${cluster_uid}\"}) by (pod, container_name)",
+          "expr": "sum(ps_current_memory_limit_bytes{ps_namespace=~\"${namespace}\", workload_name=~\"${workload}\", ps_container_name=~\"${container}\", cluster_uid=~\"${cluster_uid}\"}) by (workload_name, ps_container_name)",
           "hide": false,
           "instant": false,
-          "legendFormat": "Current Limit: Pod: {{workload_name}} Container: {{container_name}}",
+          "legendFormat": "Current Limit: Pod: {{workload_name}} Container: {{ps_container_name}}",
           "range": true,
           "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DataSource}"
+          },
+          "editorMode": "code",
+          "expr": "sum(ps_user_spec_memory_limit_bytes{ps_namespace=~\"${namespace}\", workload_name=~\"${workload}\", ps_container_name=~\"${container}\", cluster_uid=~\"${cluster_uid}\"}) by (workload_name, ps_container_name)",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "User Spec Memory Limit: Pod: {{workload_name}} Container: {{ps_container_name}}",
+          "range": true,
+          "refId": "E"
         }
       ],
       "title": "Memory Limit",
