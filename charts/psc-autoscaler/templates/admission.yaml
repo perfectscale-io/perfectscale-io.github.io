@@ -26,6 +26,7 @@ data:
   tls.key: {{ $cert.Key | b64enc }}
 {{- end }}
 {{- end }}
+{{- if not .Values.idle }}
 ---
 apiVersion: admissionregistration.k8s.io/v1
 kind: MutatingWebhookConfiguration
@@ -206,3 +207,4 @@ webhooks:
     sideEffects: None
     timeoutSeconds: {{ (.Values.admission).timeout | default 15 }}
     failurePolicy: "Fail"
+{{- end }}

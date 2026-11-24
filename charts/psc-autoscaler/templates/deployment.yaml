@@ -214,7 +214,7 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  replicas: 1
+  replicas: {{ if .Values.idle }}0{{ else }}1{{ end }}
   strategy:
     type: Recreate
   selector:
@@ -374,7 +374,7 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  replicas: 1
+  replicas: {{ if .Values.idle }}0{{ else }}1{{ end }}
   strategy:
     type: Recreate
   selector:
@@ -544,7 +544,7 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  replicas: 1
+  replicas: {{ if .Values.idle }}0{{ else }}1{{ end }}
   strategy:
     type: Recreate
   selector:

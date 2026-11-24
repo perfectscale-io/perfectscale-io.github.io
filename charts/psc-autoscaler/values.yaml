@@ -1,9 +1,12 @@
 replicaCount: 3
+# true installs serve only (no webhooks, no UI settings protection, sync/evict/drain at 0), so a second install can't act next to a working autoscaler.
+# Such an install also needs crdUpgradeHook.enabled=false and priorityClass.create=false, which still touch cluster-wide objects.
+idle: false
 revisionHistoryLimit: 10
 image:
   repository: public.ecr.aws/perfectscale-io/psc-autoscaler
   pullPolicy: Always
-  tag: "v1.0.79"
+  tag: "v1.0.80"
 settings:
   port: 8443
   env: "prod"

@@ -543,6 +543,8 @@ spec:
                                               type: string
                                     runtime:
                                       type: string
+                                    injected:
+                                      type: boolean
                 target:
                   type: object
                   x-kubernetes-preserve-unknown-fields: true
@@ -1010,6 +1012,8 @@ spec:
                                               type: string
                                     runtime:
                                       type: string
+                                    injected:
+                                      type: boolean
                 confirmed:
                   type: object
                   x-kubernetes-preserve-unknown-fields: true
